@@ -17,7 +17,7 @@ namespace Shaykhullin.Sandbox.Client
 			var connection = await config.Create("127.0.0.1", 4000)
 				.Connect();
 
-			await connection.Send(new IntHolder { MyProperty = 11}).In<Event>();
+			await connection.Send(new IntHolder { MyProperty = 11 }).In<Event>();
 			Thread.Sleep(-1);
 		}
 	}

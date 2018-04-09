@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Shaykhullin.Serializer.Core;
 
 namespace Shaykhullin.Serializer
 {
