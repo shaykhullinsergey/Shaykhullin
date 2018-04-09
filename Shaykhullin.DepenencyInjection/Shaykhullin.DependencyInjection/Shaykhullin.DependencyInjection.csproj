@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>7.2</LangVersion>
+    <Version>1.0.5</Version>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />
+    <ProjectReference Include="..\Shaykhullin.DependencyInjection.Core\Shaykhullin.DependencyInjection.Core.csproj" />
+  </ItemGroup>
+</Project>

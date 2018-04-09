@@ -1,0 +1,12 @@
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\bin\Debug\netstandard2.0\Shaykhullin.Activator.deps.json
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\bin\Debug\netstandard2.0\Shaykhullin.Activator.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\bin\Debug\netstandard2.0\Shaykhullin.Activator.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\bin\Debug\netstandard2.0\Shaykhullin.Activator.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\bin\Debug\netstandard2.0\Shaykhullin.Activator.Core.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.csprojResolveAssemblyReference.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.csproj.CoreCompileInputs.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.AssemblyInfoInputs.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.AssemblyInfo.cs
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.csproj.CopyComplete
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Activator\Shaykhullin.Activator\obj\Debug\netstandard2.0\Shaykhullin.Activator.pdb

@@ -1,0 +1,112 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "Shaykhullin.Sandbox.Client/1.0.0": {
+        "dependencies": {
+          "Shaykhullin.Network.Client": "1.0.8"
+        },
+        "runtime": {
+          "Shaykhullin.Sandbox.Client.dll": {}
+        }
+      },
+      "Shaykhullin.Activator/1.0.0": {
+        "dependencies": {
+          "Shaykhullin.Activator.Core": "1.0.0"
+        },
+        "runtime": {
+          "Shaykhullin.Activator.dll": {}
+        }
+      },
+      "Shaykhullin.Activator.Core/1.0.0": {
+        "runtime": {
+          "Shaykhullin.Activator.Core.dll": {}
+        }
+      },
+      "Shaykhullin.DependencyInjection/1.0.5": {
+        "dependencies": {
+          "Shaykhullin.Activator": "1.0.0",
+          "Shaykhullin.DependencyInjection.Core": "1.0.5"
+        },
+        "runtime": {
+          "Shaykhullin.DependencyInjection.dll": {}
+        }
+      },
+      "Shaykhullin.DependencyInjection.Core/1.0.5": {
+        "runtime": {
+          "Shaykhullin.DependencyInjection.Core.dll": {}
+        }
+      },
+      "Shaykhullin.Network/1.0.8": {
+        "dependencies": {
+          "Shaykhullin.Network.Core": "1.0.8"
+        },
+        "runtime": {
+          "Shaykhullin.Network.dll": {}
+        }
+      },
+      "Shaykhullin.Network.Client/1.0.8": {
+        "dependencies": {
+          "Shaykhullin.Network": "1.0.8"
+        },
+        "runtime": {
+          "Shaykhullin.Network.Client.dll": {}
+        }
+      },
+      "Shaykhullin.Network.Core/1.0.8": {
+        "dependencies": {
+          "Shaykhullin.DependencyInjection": "1.0.5"
+        },
+        "runtime": {
+          "Shaykhullin.Network.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Shaykhullin.Sandbox.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Activator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Activator.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.DependencyInjection/1.0.5": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.DependencyInjection.Core/1.0.5": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Network/1.0.8": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Network.Client/1.0.8": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Network.Core/1.0.8": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

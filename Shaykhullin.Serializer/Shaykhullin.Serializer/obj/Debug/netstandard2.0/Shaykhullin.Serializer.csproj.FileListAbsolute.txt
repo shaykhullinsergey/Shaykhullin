@@ -1,0 +1,16 @@
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Serializer.deps.json
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Serializer.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Serializer.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Activator.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Activator.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Activator.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\bin\Debug\netstandard2.0\Shaykhullin.Activator.Core.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.csprojResolveAssemblyReference.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.csproj.CoreCompileInputs.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.AssemblyInfoInputs.cache
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.AssemblyInfo.cs
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.csproj.CopyComplete
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer\obj\Debug\netstandard2.0\Shaykhullin.Serializer.pdb
