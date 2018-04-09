@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.Serializer", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaykhullin.Serializer", "Shaykhullin.Serializer", "{9F081D80-4C9B-42E2-A88B-1228B4D2F860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shaykhullin.Serializer.Core", "Shaykhullin.Serializer\Shaykhullin.Serializer.Core\Shaykhullin.Serializer.Core.csproj", "{D2272D34-9EC8-4105-87D8-D590F5C3CFAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.Serializer.Core", "Shaykhullin.Serializer\Shaykhullin.Serializer.Core\Shaykhullin.Serializer.Core.csproj", "{D2272D34-9EC8-4105-87D8-D590F5C3CFAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shaykhullin.Sandbox.Serializer", "Shaykhullin.Sandbox\Shaykhullin.Sandbox.Serializer\Shaykhullin.Sandbox.Serializer.csproj", "{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.Sandbox.Serializer", "Shaykhullin.Sandbox\Shaykhullin.Sandbox.Serializer\Shaykhullin.Sandbox.Serializer.csproj", "{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
