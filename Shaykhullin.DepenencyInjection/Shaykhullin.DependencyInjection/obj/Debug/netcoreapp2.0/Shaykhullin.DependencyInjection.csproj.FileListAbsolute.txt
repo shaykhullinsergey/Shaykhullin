@@ -1,4 +1,0 @@
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\obj\Debug\netcoreapp2.0\Shaykhullin.DependencyInjection.csprojResolveAssemblyReference.cache
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\obj\Debug\netcoreapp2.0\Shaykhullin.DependencyInjection.csproj.CoreCompileInputs.cache
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\obj\Debug\netcoreapp2.0\Shaykhullin.DependencyInjection.AssemblyInfoInputs.cache
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\obj\Debug\netcoreapp2.0\Shaykhullin.DependencyInjection.AssemblyInfo.cs

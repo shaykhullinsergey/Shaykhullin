@@ -1,8 +1,0 @@
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\bin\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.deps.json
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\bin\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.dll
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\bin\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.pdb
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\obj\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.csproj.CoreCompileInputs.cache
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\obj\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.AssemblyInfoInputs.cache
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\obj\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.AssemblyInfo.cs
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\obj\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.dll
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\obj\Debug\netstandard2.0\Shaykhullin.DependencyInjection.Core.pdb
