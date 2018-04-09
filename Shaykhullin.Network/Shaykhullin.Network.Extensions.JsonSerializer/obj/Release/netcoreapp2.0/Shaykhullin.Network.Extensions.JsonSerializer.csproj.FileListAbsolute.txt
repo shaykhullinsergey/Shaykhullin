@@ -1,0 +1,12 @@
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\bin\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.deps.json
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\bin\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.dll
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\bin\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.pdb
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\bin\Release\netcoreapp2.0\Shaykhullin.Network.Core.dll
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\bin\Release\netcoreapp2.0\Shaykhullin.Network.Core.pdb
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.csprojResolveAssemblyReference.cache
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.csproj.CoreCompileInputs.cache
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.AssemblyInfoInputs.cache
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.AssemblyInfo.cs
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.csproj.CopyComplete
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.dll
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Extensions.JsonSerializer\obj\Release\netcoreapp2.0\Shaykhullin.Network.Extensions.JsonSerializer.pdb

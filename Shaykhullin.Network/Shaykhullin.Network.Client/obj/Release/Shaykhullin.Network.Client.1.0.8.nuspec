@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Shaykhullin.Network.Client</id>
+    <version>1.0.8</version>
+    <authors>Shaykhullin.Network.Client</authors>
+    <owners>Shaykhullin.Network.Client</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework=".NETCoreApp2.0">
+        <dependency id="Shaykhullin.Network" version="1.0.8" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Shaykhullin.Network" version="1.0.8" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Client\bin\Release\netcoreapp2.0\Shaykhullin.Network.Client.dll" target="lib\netcoreapp2.0\Shaykhullin.Network.Client.dll" />
+    <file src="C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Client\bin\Release\netstandard2.0\Shaykhullin.Network.Client.dll" target="lib\netstandard2.0\Shaykhullin.Network.Client.dll" />
+  </files>
+</package>

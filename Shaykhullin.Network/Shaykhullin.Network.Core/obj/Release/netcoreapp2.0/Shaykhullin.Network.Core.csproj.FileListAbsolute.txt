@@ -1,0 +1,8 @@
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\bin\Release\netcoreapp2.0\Shaykhullin.Network.Core.deps.json
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\bin\Release\netcoreapp2.0\Shaykhullin.Network.Core.dll
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\bin\Release\netcoreapp2.0\Shaykhullin.Network.Core.pdb
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\obj\Release\netcoreapp2.0\Shaykhullin.Network.Core.csproj.CoreCompileInputs.cache
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\obj\Release\netcoreapp2.0\Shaykhullin.Network.Core.AssemblyInfoInputs.cache
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\obj\Release\netcoreapp2.0\Shaykhullin.Network.Core.AssemblyInfo.cs
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\obj\Release\netcoreapp2.0\Shaykhullin.Network.Core.dll
+C:\Users\yolor\Documents\Shaykhullin.Network\Shaykhullin.Network.Core\obj\Release\netcoreapp2.0\Shaykhullin.Network.Core.pdb
