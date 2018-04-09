@@ -72,6 +72,16 @@
         "runtime": {
           "bin/placeholder/Shaykhullin.DependencyInjection.Core.dll": {}
         }
+      },
+      "Shaykhullin.Serializer.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Shaykhullin.Serializer.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shaykhullin.Serializer.Core.dll": {}
+        }
       }
     }
   },
@@ -236,12 +246,18 @@
       "type": "project",
       "path": "../../Shaykhullin.DepenencyInjection/Shaykhullin.DependencyInjection.Core/Shaykhullin.DependencyInjection.Core.csproj",
       "msbuildProject": "../../Shaykhullin.DepenencyInjection/Shaykhullin.DependencyInjection.Core/Shaykhullin.DependencyInjection.Core.csproj"
+    },
+    "Shaykhullin.Serializer.Core/1.0.0": {
+      "type": "project",
+      "path": "../../Shaykhullin.Serializer/Shaykhullin.Serializer.Core/Shaykhullin.Serializer.Core.csproj",
+      "msbuildProject": "../../Shaykhullin.Serializer/Shaykhullin.Serializer.Core/Shaykhullin.Serializer.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.1",
-      "Shaykhullin.DependencyInjection >= 1.0.5"
+      "Shaykhullin.DependencyInjection >= 1.0.5",
+      "Shaykhullin.Serializer.Core >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -278,6 +294,9 @@
           "projectReferences": {
             "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.DepenencyInjection\\Shaykhullin.DependencyInjection\\Shaykhullin.DependencyInjection.csproj": {
               "projectPath": "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.DepenencyInjection\\Shaykhullin.DependencyInjection\\Shaykhullin.DependencyInjection.csproj"
+            },
+            "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Serializer\\Shaykhullin.Serializer.Core\\Shaykhullin.Serializer.Core.csproj": {
+              "projectPath": "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Serializer\\Shaykhullin.Serializer.Core\\Shaykhullin.Serializer.Core.csproj"
             }
           }
         }

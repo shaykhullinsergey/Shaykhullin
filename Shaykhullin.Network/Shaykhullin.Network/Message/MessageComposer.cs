@@ -1,7 +1,7 @@
-using System;
-using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
+using Shaykhullin.Serializer;
 
 namespace Network.Core
 {
@@ -22,10 +22,15 @@ namespace Network.Core
 
 		public async Task<IMessage> GetMessage(IPayload payload)
 		{
-			var data = serializer.Serialize(payload.Data);
+			byte[] data;
+			using (var stream = new MemoryStream())
+			{
+				serializer.Serialize(stream, payload.Data);
+				data = stream.ToArray();
+			}
+
 			data = compression.Compress(data);
 			data = encryption.Encrypt(data);
-
 			var eventId = eventHolder.GetEvent(payload.Event);
 
 			return await Task.FromResult((IMessage)new Message { EventId = eventId, Data = data }).ConfigureAwait(false);
@@ -39,7 +44,12 @@ namespace Network.Core
 			var @event = eventHolder.GetEvent(message.EventId);
 			var dataType = @event.GetInterfaces()[0].GetGenericArguments()[0];
 
-			var @object = serializer.Deserialize(data, dataType);
+			object @object;
+
+			using (var stream = new MemoryStream(data))
+			{
+				@object = serializer.Deserialize(stream, dataType);
+			}
 
 			return await Task.FromResult((IPayload)new Payload { Event = @event, Data = @object }).ConfigureAwait(false);
 		}

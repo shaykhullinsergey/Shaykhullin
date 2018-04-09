@@ -6,5 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\Shaykhullin.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\Shaykhullin.Serializer.Core.csproj" />
   </ItemGroup>
 </Project>

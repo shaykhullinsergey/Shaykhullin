@@ -43,7 +43,8 @@
       },
       "Shaykhullin.Network/1.0.8": {
         "dependencies": {
-          "Shaykhullin.Network.Core": "1.0.8"
+          "Shaykhullin.Network.Core": "1.0.8",
+          "Shaykhullin.Serializer": "1.0.0"
         },
         "runtime": {
           "Shaykhullin.Network.dll": {}
@@ -51,7 +52,8 @@
       },
       "Shaykhullin.Network.Core/1.0.8": {
         "dependencies": {
-          "Shaykhullin.DependencyInjection": "1.0.5"
+          "Shaykhullin.DependencyInjection": "1.0.5",
+          "Shaykhullin.Serializer.Core": "1.0.0"
         },
         "runtime": {
           "Shaykhullin.Network.Core.dll": {}
@@ -63,6 +65,20 @@
         },
         "runtime": {
           "Shaykhullin.Network.Server.dll": {}
+        }
+      },
+      "Shaykhullin.Serializer/1.0.0": {
+        "dependencies": {
+          "Shaykhullin.Activator": "1.0.0",
+          "Shaykhullin.Serializer.Core": "1.0.0"
+        },
+        "runtime": {
+          "Shaykhullin.Serializer.dll": {}
+        }
+      },
+      "Shaykhullin.Serializer.Core/1.0.0": {
+        "runtime": {
+          "Shaykhullin.Serializer.Core.dll": {}
         }
       }
     }
@@ -104,6 +120,16 @@
       "sha512": ""
     },
     "Shaykhullin.Network.Server/1.0.8": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Serializer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Serializer.Core/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -1,4 +1,6 @@
-﻿namespace Network.Core
+﻿using Shaykhullin.Serializer;
+
+namespace Network.Core
 {
 	public interface ISerializerBuilder : ICompressionBuilder
 	{

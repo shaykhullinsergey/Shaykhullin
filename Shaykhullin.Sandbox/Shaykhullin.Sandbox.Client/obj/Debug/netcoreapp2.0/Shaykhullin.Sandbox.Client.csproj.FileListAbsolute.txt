@@ -24,3 +24,7 @@ C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Clien
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Client.csproj.CopyComplete
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Client.dll
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Client.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Client\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.Core.pdb

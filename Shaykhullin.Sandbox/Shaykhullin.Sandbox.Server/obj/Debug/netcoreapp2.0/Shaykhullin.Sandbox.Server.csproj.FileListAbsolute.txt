@@ -24,3 +24,7 @@ C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Serve
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Server.csproj.CopyComplete
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Server.dll
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\obj\Debug\netcoreapp2.0\Shaykhullin.Sandbox.Server.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Sandbox\Shaykhullin.Sandbox.Server\bin\Debug\netcoreapp2.0\Shaykhullin.Serializer.Core.pdb

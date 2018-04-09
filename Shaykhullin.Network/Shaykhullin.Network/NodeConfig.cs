@@ -2,6 +2,7 @@
 using Network.Core;
 using Shaykhullin.DependencyInjection;
 using Shaykhullin.DependencyInjection.Core;
+using Shaykhullin.Serializer;
 
 namespace Network
 {
@@ -14,7 +15,7 @@ namespace Network
 		protected NodeConfig()
 		{
 			rootConfig.Register<ISerializer>()
-				.ImplementedBy<Serializer>()
+				.ImplementedBy(c => new SerializerConfig().Create())
 				.As<Singleton>();
 			
 			rootConfig.Register<ICompression>()

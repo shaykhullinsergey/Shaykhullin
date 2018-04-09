@@ -30,3 +30,7 @@ C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\D
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Activator.Core.pdb
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Activator.pdb
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\obj\Debug\netstandard2.0\Shaykhullin.Network.csproj.CopyComplete
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Serializer.dll
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Serializer.pdb
+C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Network\Shaykhullin.Network\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.pdb

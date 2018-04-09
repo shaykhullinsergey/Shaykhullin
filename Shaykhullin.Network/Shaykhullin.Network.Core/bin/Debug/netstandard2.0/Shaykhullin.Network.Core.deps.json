@@ -10,7 +10,8 @@
       "Shaykhullin.Network.Core/1.0.8": {
         "dependencies": {
           "NETStandard.Library": "2.0.1",
-          "Shaykhullin.DependencyInjection": "1.0.5"
+          "Shaykhullin.DependencyInjection": "1.0.5",
+          "Shaykhullin.Serializer.Core": "1.0.0"
         },
         "runtime": {
           "Shaykhullin.Network.Core.dll": {}
@@ -47,6 +48,11 @@
       "Shaykhullin.DependencyInjection.Core/1.0.5": {
         "runtime": {
           "Shaykhullin.DependencyInjection.Core.dll": {}
+        }
+      },
+      "Shaykhullin.Serializer.Core/1.0.0": {
+        "runtime": {
+          "Shaykhullin.Serializer.Core.dll": {}
         }
       }
     }
@@ -87,6 +93,11 @@
       "sha512": ""
     },
     "Shaykhullin.DependencyInjection.Core/1.0.5": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Shaykhullin.Serializer.Core/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

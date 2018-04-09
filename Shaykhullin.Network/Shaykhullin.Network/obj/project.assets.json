@@ -77,13 +77,38 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "Shaykhullin.DependencyInjection": "1.0.5"
+          "Shaykhullin.DependencyInjection": "1.0.5",
+          "Shaykhullin.Serializer.Core": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Shaykhullin.Network.Core.dll": {}
         },
         "runtime": {
           "bin/placeholder/Shaykhullin.Network.Core.dll": {}
+        }
+      },
+      "Shaykhullin.Serializer/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Shaykhullin.Activator": "1.0.0",
+          "Shaykhullin.Serializer.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Shaykhullin.Serializer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shaykhullin.Serializer.dll": {}
+        }
+      },
+      "Shaykhullin.Serializer.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Shaykhullin.Serializer.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shaykhullin.Serializer.Core.dll": {}
         }
       }
     }
@@ -254,12 +279,23 @@
       "type": "project",
       "path": "../Shaykhullin.Network.Core/Shaykhullin.Network.Core.csproj",
       "msbuildProject": "../Shaykhullin.Network.Core/Shaykhullin.Network.Core.csproj"
+    },
+    "Shaykhullin.Serializer/1.0.0": {
+      "type": "project",
+      "path": "../../Shaykhullin.Serializer/Shaykhullin.Serializer/Shaykhullin.Serializer.csproj",
+      "msbuildProject": "../../Shaykhullin.Serializer/Shaykhullin.Serializer/Shaykhullin.Serializer.csproj"
+    },
+    "Shaykhullin.Serializer.Core/1.0.0": {
+      "type": "project",
+      "path": "../../Shaykhullin.Serializer/Shaykhullin.Serializer.Core/Shaykhullin.Serializer.Core.csproj",
+      "msbuildProject": "../../Shaykhullin.Serializer/Shaykhullin.Serializer.Core/Shaykhullin.Serializer.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.1",
-      "Shaykhullin.Network.Core >= 1.0.8"
+      "Shaykhullin.Network.Core >= 1.0.8",
+      "Shaykhullin.Serializer >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -296,6 +332,9 @@
           "projectReferences": {
             "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Network\\Shaykhullin.Network.Core\\Shaykhullin.Network.Core.csproj": {
               "projectPath": "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Network\\Shaykhullin.Network.Core\\Shaykhullin.Network.Core.csproj"
+            },
+            "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Serializer\\Shaykhullin.Serializer\\Shaykhullin.Serializer.csproj": {
+              "projectPath": "C:\\Users\\yolor\\Desktop\\Shaykhullin\\Shaykhullin.Serializer\\Shaykhullin.Serializer\\Shaykhullin.Serializer.csproj"
             }
           }
         }

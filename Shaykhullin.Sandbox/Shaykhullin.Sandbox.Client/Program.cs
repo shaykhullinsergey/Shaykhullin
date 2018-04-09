@@ -17,29 +17,35 @@ namespace Shaykhullin.Sandbox.Client
 			var connection = await config.Create("127.0.0.1", 4000)
 				.Connect();
 
-			await connection.Send("DATA").In<Event>();
+			await connection.Send(new IntHolder { MyProperty = 11}).In<Event>();
 			Thread.Sleep(-1);
 		}
 	}
 
-	class Event : IEvent<string>
+	class IntHolder
 	{
-		public Event(IConnection connection, string message)
+		public int MyProperty { get; set; }
+	}
+
+	class Event : IEvent<IntHolder>
+	{
+		public Event(IConnection connection, IntHolder message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public string Message { get; }
+		public IntHolder Message { get; }
 	}
 
 	class Handler : IHandler<Event>
 	{
 		public async Task Execute(Event @event)
 		{
-			Console.WriteLine(@event.Message);
-			await @event.Connection.Send("Data")
+			Console.WriteLine(@event.Message.MyProperty);
+			@event.Message.MyProperty++;
+			await @event.Connection.Send(@event.Message)
 				.In<Event>();
 		}
 	}

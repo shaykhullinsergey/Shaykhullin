@@ -1,7 +1,6 @@
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.deps.json
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.dll
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\bin\Debug\netstandard2.0\Shaykhullin.Serializer.Core.pdb
-C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\obj\Debug\netstandard2.0\Shaykhullin.Serializer.Core.csprojResolveAssemblyReference.cache
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\obj\Debug\netstandard2.0\Shaykhullin.Serializer.Core.csproj.CoreCompileInputs.cache
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\obj\Debug\netstandard2.0\Shaykhullin.Serializer.Core.AssemblyInfoInputs.cache
 C:\Users\yolor\Desktop\Shaykhullin\Shaykhullin.Serializer\Shaykhullin.Serializer.Core\obj\Debug\netstandard2.0\Shaykhullin.Serializer.Core.AssemblyInfo.cs
