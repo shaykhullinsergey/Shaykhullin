@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public class HandlerCollection
 	{
@@ -14,9 +14,9 @@ namespace Network.Core
 			this.config = config;
 		}
 
-		public void Add<TEvent, THandler>()
-			where TEvent : class, IEvent<object>
-			where THandler : class, IHandler<TEvent>
+		public void Add<TData, TEvent, THandler>()
+			where TEvent : IEvent<TData>
+			where THandler : IHandler<TData, TEvent>
 		{
 			var @event = typeof(TEvent);
 			var handler = typeof(THandler);

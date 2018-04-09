@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public class EventCollection
 	{
@@ -14,8 +14,8 @@ namespace Network.Core
 			this.config = config;
 		}
 
-		public void Add<TEvent>()
-			where TEvent : class, IEvent<object>
+		public void Add<TData, TEvent>()
+			where TEvent : IEvent<TData>
 		{
 			var @event = typeof(TEvent);
 			
@@ -43,7 +43,7 @@ namespace Network.Core
 
 			var hash = GetHash(@event.Name);
 			events.Add(hash, @event);
-			config.Register(@event);
+			config.Register<object>(@event);
 			return hash;
 		}
 		

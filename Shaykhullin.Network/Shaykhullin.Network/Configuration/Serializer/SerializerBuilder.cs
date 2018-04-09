@@ -1,7 +1,7 @@
 ﻿using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class SerializerBuilder : ISerializerBuilder
 	{

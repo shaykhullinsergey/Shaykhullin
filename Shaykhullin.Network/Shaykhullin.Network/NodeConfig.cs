@@ -1,18 +1,19 @@
 ﻿using System;
-using Network.Core;
+using Shaykhullin.Network.Core;
+
+using Shaykhullin.Serializer;
 using Shaykhullin.DependencyInjection;
 using Shaykhullin.DependencyInjection.Core;
-using Shaykhullin.Serializer;
 
-namespace Network
+namespace Shaykhullin.Network
 {
-	public abstract class NodeConfig<TNode> : IConfig<TNode>
+	public abstract class Config<TNode> : IConfig<TNode>
 		where TNode : INode
 	{
 		private readonly IContainerConfig rootConfig = new ContainerConfig();
-		protected readonly IContainerConfig Config;
+		private readonly IContainerConfig config;
 
-		protected NodeConfig()
+		protected Config()
 		{
 			rootConfig.Register<ISerializer>()
 				.ImplementedBy(c => new SerializerConfig().Create())
@@ -45,56 +46,59 @@ namespace Network
 			rootConfig.Register<Disconnect>();
 			rootConfig.Register<Error>();
 
-			Config = rootConfig.Scope();
+			config = rootConfig.Scope();
 
-			Config.Register<IContainerConfig>()
-				.ImplementedBy(c => Config)
+			config.Register<IContainerConfig>()
+				.ImplementedBy(c => config)
 				.As<Singleton>();
 		}
 		
 		public ICompressionBuilder UseSerializer<TSerializer>() 
 			where TSerializer : ISerializer
 		{
-			return new SerializerBuilder(Config)
-				.UseSerializer<TSerializer>();
+			return new SerializerBuilder(config).UseSerializer<TSerializer>();
 		}
 		public IEncryptionBuilder UseCompression<TCompression>()
 			where TCompression : ICompression
 		{
-			return new SerializerBuilder(Config)
-				.UseCompression<TCompression>();
+			return new SerializerBuilder(config).UseCompression<TCompression>();
 		}
 		public void UseEncryption<TEncryption>()
 			where TEncryption : IEncryption
 		{
-			new SerializerBuilder(Config)
-				.UseEncryption<TEncryption>();
+			new SerializerBuilder(config).UseEncryption<TEncryption>();
 		}
 
 		public IImplementedByBuilder<TRegister> Register<TRegister>() 
-			where TRegister : class
 		{
-			return Config.Register<TRegister>();
+			return Register<TRegister>(typeof(TRegister));
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
 		{
-			return Config.Register(register);
+			return Register<object>(register);
 		}
 
-		public IHandlerBuilder<TEvent> When<TEvent>() 
-			where TEvent : class, IEvent<object>
+		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
 		{
-			return new EventBuilder(Config)
-				.When<TEvent>();
+			return config.Register<TRegister>(register);
 		}
+
 		public abstract TNode Create(string host, int port);
 
-		protected void Configure(string host, int port)
+
+		public IEventBuilder<TData> When<TData>()
 		{
-			Config.Register<IConfiguration>()
+			return new EventBuilder<TData>(config.Container);
+		}
+
+		protected IContainerConfig Configure(string host, int port)
+		{
+			config.Register<IConfiguration>()
 				.ImplementedBy(c => new Configuration(host, port))
 				.As<Singleton>();
+
+			return config;
 		}
 	}
 }

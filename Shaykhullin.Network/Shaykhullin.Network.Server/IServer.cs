@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface IServer : INode
 	{

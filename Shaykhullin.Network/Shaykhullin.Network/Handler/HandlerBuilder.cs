@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using Shaykhullin.DependencyInjection;
+﻿using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
-	internal class HandlerBuilder<TEvent> : IHandlerBuilder<TEvent>
-		where TEvent : class, IEvent<object>
+	internal class HandlerBuilder<TData, TEvent> : IHandlerBuilder<TData, TEvent>
+		where TEvent : IEvent<TData>
 	{
-		private readonly IContainerConfig config;
+		private readonly IContainer container;
 
-		public HandlerBuilder(IContainerConfig config)
+		public HandlerBuilder(IContainer container)
 		{
-			this.config = config;
+			this.container = container;
 		}
 
-		public void Use<THandler>() where THandler 
-			: class, IHandler<TEvent>
+		public void Call<THandler>() where THandler 
+			: IHandler<TData, TEvent>
 		{
-			var container = config.Container;
-			
 			container.Resolve<EventCollection>()
-				.Add<TEvent>();
-			
+				.Add<TData, TEvent>();
+
 			container.Resolve<HandlerCollection>()
-				.Add<TEvent, THandler>();
+				.Add<TData, TEvent, THandler>();
 		}
 	}
 }

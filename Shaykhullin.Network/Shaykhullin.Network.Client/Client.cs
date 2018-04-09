@@ -1,10 +1,10 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
 
-using Network.Core;
+using Shaykhullin.Network.Core;
 using Shaykhullin.DependencyInjection;
 
-namespace Network
+namespace Shaykhullin.Network
 {
 	internal class Client : IClient
 	{

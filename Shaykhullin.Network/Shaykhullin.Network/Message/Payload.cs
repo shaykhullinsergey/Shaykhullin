@@ -1,6 +1,6 @@
 using System;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
   internal class Payload : IPayload
 	{

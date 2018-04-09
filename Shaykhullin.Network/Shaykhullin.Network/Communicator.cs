@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class Communicator : ICommunicator
 	{

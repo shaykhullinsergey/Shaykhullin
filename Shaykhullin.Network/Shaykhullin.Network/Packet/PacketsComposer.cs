@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class PacketsComposer : IPacketsComposer
 	{

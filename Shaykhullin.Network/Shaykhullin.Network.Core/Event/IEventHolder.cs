@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface IEventHolder
 	{

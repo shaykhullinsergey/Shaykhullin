@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface IPacketsComposer
 	{

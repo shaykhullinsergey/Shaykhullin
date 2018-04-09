@@ -1,4 +1,4 @@
-﻿using Network;
+﻿using Shaykhullin.Network;
 using System;
 using System.Threading.Tasks;
 
@@ -10,38 +10,33 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.When<Event>()
-				.Use<Handler>();
+			config.When<int>()
+				.From<Event>()
+				.Call<Handler>();
 
 			await config.Create("127.0.0.1", 4000).Run();
 		}
 	}
 
-	class IntHolder
+	struct Event : IEvent<int>
 	{
-		public int MyProperty { get; set; }
-	}
-
-	class Event : IEvent<IntHolder>
-	{
-		public Event(IConnection connection, IntHolder message)
+		public Event(IConnection connection, int message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public IntHolder Message { get; }
+		public int Message { get; }
 	}
 
-	class Handler : IHandler<Event>
+	struct Handler : IHandler<int, Event>
 	{
 		public async Task Execute(Event @event)
 		{
-			Console.WriteLine(@event.Message.MyProperty);
-			@event.Message.MyProperty++;
-			await @event.Connection.Send(@event.Message)
-				.In<Event>();
+			Console.WriteLine(@event.Message);
+			var m = @event.Message + 1;
+			await @event.Connection.Send(@event.Message).To<Event>();
 		}
 	}
 }

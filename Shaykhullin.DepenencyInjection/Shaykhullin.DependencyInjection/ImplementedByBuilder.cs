@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class ImplementedByBuilder<TRegister> : IImplementedByBuilder<TRegister>
-		where TRegister : class
 	{
 		private readonly Dependency dto;
 		

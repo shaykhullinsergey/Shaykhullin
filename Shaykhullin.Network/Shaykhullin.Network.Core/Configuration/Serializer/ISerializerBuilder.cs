@@ -1,6 +1,6 @@
 ﻿using Shaykhullin.Serializer;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface ISerializerBuilder : ICompressionBuilder
 	{

@@ -1,13 +1,13 @@
-﻿using Network.Core;
+﻿using Shaykhullin.Network.Core;
 
-namespace Network
+namespace Shaykhullin.Network
 {
-	public sealed class ServerConfig : NodeConfig<IServer>
+	public sealed class ServerConfig : Config<IServer>
 	{
 		public override IServer Create(string host, int port)
 		{
-			base.Configure(host, port);
-			return new Server(Config);
+			var config = Configure(host, port);
+			return new Server(config);
 		}
 	}
 }

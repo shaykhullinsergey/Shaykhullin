@@ -1,6 +1,6 @@
-﻿using Network.Core;
+﻿using Shaykhullin.Network.Core;
 
-namespace Network
+namespace Shaykhullin.Network
 {
 	public interface IEvent<out TData>
 	{

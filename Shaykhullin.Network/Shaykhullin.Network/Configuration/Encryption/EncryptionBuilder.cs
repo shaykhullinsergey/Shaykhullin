@@ -1,6 +1,6 @@
 ﻿using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class EncryptionBuilder : IEncryptionBuilder
 	{

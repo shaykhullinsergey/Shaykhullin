@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class SendBuilder<TData> : ISendBuilder<TData>
 	{
@@ -14,7 +14,7 @@ namespace Network.Core
 			this.data = data;
 		}
 		
-		public async Task In<TEvent>() 
+		public async Task To<TEvent>() 
 			where TEvent : IEvent<TData>
 		{
 			var payload = new Payload { Event = typeof(TEvent), Data = data };

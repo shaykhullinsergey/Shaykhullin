@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class Server : IServer
 	{

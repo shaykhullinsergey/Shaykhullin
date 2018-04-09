@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface IPayload
 	{

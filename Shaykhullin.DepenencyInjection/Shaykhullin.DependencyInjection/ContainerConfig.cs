@@ -25,18 +25,27 @@ namespace Shaykhullin.DependencyInjection
 		}
 
 		public IImplementedByBuilder<TRegister> Register<TRegister>()
-			where TRegister : class =>
-				new RegisterBuilder(dependencyContainer)
-					.Register<TRegister>();
+		{
+			return Register<TRegister>(typeof(TRegister));
+		}
 
-		public IImplementedByBuilder<object> Register(Type register) =>
-			new RegisterBuilder(dependencyContainer)
-				.Register(register);
+		public IImplementedByBuilder<object> Register(Type register)
+		{
+			return Register<object>(register);
+		}
+
+		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
+		{
+			return new RegisterBuilder(dependencyContainer)
+				.Register<TRegister>(register);
+		}
 
 		public IContainerConfig Scope() => new ContainerConfig(this);
 
 		public IContainer Container => container ?? (container = new Container(activatorConfig.Create(), dependencyContainer));
 
 		public void Dispose() { }
+
+	
 	}
 }

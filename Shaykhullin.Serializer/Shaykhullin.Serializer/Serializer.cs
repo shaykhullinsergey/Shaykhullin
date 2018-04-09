@@ -13,11 +13,13 @@ namespace Shaykhullin.Serializer
 	{
 		private readonly IActivator activator;
 		private readonly Dictionary<Type, IConverter> converters;
+		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
 		public Serializer(IActivator activator, Dictionary<Type, IConverter> converters)
 		{
 			this.activator = activator;
 			this.converters = converters;
+			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
 
 		public void Serialize<TData>(Stream stream, TData data)
@@ -48,16 +50,18 @@ namespace Shaykhullin.Serializer
 				return;
 			}
 
-			var props = dataType
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Where(x => x.CanRead && x.CanWrite)
-				.ToArray();
+			if (!properties.TryGetValue(dataType, out var props))
+			{
+				props = dataType
+					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+					.Where(x => x.CanRead && x.CanWrite)
+					.ToArray();
+				properties.Add(dataType, props);
+			}
 
 			foreach (var p in props)
 			{
-				var value = p.GetValue(data);
-
-				Serialize(stream, value);
+				Serialize(stream, p.GetValue(data));
 			}
 		}
 
@@ -73,10 +77,14 @@ namespace Shaykhullin.Serializer
 				return converter.DeserializeObject(stream);
 			}
 
-			var props = type
-				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Where(x => x.CanRead && x.CanWrite)
-				.ToArray();
+			if (!properties.TryGetValue(type, out var props))
+			{
+				props = type
+					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+					.Where(x => x.CanRead && x.CanWrite)
+					.ToArray();
+				properties.Add(type, props);
+			}
 
 			var instance = activator.Create(type);
 

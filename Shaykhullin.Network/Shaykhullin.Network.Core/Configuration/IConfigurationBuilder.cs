@@ -1,4 +1,4 @@
-﻿namespace Network.Core
+﻿namespace Shaykhullin.Network.Core
 {
 	public interface IConfigurationBuilder : ISerializerBuilder
 	{

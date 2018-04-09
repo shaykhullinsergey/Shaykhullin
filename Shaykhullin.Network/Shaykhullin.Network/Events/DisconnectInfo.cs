@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Network
+namespace Shaykhullin.Network
 {
 	public class DisconnectInfo
 	{

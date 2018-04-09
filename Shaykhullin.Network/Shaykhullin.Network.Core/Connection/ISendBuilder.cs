@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	public interface ISendBuilder<TData>
 	{
-		Task In<TEvent>()
+		Task To<TEvent>()
 			where TEvent : IEvent<TData>;
 	}
 }

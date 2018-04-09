@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Network
+namespace Shaykhullin.Network
 {
-	public interface IHandler<TEvent>
-		where TEvent : IEvent<object>
+	public interface IHandler<TData, TEvent>
+		where TEvent : IEvent<TData>
 	{
 		Task Execute(TEvent @event);
 	}

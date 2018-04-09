@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class EventRaiser : IEventRaiser
 	{
@@ -25,7 +25,7 @@ namespace Network.Core
 			{
 				using (var scope = config.Scope())
 				{
-					scope.Register(payload.Data.GetType())
+					scope.Register<object>(payload.Data.GetType())
 						.ImplementedBy(c => payload.Data)
 						.As<Singleton>();
 

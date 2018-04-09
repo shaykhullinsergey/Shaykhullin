@@ -13,15 +13,19 @@ namespace Shaykhullin.DependencyInjection.Core
 		}
 		
 		public IImplementedByBuilder<TRegister> Register<TRegister>() 
-			where TRegister : class
 		{
-			return Register(typeof(TRegister));
+			return Register<TRegister>(typeof(TRegister));
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
 		{
+			return Register<object>(register);
+		}
+
+		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
+		{
 			var dto = dependencies.Register(register);
-			return new ImplementedByBuilder<object>(dto);
+			return new ImplementedByBuilder<TRegister>(dto);
 		}
 	}
 }

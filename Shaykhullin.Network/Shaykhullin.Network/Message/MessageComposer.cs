@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
 	internal class MessageComposer : IMessageComposer
 	{

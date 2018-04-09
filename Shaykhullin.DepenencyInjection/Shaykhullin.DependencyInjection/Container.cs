@@ -27,38 +27,56 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		private object ResolveRecursive(Type register, Type @for)
 		{
-			var dependency = dependencyContainer.Get(register, @for) ?? throw new InvalidOperationException($"{register} not found");
+			var dependency = dependencyContainer.Get(register, @for) 
+				?? throw new InvalidOperationException($"{register} not found");
 
-			if (dependency.Instance == null)
-			{
-				dependency.Instance = (ILifecycle)activator.Create(dependency.Lifecycle, activator);
-			}
+			EnsureLifecycle(dependency);
 
 			if (dependency.Factory != null)
 			{
 				return dependency.Instance.Resolve(() => dependency.Factory(this));
 			}
 
-			if (dependency.Parameters == null)
-			{
-				var ctor = dependency.Implemented.GetConstructors()[0];
-				var parameters = ctor.GetParameters();
-				
-				dependency.Parameters = new Type[parameters.Length];
-				for (var i = 0; i < parameters.Length; i++)
-				{
-					dependency.Parameters[i] = parameters[i].ParameterType;
-				}
-			}
+			EnsureParameters(dependency);
 			
 			var arguments = new object[dependency.Parameters.Length];
-
 			for (var i = 0; i < arguments.Length; i++)
 			{
 				arguments[i] = ResolveRecursive(dependency.Parameters[i], register);
 			}
 
 			return dependency.Instance.Resolve(dependency.Implemented, arguments);
+		}
+
+		private void EnsureLifecycle(Dependency dependency)
+		{
+			if (dependency.Instance == null)
+			{
+				dependency.Instance = (ILifecycle)activator.Create(dependency.Lifecycle, activator);
+			}
+		}
+
+		private void EnsureParameters(Dependency dependency)
+		{
+			if (dependency.Parameters == null)
+			{
+				var ctors = dependency.Implemented.GetConstructors();
+
+				if (ctors.Length == 0)
+				{
+					dependency.Parameters = Array.Empty<Type>();
+				}
+				else
+				{
+					var parameters = ctors[0].GetParameters();
+
+					dependency.Parameters = new Type[parameters.Length];
+					for (var i = 0; i < parameters.Length; i++)
+					{
+						dependency.Parameters[i] = parameters[i].ParameterType;
+					}
+				}
+			}
 		}
 	}
 }

@@ -4,9 +4,9 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	public interface IRegisterBuilder
 	{
-		IImplementedByBuilder<TRegister> Register<TRegister>()
-			where TRegister : class;
+		IImplementedByBuilder<TRegister> Register<TRegister>();
 
+		IImplementedByBuilder<TRegister> Register<TRegister>(Type register);
 		IImplementedByBuilder<object> Register(Type register);
 	}
 }

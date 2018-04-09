@@ -1,8 +1,13 @@
-﻿namespace Network.Core
+﻿namespace Shaykhullin.Network.Core
 {
-	public interface IEventBuilder
+	public interface IDataBuilder
 	{
-		IHandlerBuilder<TEvent> When<TEvent>()
-			where TEvent : class, IEvent<object>;
+		IEventBuilder<TData> When<TData>();
+	}
+
+	public interface IEventBuilder<TData>
+	{
+		IHandlerBuilder<TData, TEvent> From<TEvent>()
+			where TEvent : IEvent<TData>;
 	}
 }

@@ -1,20 +1,20 @@
 ﻿using Shaykhullin.DependencyInjection;
 
-namespace Network.Core
+namespace Shaykhullin.Network.Core
 {
-	internal class EventBuilder : IEventBuilder
+	internal class EventBuilder<TData> : IEventBuilder<TData>
 	{
-		private readonly IContainerConfig config;
+		private readonly IContainer container;
 
-		public EventBuilder(IContainerConfig config)
+		public EventBuilder(IContainer container)
 		{
-			this.config = config;
+			this.container = container;
 		}
 		
-		public IHandlerBuilder<TEvent> When<TEvent>()
-			where TEvent : class, IEvent<object>
+		public IHandlerBuilder<TData, TEvent> From<TEvent>()
+			where TEvent : IEvent<TData>
 		{
-			return new HandlerBuilder<TEvent>(config);
+			return new HandlerBuilder<TData, TEvent>(container);
 		}
 	}
 }
