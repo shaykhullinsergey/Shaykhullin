@@ -16,9 +16,13 @@ namespace Shaykhullin.Serializer
 		private readonly ConverterCollection converters;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
-		public Serializer(IContainer container, ConverterCollection converters)
+		public Serializer(IContainerConfig config, ConverterCollection converters)
 		{
-			this.container = container;
+			config.Register<ISerializer>()
+				.ImplementedBy(c => this)
+				.As<Singleton>();
+
+			this.container = config.Container;
 			this.converters = converters;
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
@@ -35,30 +39,32 @@ namespace Shaykhullin.Serializer
 
 		public void Serialize(Stream stream, object data)
 		{
-			if (data == null)
+			if(data == null)
 			{
 				stream.WriteByte(1);
 				return;
 			}
 
-			stream.WriteByte(0);
+			var type = data.GetType();
 
-			var dataType = data.GetType();
-
-			if (converters.TryGetValue(dataType, out var converterType))
+			if (!type.IsValueType || (Nullable.GetUnderlyingType(type) != null))
 			{
-				var converter = (IConverter)container.Resolve(converterType);
+				stream.WriteByte(0);
+			}
+
+			if (converters.TryGetValue(type, out var converter))
+			{
 				converter.SerializeObject(stream, data);
 				return;
 			}
 
-			if (!properties.TryGetValue(dataType, out var props))
+			if (!properties.TryGetValue(type, out var props))
 			{
-				props = dataType
+				props = type
 					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 					.Where(x => x.CanRead && x.CanWrite)
 					.ToArray();
-				properties.Add(dataType, props);
+				properties.Add(type, props);
 			}
 
 			foreach (var p in props)
@@ -69,14 +75,16 @@ namespace Shaykhullin.Serializer
 
 		public object Deserialize(Stream stream, Type type)
 		{
-			if (stream.ReadByte() == 1)
+			if (!type.IsValueType || (Nullable.GetUnderlyingType(type) != null))
 			{
-				return null;
+				if (stream.ReadByte() == 1)
+				{
+					return null;
+				}
 			}
 
-			if (converters.TryGetValue(type, out var converterType))
+			if (converters.TryGetValue(type, out var converter))
 			{
-				var converter = (IConverter)container.Resolve(converterType);
 				return converter.DeserializeObject(stream);
 			}
 

@@ -7,33 +7,23 @@ namespace Shaykhullin.Sandbox.Serializer
 	{
 		static void Main(string[] args)
 		{
-			var test = new Test
-			{
-				MyProperty1 = 11,
-				MyProperty2 = new Test
-				{
-					MyProperty1 = 22,
-					MyProperty3 = 33
-				},
-				MyProperty3 = 44
-			};
+			var test = new Test[] { new Test { Prop = 12, TestIn = new Test { Prop = 1313 } }, new Test { Prop = 13 } };
 
 			var config = new SerializerConfig();
 
 			var s = config.Create();
 			using (var stream = new MemoryStream())
 			{
-				s.Serialize<byte>(stream, 252);
+				s.Serialize(stream, test);
 				stream.Position = 0;
-				var t = s.Deserialize<byte>(stream);
+				var t = s.Deserialize<Test[]>(stream);
 			}
 		}
 	}
 
 	class Test
 	{
-		public int MyProperty1 { get; set; }
-		public Test MyProperty2 { get; set; }
-		public int MyProperty3 { get; set; }
+		public int Prop { get; set; }
+		public Test TestIn { get; set; }
 	}
 }

@@ -1,42 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 using Shaykhullin.Activator;
 using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer.Core;
+using System;
 
 namespace Shaykhullin.Serializer
 {
-	public class ConverterCollection
-	{
-		private readonly Dictionary<Type, Type> converters;
-
-		public ConverterCollection()
-		{
-			converters = new Dictionary<Type, Type>();
-		}
-
-		public void Add(Type type, Type converterType, IContainerConfig config)
-		{
-			if (converters.ContainsKey(type))
-			{
-				converters[type] = converterType;
-			}
-			else
-			{
-				converters.Add(type, converterType);
-			}
-
-			config.Register(converterType)
-				.As<Singleton>();
-		}
-
-		public bool TryGetValue(Type type, out Type converterType)
-		{
-			return converters.TryGetValue(type, out converterType);
-		}
-	}
-
 	public class SerializerConfig : ISerializerConfig
 	{
 		private ISerializer serializer;
@@ -47,16 +16,31 @@ namespace Shaykhullin.Serializer
 		public SerializerConfig()
 		{
 			rootConfig = new ContainerConfig();
-			converters = new ConverterCollection();
+			scope = rootConfig.Scope();
+			converters = new ConverterCollection(scope.Container);
 
 			rootConfig.Register<IActivator>()
 				.ImplementedBy(c => new ActivatorConfig().Create())
 				.As<Singleton>();
 
-			new UseBuilder<int>(rootConfig, converters).Use<Int32Converter>();
-			new UseBuilder<int>(rootConfig, converters).Use<Int32Converter>();
+			rootConfig.Register<ConverterCollection>()
+				.ImplementedBy(c => converters)
+				.As<Singleton>();
 
-			scope = rootConfig.Scope();
+			scope.Register<IContainer>()
+				.ImplementedBy(c => c)
+				.As<Singleton>();
+
+			new UseBuilder<byte>(rootConfig, converters).Use<ByteConverter>();
+			new UseBuilder<sbyte>(rootConfig, converters).Use<SByteConverter>();
+			new UseBuilder<short>(rootConfig, converters).Use<ShortConverter>();
+			new UseBuilder<ushort>(rootConfig, converters).Use<UShortConverter>();
+			new UseBuilder<int>(rootConfig, converters).Use<Int32Converter>();
+			new UseBuilder<uint>(rootConfig, converters).Use<UInt32Converter>();
+			new UseBuilder<long>(rootConfig, converters).Use<Int64Converter>();
+			new UseBuilder<ulong>(rootConfig, converters).Use<UInt64Converter>();
+			new UseBuilder<string>(rootConfig, converters).Use<StringConverter>();
+			new UseBuilder<Array>(rootConfig, converters).Use<ArrayConverter>();
 		}
 
 		public IUseBuilder<TData> When<TData>()
@@ -66,7 +50,7 @@ namespace Shaykhullin.Serializer
 
 		public ISerializer Create()
 		{
-			return serializer ?? (serializer = new Serializer(scope.Container, converters));
+			return serializer ?? (serializer = new Serializer(scope, converters));
 		}
 	}
 }
