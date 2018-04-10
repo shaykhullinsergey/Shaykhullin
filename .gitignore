@@ -274,3 +274,5 @@ Shaykhullin.DepenencyInjection/Shaykhullin.DependencyInjection/bin/Debug/netstan
 Shaykhullin.DepenencyInjection/Shaykhullin.DependencyInjection/bin/Debug/netstandard2.0/Shaykhullin.Activator.Core.pdb
 Shaykhullin.DepenencyInjection/Shaykhullin.DependencyInjection/bin/Debug/netstandard2.0/Shaykhullin.Activator.Core.dll
 .vs/
+Shaykhullin.Serializer/Shaykhullin.Serializer/bin/
+Shaykhullin.Sandbox/Shaykhullin.Sandbox.Serializer/bin/

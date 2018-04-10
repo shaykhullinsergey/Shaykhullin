@@ -28,9 +28,15 @@ namespace Shaykhullin.Network.Core
 			{
 				lock (@lock)
 				{
-					if(!tcpClient.Connected)
+					if (!tcpClient.Connected)
 					{
 						tcpClient.ConnectAsync(configuration.Host, configuration.Port).Wait();
+						Task.Run(async () =>
+							await eventRaiser.Raise(new Payload
+							{
+								Event = typeof(Connect),
+								Data = new ConnectInfo()
+							}));
 					}
 				}
 			}
@@ -65,8 +71,33 @@ namespace Shaykhullin.Network.Core
 				await Connect().ConfigureAwait(false);
 			}
 
-			await tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+			var read = await tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+
+			if(read == 0 && !IsConnected)
+			{
+				await eventRaiser.Raise(new Payload
+				{
+					Event = typeof(Disconnect),
+					Data = new DisconnectInfo("Connection closed")
+				}).ConfigureAwait(false);
+
+				throw new OperationCanceledException();
+			}
+
 			return await packetsComposer.GetPacket(buffer).ConfigureAwait(false);
+		}
+
+		public async void Dispose()
+		{
+			tcpClient.Close();
+			tcpClient.Dispose();
+
+			await eventRaiser.Raise(new Payload
+			{
+				Event = typeof(Disconnect),
+				Data = new DisconnectInfo("Connection disposed")
+			}).ConfigureAwait(false);
+
 		}
 
 		private bool isConnected = false;

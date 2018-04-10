@@ -33,6 +33,11 @@ namespace Shaykhullin.Network.Core
 			Task.Run(async () => await ReceiveLoop());
 		}
 
+		public void Dispose()
+		{
+			container.Resolve<ICommunicator>().Dispose();
+		}
+
 		public ISendBuilder<TData> Send<TData>(TData data)
 		{
 			return new SendBuilder<TData>(container, data);
@@ -46,26 +51,11 @@ namespace Shaykhullin.Network.Core
 			var messageComposer = container.Resolve<IMessageComposer>();
 			var eventRaiser = container.Resolve<IEventRaiser>();
 
-			Console.WriteLine("Loop");
-
 			IPacket packet = null;
 
 			while (true)
 			{
-				try
-				{
-					packet = await communicator.Receive().ConfigureAwait(false);
-				}
-				catch (Exception exception)
-				{
-					await eventRaiser.Raise(new Payload
-					{
-						Event = typeof(Disconnect),
-						Data = new DisconnectInfo("Connection lost", exception)
-					}).ConfigureAwait(false);
-
-					throw;
-				}
+				packet = await communicator.Receive().ConfigureAwait(false);
 
 				if (messages.TryGetValue(packet.Id, out var packets))
 				{

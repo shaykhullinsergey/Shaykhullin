@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Shaykhullin.Network.Core
 {
-	public interface ICommunicator
+	public interface ICommunicator : IDisposable
 	{
 		bool IsConnected { get; }
 		Task Connect();

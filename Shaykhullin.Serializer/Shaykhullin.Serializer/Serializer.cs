@@ -4,20 +4,21 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-using Shaykhullin.Activator;
+using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer.Core;
+using Shaykhullin.Activator;
 
 namespace Shaykhullin.Serializer
 {
 	internal class Serializer : ISerializer
 	{
-		private readonly IActivator activator;
-		private readonly Dictionary<Type, IConverter> converters;
+		private readonly IContainer container;
+		private readonly ConverterCollection converters;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
-		public Serializer(IActivator activator, Dictionary<Type, IConverter> converters)
+		public Serializer(IContainer container, ConverterCollection converters)
 		{
-			this.activator = activator;
+			this.container = container;
 			this.converters = converters;
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
@@ -44,8 +45,9 @@ namespace Shaykhullin.Serializer
 
 			var dataType = data.GetType();
 
-			if (converters.TryGetValue(dataType, out var converter))
+			if (converters.TryGetValue(dataType, out var converterType))
 			{
+				var converter = (IConverter)container.Resolve(converterType);
 				converter.SerializeObject(stream, data);
 				return;
 			}
@@ -72,8 +74,9 @@ namespace Shaykhullin.Serializer
 				return null;
 			}
 
-			if (converters.TryGetValue(type, out var converter))
+			if (converters.TryGetValue(type, out var converterType))
 			{
+				var converter = (IConverter)container.Resolve(converterType);
 				return converter.DeserializeObject(stream);
 			}
 
@@ -86,7 +89,7 @@ namespace Shaykhullin.Serializer
 				properties.Add(type, props);
 			}
 
-			var instance = activator.Create(type);
+			var instance = container.Resolve<IActivator>().Create(type);
 
 			foreach (var p in props)
 			{

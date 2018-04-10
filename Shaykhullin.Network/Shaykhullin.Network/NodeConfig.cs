@@ -44,6 +44,7 @@ namespace Shaykhullin.Network
 				.As<Singleton>();
 
 			rootConfig.Register<Disconnect>();
+			rootConfig.Register<Connect>();
 			rootConfig.Register<Error>();
 
 			config = rootConfig.Scope();

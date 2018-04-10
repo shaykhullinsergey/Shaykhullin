@@ -10,13 +10,40 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
+			config.When<ConnectInfo>()
+				.From<Connect>()
+				.Call<ConnectHandler>();
+
 			config.When<int>()
 				.From<Event>()
 				.Call<Handler>();
 
+			config.When<DisconnectInfo>()
+				.From<Disconnect>()
+				.Call<DisconnectHandler>();
+
 			await config.Create("127.0.0.1", 4000).Run();
 		}
 	}
+
+	class DisconnectHandler : IHandler<DisconnectInfo, Disconnect>
+	{
+		public Task Execute(Disconnect @event)
+		{
+			Console.WriteLine("DISCONNECT" + @event.Message.Reason);
+			return Task.CompletedTask;
+		}
+	}
+
+	struct ConnectHandler : IHandler<ConnectInfo, Connect>
+	{
+		public Task Execute(Connect @event)
+		{
+			Console.WriteLine("CONNECT");
+			return Task.CompletedTask;
+		}
+	}
+
 
 	struct Event : IEvent<int>
 	{
@@ -32,11 +59,10 @@ namespace Shaykhullin.Sandbox.Server
 
 	struct Handler : IHandler<int, Event>
 	{
-		public async Task Execute(Event @event)
+		public Task Execute(Event @event)
 		{
 			Console.WriteLine(@event.Message);
-			var m = @event.Message + 1;
-			await @event.Connection.Send(@event.Message).To<Event>();
+			return Task.CompletedTask;
 		}
 	}
 }

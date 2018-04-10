@@ -11,15 +11,43 @@ namespace Shaykhullin.Sandbox.Client
 		{
 			var config = new ClientConfig();
 
+			config.When<ConnectInfo>()
+				.From<Connect>()
+				.Call<ConnectHandler>();
+
 			config.When<int>()
 				.From<Event>()
 				.Call<Handler>();
 
-			var connection = await config.Create("127.0.0.1", 4000)
-				.Connect();
+			config.When<DisconnectInfo>()
+				.From<Disconnect>()
+				.Call<DisconnectHandler>();
 
-			await connection.Send(1).To<Event>();
-			Thread.Sleep(-1);
+			var client = config.Create("127.0.0.1", 4000);
+
+			using (var connection = await client.Connect())
+			{
+				await connection.Send(1).To<Event>();
+				Thread.Sleep(1000);
+			}
+		}
+	}
+
+	class DisconnectHandler : IHandler<DisconnectInfo, Disconnect>
+	{
+		public Task Execute(Disconnect @event)
+		{
+			Console.WriteLine("DISCONNECT" + @event.Message.Reason);
+			return Task.CompletedTask;
+		}
+	}
+
+	struct ConnectHandler : IHandler<ConnectInfo, Connect>
+	{
+		public Task Execute(Connect @event)
+		{
+			Console.WriteLine("CONNECT");
+			return Task.CompletedTask;
 		}
 	}
 

@@ -4,7 +4,7 @@ namespace Shaykhullin.Network
 {
 	public class DisconnectInfo
 	{
-		internal DisconnectInfo(string message, Exception exception)
+		internal DisconnectInfo(string message, Exception exception = null)
 		{
 			Reason = message;
 			Exception = exception;

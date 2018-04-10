@@ -1,8 +1,9 @@
-﻿using Shaykhullin.Network.Core;
+﻿using System;
+using Shaykhullin.Network.Core;
 
 namespace Shaykhullin.Network
 {
-	public interface IConnection
+	public interface IConnection : IDisposable
 	{
 		ISendBuilder<TData> Send<TData>(TData data);
 	}

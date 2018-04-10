@@ -1,35 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Shaykhullin.Activator;
-using Shaykhullin.Serializer.Core;
+﻿using Shaykhullin.Serializer.Core;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Serializer
 {
 	internal class UseBuilder<TData> : IUseBuilder<TData>
 	{
-		private IActivator activator;
-		private Dictionary<Type, IConverter> converters;
+		private readonly IContainerConfig scope;
+		private ConverterCollection converters;
 
-		public UseBuilder(IActivator activator, Dictionary<Type, IConverter> converters)
+		public UseBuilder(IContainerConfig scope, ConverterCollection converters)
 		{
-			this.activator = activator;
+			this.scope = scope;
 			this.converters = converters;
 		}
 
 		public void Use<TConverter>() 
 			where TConverter : IConverter<TData>
 		{
-			var type = typeof(TData);
-
-			if(converters.ContainsKey(type))
-			{
-				converters[type] = activator.Create<TConverter>();
-			}
-			else
-			{
-				converters.Add(type, activator.Create<TConverter>());
-			}
+			converters.Add(typeof(TData), typeof(TConverter), scope);
 		}
 	}
 }
