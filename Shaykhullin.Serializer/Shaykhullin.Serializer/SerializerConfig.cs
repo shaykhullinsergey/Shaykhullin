@@ -40,6 +40,7 @@ namespace Shaykhullin.Serializer
 			new UseBuilder<long>(rootConfig, converters).Use<Int64Converter>();
 			new UseBuilder<ulong>(rootConfig, converters).Use<UInt64Converter>();
 			new UseBuilder<string>(rootConfig, converters).Use<StringConverter>();
+			new UseBuilder<bool>(rootConfig, converters).Use<BoolConverter>();
 			new UseBuilder<Array>(rootConfig, converters).Use<ArrayConverter>();
 		}
 

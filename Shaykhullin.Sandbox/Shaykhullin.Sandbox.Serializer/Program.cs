@@ -7,7 +7,7 @@ namespace Shaykhullin.Sandbox.Serializer
 	{
 		static void Main(string[] args)
 		{
-			Test[] test = { new Test { Prop = 11, Testt = new Test { Prop = 323 } }, new Test { Prop = 22 } };
+			var test = new Test[] { new Test { Prop = true }, new Test { Prop = false }, new Test { Prop = true }, };
 
 			var config = new SerializerConfig();
 
@@ -23,7 +23,6 @@ namespace Shaykhullin.Sandbox.Serializer
 
 	class Test
 	{
-		public int Prop { get; set; }
-		public Test Testt { get; set; }
+		public bool Prop { get; set; }
 	}
 }
