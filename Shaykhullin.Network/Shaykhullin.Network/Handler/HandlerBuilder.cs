@@ -12,7 +12,7 @@ namespace Shaykhullin.Network.Core
 			this.container = container;
 		}
 
-		public void Call<THandler>() where THandler 
+		public void CallHandler<THandler>() where THandler 
 			: IHandler<TData, TEvent>
 		{
 			container.Resolve<EventCollection>()

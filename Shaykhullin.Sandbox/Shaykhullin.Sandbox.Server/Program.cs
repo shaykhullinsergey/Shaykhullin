@@ -10,19 +10,47 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.When<ConnectInfo>()
-				.From<Connect>()
-				.Call<ConnectHandler>();
+			config.AddType<ConnectInfo>()
+				.FromEvent<Connect>()
+				.CallHandler<ConnectHandler>();
 
-			config.When<int>()
-				.From<Event>()
-				.Call<Handler>();
+			config.AddType<Person>()
+				.FromEvent<Event>()
+				.CallHandler<Handler>();
 
-			config.When<DisconnectInfo>()
-				.From<Disconnect>()
-				.Call<DisconnectHandler>();
+			config.AddType<DisconnectInfo>()
+				.FromEvent<Disconnect>()
+				.CallHandler<DisconnectHandler>();
 
 			await config.Create("127.0.0.1", 4000).Run();
+		}
+	}
+
+	class Person
+	{
+		public string Name { get; set; }
+		public int Age { get; set; }
+		public Person[] Children { get; set; }
+	}
+
+	struct Event : IEvent<Person>
+	{
+		public Event(IConnection connection, Person message)
+		{
+			Connection = connection;
+			Message = message;
+		}
+
+		public IConnection Connection { get; }
+		public Person Message { get; }
+	}
+
+	struct Handler : IHandler<Person, Event>
+	{
+		public Task Execute(Event @event)
+		{
+			Console.WriteLine(@event.Message);
+			return Task.CompletedTask;
 		}
 	}
 
@@ -40,28 +68,6 @@ namespace Shaykhullin.Sandbox.Server
 		public Task Execute(Connect @event)
 		{
 			Console.WriteLine("CONNECT");
-			return Task.CompletedTask;
-		}
-	}
-
-
-	struct Event : IEvent<int>
-	{
-		public Event(IConnection connection, int message)
-		{
-			Connection = connection;
-			Message = message;
-		}
-
-		public IConnection Connection { get; }
-		public int Message { get; }
-	}
-
-	struct Handler : IHandler<int, Event>
-	{
-		public Task Execute(Event @event)
-		{
-			Console.WriteLine(@event.Message);
 			return Task.CompletedTask;
 		}
 	}

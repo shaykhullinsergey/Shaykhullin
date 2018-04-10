@@ -11,25 +11,83 @@ namespace Shaykhullin.Sandbox.Client
 		{
 			var config = new ClientConfig();
 
-			config.When<ConnectInfo>()
-				.From<Connect>()
-				.Call<ConnectHandler>();
+			config.AddType<ConnectInfo>()
+				.FromEvent<Connect>()
+				.CallHandler<ConnectHandler>();
 
-			config.When<int>()
-				.From<Event>()
-				.Call<Handler>();
+			config.AddType<Person>()
+				.FromEvent<Event>()
+				.CallHandler<Handler>();
 
-			config.When<DisconnectInfo>()
-				.From<Disconnect>()
-				.Call<DisconnectHandler>();
+			config.AddType<DisconnectInfo>()
+				.FromEvent<Disconnect>()
+				.CallHandler<DisconnectHandler>();
 
 			var client = config.Create("127.0.0.1", 4000);
 
 			using (var connection = await client.Connect())
 			{
-				await connection.Send(1).To<Event>();
+				await connection.Send
+				(
+					new Person
+					{
+						Name = "Angel",
+						Age = 32,
+						Children = new Person[]
+						{
+							new Person
+							{
+								Name = "Bob",
+								Age = 17,
+								Children = new Person[0]
+							},
+							new Person
+							{
+								Name = "Sandra",
+								Age = 14,
+								Children = new Person[]
+								{
+									new Person
+									{
+										Name = "Mike",
+										Age = 1,
+										Children = null
+									}
+								}
+							}
+						}
+					}
+				).To<Event>();
 				Thread.Sleep(1000);
 			}
+		}
+	}
+
+	class Person
+	{
+		public string Name { get; set; }
+		public int Age { get; set; }
+		public Person[] Children { get; set; }
+	}
+
+	struct Event : IEvent<Person>
+	{
+		public Event(IConnection connection, Person message)
+		{
+			Connection = connection;
+			Message = message;
+		}
+
+		public IConnection Connection { get; }
+		public Person Message { get; }
+	}
+
+	struct Handler : IHandler<Person, Event>
+	{
+		public Task Execute(Event @event)
+		{
+			Console.WriteLine(@event.Message);
+			return Task.CompletedTask;
 		}
 	}
 
@@ -48,28 +106,6 @@ namespace Shaykhullin.Sandbox.Client
 		{
 			Console.WriteLine("CONNECT");
 			return Task.CompletedTask;
-		}
-	}
-
-	struct Event : IEvent<int>
-	{
-		public Event(IConnection connection, int message)
-		{
-			Connection = connection;
-			Message = message;
-		}
-
-		public IConnection Connection { get; }
-		public int Message { get; }
-	}
-
-	struct Handler : IHandler<int, Event>
-	{
-		public async Task Execute(Event @event)
-		{
-			Console.WriteLine(@event.Message);
-			var value = @event.Message + 1;
-			await @event.Connection.Send(value).To<Event>();
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Shaykhullin.Serializer
 		}
 
 		public TData Deserialize<TData>(Stream stream)
-		{
+		 {
 			return (TData)Deserialize(stream, typeof(TData));
 		}
 
@@ -85,7 +85,7 @@ namespace Shaykhullin.Serializer
 
 			if (converters.TryGetValue(type, out var converter))
 			{
-				return converter.DeserializeObject(stream);
+				return converter.DeserializeObject(stream, type);
 			}
 
 			if (!properties.TryGetValue(type, out var props))

@@ -13,7 +13,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public override int Deserialize(Stream stream)
 		{
-			var bytes = new byte[8];
+			var bytes = new byte[4];
 			stream.Read(bytes, 0, bytes.Length);
 			return BitConverter.ToInt32(bytes, 0);
 		}

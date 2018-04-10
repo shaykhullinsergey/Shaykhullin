@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -11,6 +12,6 @@ namespace Shaykhullin.Serializer.Core
 	public interface IConverter
 	{
 		void SerializeObject(Stream stream, object obj);
-		object DeserializeObject(Stream stream);
+		object DeserializeObject(Stream stream, Type type);
 	}
 }

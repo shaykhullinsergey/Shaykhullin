@@ -88,7 +88,7 @@ namespace Shaykhullin.Network
 		public abstract TNode Create(string host, int port);
 
 
-		public IEventBuilder<TData> When<TData>()
+		public IEventBuilder<TData> AddType<TData>()
 		{
 			return new EventBuilder<TData>(config.Container);
 		}
