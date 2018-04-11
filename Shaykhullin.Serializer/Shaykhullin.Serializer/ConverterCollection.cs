@@ -36,7 +36,7 @@ namespace Shaykhullin.Serializer
 				}
 			}
 
-			throw new EntryPointNotFoundException();
+			return null;
 		}
 
 		public int GetAliasFromType(Type type)
@@ -68,6 +68,11 @@ namespace Shaykhullin.Serializer
 			{
 				if(pair.Key.IsAssignableFrom(type))
 				{
+					if(pair.Value.ConverterType == null)
+					{
+						break;
+					}
+
 					if(pair.Value.Converter == null)
 					{
 						pair.Value.Converter = (IConverter)container.Resolve(pair.Value.ConverterType);

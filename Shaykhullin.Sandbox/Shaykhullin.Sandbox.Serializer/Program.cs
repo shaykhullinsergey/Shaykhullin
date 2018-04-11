@@ -1,5 +1,5 @@
-﻿using Shaykhullin.Serializer;
-using System.IO;
+﻿using System.IO;
+using Shaykhullin.Serializer;
 
 namespace Shaykhullin.Sandbox.Serializer
 {
@@ -7,7 +7,7 @@ namespace Shaykhullin.Sandbox.Serializer
 	{
 		static void Main(string[] args)
 		{
-			Test[] test = new Test[] { new Test3 { Prop = true, Prop2 = 12 }, new Test { Prop = false }, new Test3 { Prop = true, Prop2 = int.MaxValue, Prop3 = "MaxValuesTing"} };
+			Test[] test = new Test[] { new Test3 { Prop = false, Prop2 = 123 }, new Test2 { Prop = false, Prop2 = 12}, new Test3() };
 
 			var config = new SerializerConfig();
 

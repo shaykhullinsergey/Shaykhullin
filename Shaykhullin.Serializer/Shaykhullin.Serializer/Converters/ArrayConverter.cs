@@ -30,7 +30,7 @@ namespace Shaykhullin.Serializer.Core
 
 			foreach (var element in data)
 			{
-				serializer.Serialize(stream, element);
+				serializer.Serialize(stream, element, elementType);
 			}
 		}
 

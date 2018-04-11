@@ -28,7 +28,7 @@ namespace Shaykhullin.Serializer
 
 		public void Serialize<TData>(Stream stream, TData data)
 		{
-			Serialize(stream, (object)data);
+			Serialize(stream, (object)data, null);
 		}
 
 		public TData Deserialize<TData>(Stream stream)
@@ -36,7 +36,7 @@ namespace Shaykhullin.Serializer
 			return (TData)Deserialize(stream, typeof(TData));
 		}
 
-		public void Serialize(Stream stream, object data)
+		public void Serialize(Stream stream, object data, Type dataTypeOverride)
 		{
 			if(data == null)
 			{
@@ -62,6 +62,23 @@ namespace Shaykhullin.Serializer
 				{
 					var aliasBytes = BitConverter.GetBytes(dto.Alias);
 					stream.Write(aliasBytes, 0, aliasBytes.Length);
+				}
+			}
+			else
+			{
+				type = dataTypeOverride;
+				if(configuration.TryGetValue(type, out var dtoOverride))
+				{
+					if (dtoOverride.Converter != null)
+					{
+						dto.Converter.SerializeObject(stream, data);
+						return;
+					}
+					else
+					{
+						var aliasBytes = BitConverter.GetBytes(dtoOverride.Alias);
+						stream.Write(aliasBytes, 0, aliasBytes.Length);
+					}
 				}
 			}
 
@@ -101,8 +118,12 @@ namespace Shaykhullin.Serializer
 					var aliasBytes = new byte[4];
 					stream.Read(aliasBytes, 0, 4);
 					var alias = BitConverter.ToInt32(aliasBytes, 0);
-					type = configuration.GetTypeFromAlias(alias);
+					type = configuration.GetTypeFromAlias(alias) ?? type;
 				}
+			}
+			else
+			{
+
 			}
 
 			if (!properties.TryGetValue(type, out var props))
