@@ -1,9 +1,9 @@
 ﻿using System;
 using Shaykhullin.Serializer.Core;
 
-namespace Shaykhullin.Serializer
+namespace Shaykhullin.Serializer.Core
 {
-	public class ConverterDto
+	internal class ConverterDto
 	{
 		public int Alias { get; }
 		public Type Type { get;  }

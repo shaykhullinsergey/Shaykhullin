@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Shaykhullin.Activator;
 using Shaykhullin.DependencyInjection;
 
-namespace Shaykhullin.Serializer
+namespace Shaykhullin.Serializer.Core
 {
 	internal class Serializer : ISerializer
 	{
@@ -28,7 +28,7 @@ namespace Shaykhullin.Serializer
 
 		public void Serialize<TData>(Stream stream, TData data)
 		{
-			Serialize(stream, (object)data, null);
+			Serialize(stream, (object)data, typeof(TData));
 		}
 
 		public TData Deserialize<TData>(Stream stream)
@@ -93,7 +93,7 @@ namespace Shaykhullin.Serializer
 
 			foreach (var p in props)
 			{
-				Serialize(stream, p.GetValue(data));
+				Serialize(stream, p.GetValue(data), p.PropertyType);
 			}
 		}
 

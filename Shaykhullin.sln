@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.Serializer.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.Sandbox.Serializer", "Shaykhullin.Sandbox\Shaykhullin.Sandbox.Serializer\Shaykhullin.Sandbox.Serializer.csproj", "{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shaykhullin.Serializer.Tests", "Shaykhullin.Serializer\Shaykhullin.Serializer.Tests\Shaykhullin.Serializer.Tests.csproj", "{8389F348-6CE7-48BC-B7F8-9A0F79B75268}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8389F348-6CE7-48BC-B7F8-9A0F79B75268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8389F348-6CE7-48BC-B7F8-9A0F79B75268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8389F348-6CE7-48BC-B7F8-9A0F79B75268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8389F348-6CE7-48BC-B7F8-9A0F79B75268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{96277FCA-8B2F-4C39-81A0-74AA517C72A3} = {9F081D80-4C9B-42E2-A88B-1228B4D2F860}
 		{D2272D34-9EC8-4105-87D8-D590F5C3CFAD} = {9F081D80-4C9B-42E2-A88B-1228B4D2F860}
 		{AECD8231-1CE0-4324-94AF-CFB04FA1E6F9} = {D9DBD46B-6795-4537-98B1-73E0F17E39B8}
+		{8389F348-6CE7-48BC-B7F8-9A0F79B75268} = {9F081D80-4C9B-42E2-A88B-1228B4D2F860}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {594E14A9-9462-43B7-A190-E38CD2278F63}

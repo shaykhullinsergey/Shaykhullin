@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Shaykhullin.DependencyInjection;
-using Shaykhullin.Serializer.Core;
 
-namespace Shaykhullin.Serializer
+namespace Shaykhullin.Serializer.Core
 {
-	public class Configuration
+	internal class Configuration
 	{
 		private readonly IContainer container;
 		private readonly Dictionary<Type, ConverterDto> converters;

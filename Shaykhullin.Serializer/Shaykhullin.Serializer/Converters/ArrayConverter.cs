@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Shaykhullin.Serializer.Core
 {
-	public class ArrayConverter : Converter<Array>
+	internal class ArrayConverter : Converter<Array>
 	{
 		private readonly ISerializer serializer;
 		private readonly Configuration configuration;

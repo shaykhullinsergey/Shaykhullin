@@ -57,7 +57,7 @@ namespace Shaykhullin.Serializer
 
 		public ISerializer Create()
 		{
-			return serializer ?? (serializer = new Serializer(scope, configuration));
+			return serializer ?? (serializer = new Core.Serializer(scope, configuration));
 		}
 	}
 }
