@@ -27,12 +27,8 @@ namespace Shaykhullin.Serializer.Core
 
 		public override void Serialize(Stream stream, IEnumerable data)
 		{
-			var elementType = data.GetType().GetGenericArguments()[0];
-
-			var alias = configuration.GetAliasFromType(elementType);
-			stream.Write(BitConverter.GetBytes(alias), 0, 4);
-
 			var elements = data.Cast<object>().ToList();
+			var elementType = data.GetType().GetGenericArguments()[0];
 
 			stream.Write(BitConverter.GetBytes(elements.Count), 0, 4);
 
@@ -44,11 +40,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public override object DeserializeObject(Stream stream, Type type)
 		{
-			var aliasBytes = new byte[4];
-			stream.Read(aliasBytes, 0, aliasBytes.Length);
-			var alias = BitConverter.ToInt32(aliasBytes, 0);
-
-			var elementType = configuration.GetTypeFromAlias(alias);
+			var elementType = type.GetGenericArguments()[0];
 
 			var lengthBuffer = new byte[4];
 			stream.Read(lengthBuffer, 0, 4);
