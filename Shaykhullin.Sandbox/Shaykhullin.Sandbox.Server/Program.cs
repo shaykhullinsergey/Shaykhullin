@@ -10,17 +10,17 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.AddType<ConnectInfo>()
-				.FromEvent<Connect>()
-				.CallHandler<ConnectHandler>();
+			config.Match<ConnectInfo>()
+				.From<Connect>()
+				.With<ConnectHandler>();
 
-			config.AddType<Person>()
-				.FromEvent<Event>()
-				.CallHandler<Handler>();
+			config.Match<Person>()
+				.From<Event>()
+				.With<Handler>();
 
-			config.AddType<DisconnectInfo>()
-				.FromEvent<Disconnect>()
-				.CallHandler<DisconnectHandler>();
+			config.Match<DisconnectInfo>()
+				.From<Disconnect>()
+				.With<DisconnectHandler>();
 
 			await config.Create("127.0.0.1", 4000).Run();
 		}

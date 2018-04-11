@@ -12,11 +12,11 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 		
-		public ICompressionBuilder UseSerializer<TSerializer>() 
+		public ICompressionBuilder UseSerializer<TSerializer>(TSerializer serializer = default) 
 			where TSerializer : ISerializer
 		{
 			return new SerializerBuilder(config)
-				.UseSerializer<TSerializer>();
+				.UseSerializer<TSerializer>(serializer);
 		}
 		
 		public IEncryptionBuilder UseCompression<TCompression>() 

@@ -5,47 +5,63 @@ using Shaykhullin.Serializer.Core;
 
 namespace Shaykhullin.Serializer
 {
-	public class ConverterCollection
+	public class Configuration
 	{
 		private readonly IContainer container;
 		private readonly Dictionary<Type, ConverterDto> converters;
+		public bool TypeAliasing { get; set; }
 
-		public ConverterCollection(IContainer container)
+		public Configuration(IContainer container)
 		{
 			this.container = container;
 			converters = new Dictionary<Type, ConverterDto>();
 		}
 
-		public void Add(Type type, Type converterType, IContainerConfig config)
+		public void RegisterTypeWithAlias(Type type)
 		{
-			var dto = new ConverterDto
-			{
-				Type = converterType
-			};
-
-			if (converters.ContainsKey(type))
-			{
-				converters[type] = dto;
-			}
-			else
-			{
-				converters.Add(type, dto);
-			}
-
-			config.Register(converterType)
-				.As<Singleton>();
+			converters.Add(type, new ConverterDto(type));
 		}
 
-		public bool TryGetValue(Type type, out IConverter converter)
+		public void RegisterConverterTypeFor(Type type, Type converterType)
 		{
-			if(converters.TryGetValue(type, out var dto))
+			converters[type].ConverterType = converterType;
+		}
+
+		public Type GetTypeFromAlias(int alias)
+		{
+			foreach (var element in converters)
 			{
-				if (dto.Converter == null)
+				if(element.Value.Alias == alias)
 				{
-					dto.Converter = (IConverter)container.Resolve(dto.Type);
+					return element.Key;
+				}
+			}
+
+			throw new EntryPointNotFoundException();
+		}
+
+		public int GetAliasFromType(Type type)
+		{
+			foreach (var element in converters)
+			{
+				if (element.Value.Type == type)
+				{
+					return element.Value.Alias;
+				}
+			}
+
+			throw new EntryPointNotFoundException();
+		}
+
+		public bool TryGetValue(Type type, out ConverterDto dto)
+		{
+			if(converters.TryGetValue(type, out dto))
+			{
+				if (dto.Converter == null && dto.ConverterType != null)
+				{
+					dto.Converter = (IConverter)container.Resolve(dto.ConverterType);
 				}
 
-				converter = dto.Converter;
 				return true;
 			}
 
@@ -55,15 +71,15 @@ namespace Shaykhullin.Serializer
 				{
 					if(pair.Value.Converter == null)
 					{
-						pair.Value.Converter = (IConverter)container.Resolve(pair.Value.Type);
+						pair.Value.Converter = (IConverter)container.Resolve(pair.Value.ConverterType);
 					}
 
-					converter = pair.Value.Converter;
+					dto = pair.Value;
 					return true;
 				}
 			}
 
-			converter = null;
+			dto = null;
 			return false;
 		}
 	}

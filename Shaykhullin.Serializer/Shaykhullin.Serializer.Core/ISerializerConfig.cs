@@ -4,7 +4,8 @@ namespace Shaykhullin.Serializer
 {
 	public interface ISerializerConfig
 	{
-		IUseBuilder<TData> When<TData>();
+		void UseTypeAliasing();
+		IUseBuilder<TData> Match<TData>();
 		ISerializer Create();
 	}
 }

@@ -15,8 +15,14 @@ namespace Shaykhullin.Network
 
 		protected Config()
 		{
+			var serializerConfig = new SerializerConfig();
+
+			rootConfig.Register<ISerializerConfig>()
+				.ImplementedBy(c => serializerConfig)
+				.As<Singleton>();
+				
 			rootConfig.Register<ISerializer>()
-				.ImplementedBy(c => new SerializerConfig().Create())
+				.ImplementedBy(c => c.Resolve<ISerializerConfig>().Create())
 				.As<Singleton>();
 			
 			rootConfig.Register<ICompression>()
@@ -54,10 +60,10 @@ namespace Shaykhullin.Network
 				.As<Singleton>();
 		}
 		
-		public ICompressionBuilder UseSerializer<TSerializer>() 
+		public ICompressionBuilder UseSerializer<TSerializer>(TSerializer serializer = default) 
 			where TSerializer : ISerializer
 		{
-			return new SerializerBuilder(config).UseSerializer<TSerializer>();
+			return new SerializerBuilder(config).UseSerializer(serializer);
 		}
 		public IEncryptionBuilder UseCompression<TCompression>()
 			where TCompression : ICompression
@@ -88,7 +94,7 @@ namespace Shaykhullin.Network
 		public abstract TNode Create(string host, int port);
 
 
-		public IEventBuilder<TData> AddType<TData>()
+		public IEventBuilder<TData> Match<TData>()
 		{
 			return new EventBuilder<TData>(config.Container);
 		}
@@ -96,7 +102,7 @@ namespace Shaykhullin.Network
 		protected IContainerConfig Configure(string host, int port)
 		{
 			config.Register<IConfiguration>()
-				.ImplementedBy(c => new Configuration(host, port))
+				.ImplementedBy(c => new Core.Configuration(host, port))
 				.As<Singleton>();
 
 			return config;

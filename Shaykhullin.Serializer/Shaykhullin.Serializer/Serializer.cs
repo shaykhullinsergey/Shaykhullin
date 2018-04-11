@@ -4,26 +4,25 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-using Shaykhullin.DependencyInjection;
-using Shaykhullin.Serializer.Core;
 using Shaykhullin.Activator;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Serializer
 {
 	internal class Serializer : ISerializer
 	{
 		private readonly IContainer container;
-		private readonly ConverterCollection converters;
+		private readonly Configuration configuration;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
-		public Serializer(IContainerConfig config, ConverterCollection converters)
+		public Serializer(IContainerConfig config, Configuration configuration)
 		{
 			config.Register<ISerializer>()
 				.ImplementedBy(c => this)
 				.As<Singleton>();
 
 			this.container = config.Container;
-			this.converters = converters;
+			this.configuration = configuration;
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
 
@@ -52,10 +51,19 @@ namespace Shaykhullin.Serializer
 				stream.WriteByte(0);
 			}
 
-			if (converters.TryGetValue(type, out var converter))
+			if (configuration.TryGetValue(type, out var dto))
 			{
-				converter.SerializeObject(stream, data);
-				return;
+				if(configuration.TypeAliasing)
+				{
+					var aliasBytes = BitConverter.GetBytes(dto.Alias);
+					stream.Write(aliasBytes, 0, aliasBytes.Length);
+				}
+
+				if(dto.Converter != null)
+				{
+					dto.Converter.SerializeObject(stream, data);
+					return;
+				}
 			}
 
 			if (!properties.TryGetValue(type, out var props))
@@ -83,9 +91,20 @@ namespace Shaykhullin.Serializer
 				}
 			}
 
-			if (converters.TryGetValue(type, out var converter))
+			if(configuration.TypeAliasing)
 			{
-				return converter.DeserializeObject(stream, type);
+				var aliasBytes = new byte[4];
+				stream.Read(aliasBytes, 0, 4);
+				var alias = BitConverter.ToInt32(aliasBytes, 0);
+				type = configuration.GetTypeFromAlias(alias);
+			}
+
+			if (configuration.TryGetValue(type, out var dto))
+			{
+				if(dto.Converter != null)
+				{
+					return dto.Converter.DeserializeObject(stream, type);
+				}
 			}
 
 			if (!properties.TryGetValue(type, out var props))

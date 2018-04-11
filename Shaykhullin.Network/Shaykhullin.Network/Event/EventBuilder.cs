@@ -11,7 +11,7 @@ namespace Shaykhullin.Network.Core
 			this.container = container;
 		}
 		
-		public IHandlerBuilder<TData, TEvent> FromEvent<TEvent>()
+		public IHandlerBuilder<TData, TEvent> From<TEvent>()
 			where TEvent : IEvent<TData>
 		{
 			return new HandlerBuilder<TData, TEvent>(container);

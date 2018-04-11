@@ -7,16 +7,22 @@ namespace Shaykhullin.Sandbox.Serializer
 	{
 		static void Main(string[] args)
 		{
-			var test = new Test[] { new Test { Prop = true }, new Test { Prop = false }, new Test { Prop = true }, };
+			Test[] test = new Test[] { new Test2 { Prop = true, Prop2 = 12 }, new Test { Prop = false }, new Test2 { Prop = true, Prop2 = 13 } };
 
 			var config = new SerializerConfig();
+			config.UseTypeAliasing();
 
-			var s = config.Create();
+			config.Match<Test>();
+			config.Match<Test2>();
+			config.Match<Test3>();
+
+			var serializer = config.Create();
+
 			using (var stream = new MemoryStream())
 			{
-				s.Serialize(stream, test);
+				serializer.Serialize(stream, test);
 				stream.Position = 0;
-				var t = s.Deserialize<Test[]>(stream);
+				var instance = serializer.Deserialize<Test[]>(stream);
 			}
 		}
 	}
@@ -24,5 +30,15 @@ namespace Shaykhullin.Sandbox.Serializer
 	class Test
 	{
 		public bool Prop { get; set; }
+	}
+
+	class Test2 : Test
+	{
+		public int Prop2 { get; set; }
+	}
+
+	class Test3 : Test2
+	{
+		public string Prop3 { get; set; }
 	}
 }

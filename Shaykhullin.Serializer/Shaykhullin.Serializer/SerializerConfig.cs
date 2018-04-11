@@ -1,8 +1,8 @@
-﻿
+﻿using System;
+
 using Shaykhullin.Activator;
-using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer.Core;
-using System;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Serializer
 {
@@ -11,47 +11,58 @@ namespace Shaykhullin.Serializer
 		private ISerializer serializer;
 		private readonly IContainerConfig scope;
 		private readonly IContainerConfig rootConfig;
-		private readonly ConverterCollection converters;
+		private readonly Configuration configuration;
 
 		public SerializerConfig()
 		{
 			rootConfig = new ContainerConfig();
-			scope = rootConfig.Scope();
-			converters = new ConverterCollection(scope.Container);
 
-			rootConfig.Register<IActivator>()
-				.ImplementedBy(c => new ActivatorConfig().Create())
-				.As<Singleton>();
+			using (var scope = rootConfig.Scope())
+			{
+				configuration = new Configuration(scope.Container);
 
-			rootConfig.Register<ConverterCollection>()
-				.ImplementedBy(c => converters)
-				.As<Singleton>();
+				rootConfig.Register<IActivator>()
+					.ImplementedBy(c => new ActivatorConfig().Create())
+					.As<Singleton>();
 
-			scope.Register<IContainer>()
-				.ImplementedBy(c => c)
-				.As<Singleton>();
+				rootConfig.Register<Configuration>()
+					.ImplementedBy(c => configuration)
+					.As<Singleton>();
 
-			new UseBuilder<byte>(rootConfig, converters).Use<ByteConverter>();
-			new UseBuilder<sbyte>(rootConfig, converters).Use<SByteConverter>();
-			new UseBuilder<short>(rootConfig, converters).Use<ShortConverter>();
-			new UseBuilder<ushort>(rootConfig, converters).Use<UShortConverter>();
-			new UseBuilder<int>(rootConfig, converters).Use<Int32Converter>();
-			new UseBuilder<uint>(rootConfig, converters).Use<UInt32Converter>();
-			new UseBuilder<long>(rootConfig, converters).Use<Int64Converter>();
-			new UseBuilder<ulong>(rootConfig, converters).Use<UInt64Converter>();
-			new UseBuilder<string>(rootConfig, converters).Use<StringConverter>();
-			new UseBuilder<bool>(rootConfig, converters).Use<BoolConverter>();
-			new UseBuilder<Array>(rootConfig, converters).Use<ArrayConverter>();
+				scope.Register<IContainer>()
+					.ImplementedBy(c => c)
+					.As<Singleton>();
+
+				Match<byte>().With<ByteConverter>();
+				Match<sbyte>().With<SByteConverter>();
+				Match<short>().With<ShortConverter>();
+				Match<ushort>().With<UShortConverter>();
+				Match<int>().With<Int32Converter>();
+				Match<uint>().With<UInt32Converter>();
+				Match<long>().With<Int64Converter>();
+				Match<ulong>().With<UInt64Converter>();
+				Match<string>().With<StringConverter>();
+				Match<bool>().With<BoolConverter>();
+				Match<Array>().With<ArrayConverter>();
+
+				this.scope = scope;
+			}
 		}
 
-		public IUseBuilder<TData> When<TData>()
+		public void UseTypeAliasing()
 		{
-			return new UseBuilder<TData>(scope, converters);
+			configuration.TypeAliasing = true;
+		}
+
+		public IUseBuilder<TData> Match<TData>()
+		{
+			configuration.RegisterTypeWithAlias(typeof(TData));
+			return new UseBuilder<TData>(scope ?? rootConfig, configuration);
 		}
 
 		public ISerializer Create()
 		{
-			return serializer ?? (serializer = new Serializer(scope, converters));
+			return serializer ?? (serializer = new Serializer(scope, configuration));
 		}
 	}
 }

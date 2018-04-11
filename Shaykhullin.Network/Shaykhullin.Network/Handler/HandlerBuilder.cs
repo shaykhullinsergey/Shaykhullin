@@ -1,4 +1,5 @@
 ﻿using Shaykhullin.DependencyInjection;
+using Shaykhullin.Serializer;
 
 namespace Shaykhullin.Network.Core
 {
@@ -12,9 +13,12 @@ namespace Shaykhullin.Network.Core
 			this.container = container;
 		}
 
-		public void CallHandler<THandler>() where THandler 
+		public void With<THandler>() where THandler 
 			: IHandler<TData, TEvent>
 		{
+			container.Resolve<ISerializerConfig>()
+				.Match<TData>();
+
 			container.Resolve<EventCollection>()
 				.Add<TData, TEvent>();
 

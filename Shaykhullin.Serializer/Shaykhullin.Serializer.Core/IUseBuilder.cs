@@ -2,7 +2,7 @@
 {
 	public interface IUseBuilder<TData>
 	{
-		void Use<TConverter>()
+		void With<TConverter>()
 			where TConverter : IConverter<TData>;
 	}
 }

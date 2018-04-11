@@ -12,12 +12,19 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 
-		public ICompressionBuilder UseSerializer<TSerializer>() 
+		public ICompressionBuilder UseSerializer<TSerializer>(TSerializer serializer = default) 
 			where TSerializer : ISerializer
 		{
-			config.Register<ISerializer>()
-				.ImplementedBy<TSerializer>()
-				.As<Singleton>();
+			var register = config.Register<ISerializer>();
+
+			if(serializer == null)
+			{
+				register.ImplementedBy<TSerializer>().As<Singleton>();
+			}
+			else
+			{
+				register.ImplementedBy(c => serializer).As<Singleton>();
+			}
 			
 			return new CompressionBuilder(config);
 		}

@@ -2,12 +2,12 @@
 {
 	public interface IDataBuilder
 	{
-		IEventBuilder<TData> AddType<TData>();
+		IEventBuilder<TData> Match<TData>();
 	}
 
 	public interface IEventBuilder<TData>
 	{
-		IHandlerBuilder<TData, TEvent> FromEvent<TEvent>()
+		IHandlerBuilder<TData, TEvent> From<TEvent>()
 			where TEvent : IEvent<TData>;
 	}
 }
