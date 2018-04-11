@@ -48,7 +48,6 @@ namespace Shaykhullin.Serializer.Tests
 		public void ComplexTypeSerializing()
 		{
 			var config = new SerializerConfig();
-			config.Match<SimplePerson>();
 
 			var serializer = config.Create();
 
@@ -93,7 +92,6 @@ namespace Shaykhullin.Serializer.Tests
 		public void ComplexPersonSerializing()
 		{
 			var config = new SerializerConfig();
-			config.Match<ComplexPerson>();
 
 			var serializer = config.Create();
 
@@ -183,12 +181,48 @@ namespace Shaykhullin.Serializer.Tests
 			public int Floor { get; set; }
 		}
 
+		public class A
+		{
+			public int Prop1 { get; set; }
+		}
+
+		public class B : A
+		{
+			public int Prop2 { get; set; }
+		}
+
+		[Fact]
+		public void ExtendedPersonInBasePersonArraySerializing()
+		{
+			var config = new SerializerConfig();
+
+			var serializer = config.Create();
+
+			var input = new A[]
+			{
+				new B
+				{
+					Prop1 = 11,
+					Prop2 = 22
+				},
+				new A
+				{
+					Prop1 = 33
+				}
+			};
+
+			using (var stream = CreateStream())
+			{
+				serializer.Serialize(stream, input);
+				stream.Position = 0;
+				var result = serializer.Deserialize<A[]>(stream);
+			}
+		}
+
 		[Fact]
 		public void ExtendedPersonAsBasePersonTypeArraySerializing()
 		{
 			var config = new SerializerConfig();
-
-			config.Match<BasePerson>();
 			config.Match<ExtendedPerson>();
 
 			var serializer = config.Create();

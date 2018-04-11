@@ -28,7 +28,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public void Serialize<TData>(Stream stream, TData data)
 		{
-			Serialize(stream, (object)data, typeof(TData));
+			Serialize(stream, data, typeof(TData));
 		}
 
 		public TData Deserialize<TData>(Stream stream)
@@ -80,6 +80,11 @@ namespace Shaykhullin.Serializer.Core
 						stream.Write(aliasBytes, 0, aliasBytes.Length);
 					}
 				}
+				else
+				{
+					var aliasBytes = BitConverter.GetBytes(0);
+					stream.Write(aliasBytes, 0, aliasBytes.Length);
+				}
 			}
 
 			if (!properties.TryGetValue(type, out var props))
@@ -116,14 +121,17 @@ namespace Shaykhullin.Serializer.Core
 				else
 				{
 					var aliasBytes = new byte[4];
-					stream.Read(aliasBytes, 0, 4);
+					stream.Read(aliasBytes, 0, aliasBytes.Length);
 					var alias = BitConverter.ToInt32(aliasBytes, 0);
 					type = configuration.GetTypeFromAlias(alias) ?? type;
 				}
 			}
 			else
 			{
-
+				var aliasBytes = new byte[4];
+				stream.Read(aliasBytes, 0, aliasBytes.Length);
+				var alias = BitConverter.ToInt32(aliasBytes, 0);
+				type = configuration.GetTypeFromAlias(alias) ?? type;
 			}
 
 			if (!properties.TryGetValue(type, out var props))
