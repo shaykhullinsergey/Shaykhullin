@@ -3,6 +3,7 @@
 using Shaykhullin.Activator;
 using Shaykhullin.Serializer.Core;
 using Shaykhullin.DependencyInjection;
+using System.Collections;
 
 namespace Shaykhullin.Serializer
 {
@@ -43,7 +44,12 @@ namespace Shaykhullin.Serializer
 				Match<ulong>().With<UInt64Converter>();
 				Match<string>().With<StringConverter>();
 				Match<bool>().With<BoolConverter>();
+				Match<float>().With<SingleConverter>();
+				Match<double>().With<DoubleConverter>();
 				Match<Array>().With<ArrayConverter>();
+				Match<IList>().With<IListConverter>();
+				Match<ICollection>().With<CollectionConverter>();
+				Match<IEnumerable>().With<IEnumerableConverter>();
 
 				this.scope = scope;
 			}

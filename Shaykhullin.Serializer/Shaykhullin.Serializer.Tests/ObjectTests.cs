@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.Serializer.Tests
 {
-	public class ObjectTests
+	public class ObjectTests : SerializerTests
 	{
 		[Fact]
 		public void ObjectSerializing()

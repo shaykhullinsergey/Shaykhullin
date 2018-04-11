@@ -1,5 +1,6 @@
 ﻿using Shaykhullin.Network;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Shaykhullin.Sandbox.Server
@@ -31,6 +32,13 @@ namespace Shaykhullin.Sandbox.Server
 		public string Name { get; set; }
 		public int Age { get; set; }
 		public Person[] Children { get; set; }
+
+		public override string ToString()
+		{
+			var children = Children?.Select(x => x.ToString()) ?? Enumerable.Empty<string>();
+
+			return $"Name: {Name}, Age: {Age}, Children: [{string.Join(",", children)}]";
+		}
 	}
 
 	struct Event : IEvent<Person>
@@ -58,7 +66,7 @@ namespace Shaykhullin.Sandbox.Server
 	{
 		public Task Execute(Disconnect @event)
 		{
-			Console.WriteLine("DISCONNECT" + @event.Message.Reason);
+			Console.WriteLine(@event.Message.Reason);
 			return Task.CompletedTask;
 		}
 	}
