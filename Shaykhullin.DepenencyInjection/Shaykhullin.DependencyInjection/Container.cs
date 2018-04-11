@@ -60,15 +60,15 @@ namespace Shaykhullin.DependencyInjection.Core
 		{
 			if (dependency.Parameters == null)
 			{
-				var ctors = dependency.Implemented.GetConstructors();
+				var constructors = dependency.Implemented.GetConstructors();
 
-				if (ctors.Length == 0)
+				if (constructors.Length == 0)
 				{
 					dependency.Parameters = Array.Empty<Type>();
 				}
 				else
 				{
-					var parameters = ctors[0].GetParameters();
+					var parameters = constructors[0].GetParameters();
 
 					dependency.Parameters = new Type[parameters.Length];
 					for (var i = 0; i < parameters.Length; i++)

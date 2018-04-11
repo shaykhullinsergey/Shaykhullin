@@ -9,7 +9,6 @@ namespace Shaykhullin.Serializer
 	{
 		private readonly IContainer container;
 		private readonly Dictionary<Type, ConverterDto> converters;
-		public bool TypeAliasing { get; set; }
 
 		public Configuration(IContainer container)
 		{

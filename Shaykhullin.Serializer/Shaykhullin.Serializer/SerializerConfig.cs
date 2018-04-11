@@ -49,11 +49,6 @@ namespace Shaykhullin.Serializer
 			}
 		}
 
-		public void UseTypeAliasing()
-		{
-			configuration.TypeAliasing = true;
-		}
-
 		public IUseBuilder<TData> Match<TData>()
 		{
 			configuration.RegisterTypeWithAlias(typeof(TData));

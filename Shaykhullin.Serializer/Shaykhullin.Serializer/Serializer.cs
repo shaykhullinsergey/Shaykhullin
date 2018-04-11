@@ -53,16 +53,15 @@ namespace Shaykhullin.Serializer
 
 			if (configuration.TryGetValue(type, out var dto))
 			{
-				if(configuration.TypeAliasing)
-				{
-					var aliasBytes = BitConverter.GetBytes(dto.Alias);
-					stream.Write(aliasBytes, 0, aliasBytes.Length);
-				}
-
 				if(dto.Converter != null)
 				{
 					dto.Converter.SerializeObject(stream, data);
 					return;
+				}
+				else
+				{
+					var aliasBytes = BitConverter.GetBytes(dto.Alias);
+					stream.Write(aliasBytes, 0, aliasBytes.Length);
 				}
 			}
 
@@ -91,19 +90,18 @@ namespace Shaykhullin.Serializer
 				}
 			}
 
-			if(configuration.TypeAliasing)
-			{
-				var aliasBytes = new byte[4];
-				stream.Read(aliasBytes, 0, 4);
-				var alias = BitConverter.ToInt32(aliasBytes, 0);
-				type = configuration.GetTypeFromAlias(alias);
-			}
-
 			if (configuration.TryGetValue(type, out var dto))
 			{
 				if(dto.Converter != null)
 				{
 					return dto.Converter.DeserializeObject(stream, type);
+				}
+				else
+				{
+					var aliasBytes = new byte[4];
+					stream.Read(aliasBytes, 0, 4);
+					var alias = BitConverter.ToInt32(aliasBytes, 0);
+					type = configuration.GetTypeFromAlias(alias);
 				}
 			}
 

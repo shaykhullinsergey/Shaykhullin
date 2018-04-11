@@ -7,13 +7,11 @@ namespace Shaykhullin.Sandbox.Serializer
 	{
 		static void Main(string[] args)
 		{
-			Test[] test = new Test[] { new Test2 { Prop = true, Prop2 = 12 }, new Test { Prop = false }, new Test2 { Prop = true, Prop2 = 13 } };
+			Test[] test = new Test[] { new Test3 { Prop = true, Prop2 = 12 }, new Test { Prop = false }, new Test3 { Prop = true, Prop2 = int.MaxValue, Prop3 = "MaxValuesTing"} };
 
 			var config = new SerializerConfig();
-			config.UseTypeAliasing();
 
 			config.Match<Test>();
-			config.Match<Test2>();
 			config.Match<Test3>();
 
 			var serializer = config.Create();
