@@ -11,12 +11,10 @@ namespace Shaykhullin.Serializer.Core
 	{
 		private readonly IActivator activator;
 		private readonly ISerializer serializer;
-		private readonly Configuration configuration;
 
 		public CollectionConverter(ISerializer serializer, IActivator activator, Configuration configuration)
 		{
 			this.serializer = serializer;
-			this.configuration = configuration;
 			this.activator = activator;
 		}
 

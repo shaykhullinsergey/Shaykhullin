@@ -6,12 +6,10 @@ namespace Shaykhullin.Serializer.Core
 	internal class ArrayConverter : Converter<Array>
 	{
 		private readonly ISerializer serializer;
-		private readonly Configuration configuration;
 
-		public ArrayConverter(ISerializer serializer, Configuration configuration)
+		public ArrayConverter(ISerializer serializer)
 		{
 			this.serializer = serializer;
-			this.configuration = configuration;
 		}
 
 		public override Array Deserialize(Stream stream)

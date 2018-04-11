@@ -10,13 +10,11 @@ namespace Shaykhullin.Serializer.Core
 	{
 		private readonly IActivator activator;
 		private readonly ISerializer serializer;
-		private readonly Configuration configuration;
 
-		public IListConverter(ISerializer serializer, IActivator activator, Configuration configuration)
+		public IListConverter(ISerializer serializer, IActivator activator)
 		{
-			this.serializer = serializer;
-			this.configuration = configuration;
 			this.activator = activator;
+			this.serializer = serializer;
 		}
 
 		public override IList Deserialize(Stream stream)
