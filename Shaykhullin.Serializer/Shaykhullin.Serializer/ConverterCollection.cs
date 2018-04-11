@@ -86,7 +86,7 @@ namespace Shaykhullin.Serializer.Core
 			return false;
 		}
 
-		public ConverterDto GetValue(Type type)
+		public ConverterDto TryGetDto(Type type)
 		{
 			if (converters.TryGetValue(type, out var dto))
 			{

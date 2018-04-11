@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections;
 
 using Shaykhullin.Activator;
 using Shaykhullin.Serializer.Core;
 using Shaykhullin.DependencyInjection;
-using System.Collections;
 
 namespace Shaykhullin.Serializer
 {

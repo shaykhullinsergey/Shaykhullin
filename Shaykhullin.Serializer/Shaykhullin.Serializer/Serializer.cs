@@ -21,7 +21,7 @@ namespace Shaykhullin.Serializer.Core
 				.ImplementedBy(c => this)
 				.As<Singleton>();
 
-			this.container = config.Container;
+			container = config.Container;
 			this.configuration = configuration;
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
@@ -32,79 +32,60 @@ namespace Shaykhullin.Serializer.Core
 		}
 
 		public TData Deserialize<TData>(Stream stream)
-		 {
+		{
 			return (TData)Deserialize(stream, typeof(TData));
 		}
 
 		public void Serialize(Stream stream, object data, Type dataTypeOverride)
 		{
-			if(data == null)
+			if (stream == null)
+			{
+				throw new ArgumentNullException(nameof(stream));
+			}
+
+			if (data == null)
 			{
 				stream.WriteByte(1);
 				return;
 			}
 
-			var type = data.GetType();
+			var dataType = data.GetType();
 
-			if (!type.IsValueType || (Nullable.GetUnderlyingType(type) != null))
+			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
 			{
 				stream.WriteByte(0);
 			}
 
-			if (configuration.TryGetValue(type, out var dto))
+			var dto = configuration.TryGetDto(dataType);
+
+			if (dto == null)
 			{
-				if(dto.Converter != null)
-				{
-					dto.Converter.SerializeObject(stream, data);
-					return;
-				}
-				else
-				{
-					var aliasBytes = BitConverter.GetBytes(dto.Alias);
-					stream.Write(aliasBytes, 0, aliasBytes.Length);
-				}
-			}
-			else
-			{
-				type = dataTypeOverride;
-				if(configuration.TryGetValue(type, out var dtoOverride))
-				{
-					if (dtoOverride.Converter != null)
-					{
-						dto.Converter.SerializeObject(stream, data);
-						return;
-					}
-					else
-					{
-						var aliasBytes = BitConverter.GetBytes(dtoOverride.Alias);
-						stream.Write(aliasBytes, 0, aliasBytes.Length);
-					}
-				}
-				else
-				{
-					var aliasBytes = BitConverter.GetBytes(0);
-					stream.Write(aliasBytes, 0, aliasBytes.Length);
-				}
+				dataType = dataTypeOverride;
+				dto = configuration.TryGetDto(dataTypeOverride);
 			}
 
-			if (!properties.TryGetValue(type, out var props))
+			if (dto?.Converter != null)
 			{
-				props = type
-					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-					.Where(x => x.CanRead && x.CanWrite)
-					.ToArray();
-				properties.Add(type, props);
+				dto.Converter.SerializeObject(stream, data);
+				return;
 			}
 
-			foreach (var p in props)
+			stream.Write(BitConverter.GetBytes(dto?.Alias ?? 0), 0, 4);
+
+			foreach (var property in EnsureProperties(dataType))
 			{
-				Serialize(stream, p.GetValue(data), p.PropertyType);
+				Serialize(stream, property.GetValue(data), property.PropertyType);
 			}
 		}
 
-		public object Deserialize(Stream stream, Type type)
+		public object Deserialize(Stream stream, Type dataType)
 		{
-			if (!type.IsValueType || (Nullable.GetUnderlyingType(type) != null))
+			if (stream == null)
+			{
+				throw new ArgumentNullException(nameof(stream));
+			}
+
+			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
 			{
 				if (stream.ReadByte() == 1)
 				{
@@ -112,45 +93,40 @@ namespace Shaykhullin.Serializer.Core
 				}
 			}
 
-			if (configuration.TryGetValue(type, out var dto))
+			var dto = configuration.TryGetDto(dataType);
+			if (dto?.Converter != null)
 			{
-				if(dto.Converter != null)
-				{
-					return dto.Converter.DeserializeObject(stream, type);
-				}
-				else
-				{
-					var aliasBytes = new byte[4];
-					stream.Read(aliasBytes, 0, aliasBytes.Length);
-					var alias = BitConverter.ToInt32(aliasBytes, 0);
-					type = configuration.GetTypeFromAlias(alias) ?? type;
-				}
-			}
-			else
-			{
-				var aliasBytes = new byte[4];
-				stream.Read(aliasBytes, 0, aliasBytes.Length);
-				var alias = BitConverter.ToInt32(aliasBytes, 0);
-				type = configuration.GetTypeFromAlias(alias) ?? type;
+				return dto.Converter.DeserializeObject(stream, dataType);
 			}
 
-			if (!properties.TryGetValue(type, out var props))
-			{
-				props = type
-					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-					.Where(x => x.CanRead && x.CanWrite)
-					.ToArray();
-				properties.Add(type, props);
-			}
+			var aliasBytes = new byte[4];
+			stream.Read(aliasBytes, 0, aliasBytes.Length);
+			var alias = BitConverter.ToInt32(aliasBytes, 0);
+			dataType = configuration.GetTypeFromAlias(alias) ?? dataType;
 
-			var instance = container.Resolve<IActivator>().Create(type);
+			var instance = container.Resolve<IActivator>().Create(dataType);
 
-			foreach (var p in props)
+			foreach (var propertyInfo in EnsureProperties(dataType))
 			{
-				p.SetValue(instance, Deserialize(stream, p.PropertyType));
+				propertyInfo.SetValue(instance, Deserialize(stream, propertyInfo.PropertyType));
 			}
 
 			return instance;
+		}
+
+		private PropertyInfo[] EnsureProperties(Type type)
+		{
+			if (!properties.TryGetValue(type, out var propertiesInfo))
+			{
+				propertiesInfo = type
+					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+					.Where(x => x.CanRead && x.CanWrite)
+					.ToArray();
+
+				properties.Add(type, propertiesInfo);
+			}
+
+			return propertiesInfo;
 		}
 	}
 }

@@ -150,27 +150,27 @@ namespace Shaykhullin.Serializer.Tests
 				var sarah = result[0];
 				Assert.Equal("Sarah", sarah.Name);
 				Assert.Equal(37, sarah.Age);
-				Assert.Equal(1, sarah.Children.Count);
+				Assert.Single(sarah.Children);
 
 				var john = sarah.Children[0];
 				Assert.Equal("John", john.Name);
 				Assert.Equal(14, john.Age);
-				Assert.Equal(0, john.Children.Count);
+				Assert.Empty(john.Children);
 
 				var julia = result[1];
 				Assert.Equal("Julia", julia.Name);
 				Assert.Equal(42, julia.Age);
-				Assert.Equal(1, julia.Children.Count);
+				Assert.Single(julia.Children);
 
 				var sandra = julia.Children[0];
 				Assert.Equal("Sandra", sandra.Name);
 				Assert.Equal(20, sandra.Age);
-				Assert.Equal(null, sandra.Children);
+				Assert.Null(sandra.Children);
 
 				var sam = result[2];
 				Assert.Equal("Sam", sam.Name);
 				Assert.Equal(14, sam.Age);
-				Assert.Equal(null, sam.Children);
+				Assert.Null(sam.Children);
 			}
 		}
 

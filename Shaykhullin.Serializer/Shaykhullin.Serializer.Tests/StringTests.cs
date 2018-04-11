@@ -19,5 +19,30 @@ namespace Shaykhullin.Serializer.Tests
 				Assert.Equal(input, result);
 			}
 		}
+
+		class Person
+		{
+			public string Name { get; set; }
+		}
+
+		[Fact]
+		public void StringNameInPersonIsSerializing()
+		{
+			var serializer = new SerializerConfig().Create();
+
+			var input = new Person
+			{
+				Name = "Sergey"
+			};
+
+			using (var stream = CreateStream())
+			{
+				serializer.Serialize(stream, input);
+				stream.Position = 0;
+				var result = serializer.Deserialize<Person>(stream);
+
+				Assert.Equal("Sergey", result.Name);
+			}
+		}
 	}
 }
