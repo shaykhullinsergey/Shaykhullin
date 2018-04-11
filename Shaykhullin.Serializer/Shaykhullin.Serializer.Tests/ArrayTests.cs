@@ -276,5 +276,69 @@ namespace Shaykhullin.Serializer.Tests
 				Assert.Equal(44, michael.Age);
 			}
 		}
+
+		public class ClassHolder
+		{
+			public BaseClass[] BaseClasses { get; set; }
+		}
+
+		public class BaseClass
+		{
+			public string Name { get; set; }
+			public int Age { get; set; }
+		}
+
+		public class DerivedClass : BaseClass
+		{
+			public int House { get; set; }
+		}
+
+		[Fact]
+		public void DerivedClassInBaseClassArrayInClassHolderSerializing()
+		{
+			var config = new SerializerConfig();
+			config.Match<DerivedClass>();
+
+			var serializer = config.Create();
+
+			var input = new ClassHolder
+			{
+				BaseClasses = new BaseClass[]
+				{
+					new BaseClass
+					{
+						Name = "Base",
+						Age = 11
+					},
+					new DerivedClass
+					{
+						Name = "Derived",
+						Age = 22,
+						House = 33
+					}
+				}
+			};
+
+			using (var stream = CreateStream())
+			{
+				serializer.Serialize(stream, input);
+				stream.Position = 0;
+				var result = serializer.Deserialize<ClassHolder>(stream);
+
+				Assert.NotNull(result.BaseClasses);
+				Assert.Equal(2, result.BaseClasses.Length);
+
+				var baseClass = result.BaseClasses[0];
+				Assert.Equal("Base", baseClass.Name);
+				Assert.Equal(11, baseClass.Age);
+
+				var derivedClass = result.BaseClasses[1] as DerivedClass;
+				Assert.NotNull(derivedClass);
+
+				Assert.Equal("Derived", derivedClass.Name);
+				Assert.Equal(22, derivedClass.Age);
+				Assert.Equal(33, derivedClass.House);
+			}
+		}
 	}
 }

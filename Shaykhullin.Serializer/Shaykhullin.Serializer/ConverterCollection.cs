@@ -85,5 +85,38 @@ namespace Shaykhullin.Serializer.Core
 			dto = null;
 			return false;
 		}
+
+		public ConverterDto GetValue(Type type)
+		{
+			if (converters.TryGetValue(type, out var dto))
+			{
+				if (dto.Converter == null && dto.ConverterType != null)
+				{
+					dto.Converter = (IConverter)container.Resolve(dto.ConverterType);
+				}
+
+				return dto;
+			}
+
+			foreach (var pair in converters)
+			{
+				if (pair.Key.IsAssignableFrom(type))
+				{
+					if (pair.Value.ConverterType == null)
+					{
+						break;
+					}
+
+					if (pair.Value.Converter == null)
+					{
+						pair.Value.Converter = (IConverter)container.Resolve(pair.Value.ConverterType);
+					}
+
+					return pair.Value;
+				}
+			}
+
+			return null;
+		}
 	}
 }
