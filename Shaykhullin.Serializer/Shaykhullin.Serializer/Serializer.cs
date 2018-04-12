@@ -11,7 +11,7 @@ namespace Shaykhullin.Serializer.Core
 {
 	internal class Serializer : ISerializer
 	{
-		private readonly IContainer container;
+		private readonly IActivator activator;
 		private readonly Configuration configuration;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
@@ -21,7 +21,7 @@ namespace Shaykhullin.Serializer.Core
 				.ImplementedBy(c => this)
 				.As<Singleton>();
 
-			container = config.Container;
+			activator = config.Container.Resolve<IActivator>();
 			this.configuration = configuration;
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
@@ -45,7 +45,7 @@ namespace Shaykhullin.Serializer.Core
 
 			if (data == null)
 			{
-				stream.WriteByte(1);
+				stream.WriteByte(0);
 				return;
 			}
 
@@ -53,7 +53,7 @@ namespace Shaykhullin.Serializer.Core
 
 			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
 			{
-				stream.WriteByte(0);
+				stream.WriteByte(1);
 			}
 
 			var dto = configuration.TryGetDto(dataType);
@@ -63,11 +63,13 @@ namespace Shaykhullin.Serializer.Core
 				dataType = dataTypeOverride;
 				dto = configuration.TryGetDto(dataTypeOverride);
 			}
-
-			if (dto?.Converter != null)
+			else
 			{
-				dto.Converter.SerializeObject(stream, data);
-				return;
+				if(dto.Converter != null)
+				{
+					dto.Converter.SerializeObject(stream, data);
+					return;
+				}
 			}
 
 			stream.Write(BitConverter.GetBytes(dto?.Alias ?? 0), 0, 4);
@@ -87,7 +89,7 @@ namespace Shaykhullin.Serializer.Core
 
 			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
 			{
-				if (stream.ReadByte() == 1)
+				if (stream.ReadByte() == 0)
 				{
 					return null;
 				}
@@ -104,7 +106,7 @@ namespace Shaykhullin.Serializer.Core
 			var alias = BitConverter.ToInt32(aliasBytes, 0);
 			dataType = configuration.GetTypeFromAlias(alias) ?? dataType;
 
-			var instance = container.Resolve<IActivator>().Create(dataType);
+			var instance = activator.Create(dataType);
 
 			foreach (var propertyInfo in EnsureProperties(dataType))
 			{
