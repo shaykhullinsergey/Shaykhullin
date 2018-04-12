@@ -72,7 +72,15 @@ namespace Shaykhullin.Serializer.Core
 				}
 			}
 
-			stream.Write(BitConverter.GetBytes(dto?.Alias ?? 0), 0, 4);
+			if(dto == null)
+			{
+				stream.WriteByte(0);
+			}
+			else
+			{
+				stream.WriteByte(1);
+				stream.Write(BitConverter.GetBytes(dto?.Alias ?? 0), 0, 4);
+			}
 
 			foreach (var property in EnsureProperties(dataType))
 			{
@@ -96,16 +104,23 @@ namespace Shaykhullin.Serializer.Core
 			}
 
 			var dto = configuration.TryGetDto(dataType);
-			if (dto?.Converter != null)
+
+			if(dto != null)
 			{
-				return dto.Converter.DeserializeObject(stream, dataType);
+				if (dto.Converter != null)
+				{
+					return dto.Converter.DeserializeObject(stream, dataType);
+				}
 			}
 
-			var aliasBytes = new byte[4];
-			stream.Read(aliasBytes, 0, aliasBytes.Length);
-			var alias = BitConverter.ToInt32(aliasBytes, 0);
-			dataType = configuration.GetTypeFromAlias(alias) ?? dataType;
-
+			if (stream.ReadByte() == 1)
+			{
+				var aliasBytes = new byte[4];
+				stream.Read(aliasBytes, 0, aliasBytes.Length);
+				var alias = BitConverter.ToInt32(aliasBytes, 0);
+				dataType = configuration.GetTypeFromAlias(alias);
+			}
+			
 			var instance = activator.Create(dataType);
 
 			foreach (var propertyInfo in EnsureProperties(dataType))

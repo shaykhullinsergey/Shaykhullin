@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Text;
+using Xunit;
 
 namespace Shaykhullin.Serializer.Tests
 {
@@ -27,6 +28,32 @@ namespace Shaykhullin.Serializer.Tests
 
 				Assert.NotNull(result);
 				Assert.Equal(123, result.Id);
+			}
+		}
+
+		public class StringEntity
+		{
+			public string Name { get; set; }
+		}
+
+		[Fact]
+		public void StringEntitySerializing()
+		{
+			var serializer = new SerializerConfig().Create();
+
+			var input = new StringEntity
+			{
+				Name = Encoding.UTF8.GetString(new byte[] { 1, 2, 3, 4, 5 })
+			};
+
+			using (var stream = CreateStream())
+			{
+				serializer.Serialize(stream, input);
+				stream.Position = 0;
+				var result = serializer.Deserialize<StringEntity>(stream);
+
+				Assert.NotNull(result);
+				Assert.Equal(input.Name, result.Name);
 			}
 		}
 
