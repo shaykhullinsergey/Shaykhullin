@@ -6,7 +6,7 @@ namespace Shaykhullin.Serializer
 	internal class UseBuilder<TData> : IUseBuilder<TData>
 	{
 		private readonly IContainerConfig scope;
-		private Configuration converters;
+		private readonly Configuration converters;
 
 		public UseBuilder(IContainerConfig scope, Configuration converters)
 		{

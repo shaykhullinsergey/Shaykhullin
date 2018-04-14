@@ -17,7 +17,10 @@ namespace Shaykhullin.Serializer.Core
 
 		public void RegisterTypeWithAlias(Type type)
 		{
-			converters.Add(type, new ConverterDto(type));
+			if (!converters.ContainsKey(type))
+			{
+				converters.Add(type, new ConverterDto(type));
+			}
 		}
 
 		public void RegisterConverterTypeFor(Type type, Type converterType)

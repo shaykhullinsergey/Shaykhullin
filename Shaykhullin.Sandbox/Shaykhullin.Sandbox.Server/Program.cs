@@ -11,54 +11,32 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.Match<ConnectInfo>()
-				.From<Connect>()
-				.With<ConnectHandler>();
-
-			config.Match<Person>()
+			config.Match<string>()
 				.From<Event>()
 				.With<Handler>();
-
-			config.Match<DisconnectInfo>()
-				.From<Disconnect>()
-				.With<DisconnectHandler>();
 
 			await config.Create("127.0.0.1", 4000).Run();
 		}
 	}
 
-	class Person
+	struct Event : IEvent<string>
 	{
-		public string Name { get; set; }
-		public int Age { get; set; }
-		public Person[] Children { get; set; }
-
-		public override string ToString()
-		{
-			var children = Children?.Select(x => x.ToString()) ?? Enumerable.Empty<string>();
-
-			return $"Name: {Name}, Age: {Age}, Children: [{string.Join(",", children)}]";
-		}
-	}
-
-	struct Event : IEvent<Person>
-	{
-		public Event(IConnection connection, Person message)
+		public Event(IConnection connection, string message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public Person Message { get; }
+		public string Message { get; }
 	}
 
-	struct Handler : IHandler<Person, Event>
+	struct Handler : IHandler<string, Event>
 	{
 		public Task Execute(Event @event)
 		{
 			Console.WriteLine(@event.Message);
-			return Task.CompletedTask;
+			return @event.Connection.Send("Echo: " + @event.Message).To<Event>();
 		}
 	}
 
