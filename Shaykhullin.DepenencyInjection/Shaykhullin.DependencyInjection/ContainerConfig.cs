@@ -1,8 +1,8 @@
 ﻿using System;
-using Shaykhullin.DependencyInjection.Core;
 
 using Shaykhullin.Activator;
-using Shaykhullin.Activator.Core;
+using Shaykhullin.DependencyInjection.Core;
+
 
 namespace Shaykhullin.DependencyInjection
 {
