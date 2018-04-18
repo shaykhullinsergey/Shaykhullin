@@ -8,8 +8,8 @@ namespace Shaykhullin.Serializer.Core
 	{
 		private readonly IContainerConfig config;
 		private readonly ConverterContainer parent;
-		private readonly Dictionary<Type, ConverterDto> converters;
 		private readonly Dictionary<int, Type> aliases;
+		private readonly Dictionary<Type, ConverterDto> converters;
 
 		public ConverterContainer(IContainerConfig config)
 		{
