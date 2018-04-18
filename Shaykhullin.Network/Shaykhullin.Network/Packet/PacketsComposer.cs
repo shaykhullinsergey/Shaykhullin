@@ -19,12 +19,11 @@ namespace Shaykhullin.Network.Core
 			this.eventRaiser = eventRaiser;
 		}
 
-
 		public async Task<IPacket> GetPacket(byte[] data)
 		{
 			var chunk = await GetBuffer().ConfigureAwait(false);
 			Array.Copy(data, HeaderSize, chunk, 0, PayloadSize);
-
+			
 			return new Packet
 			{
 				Id = data[0],
@@ -64,15 +63,8 @@ namespace Shaykhullin.Network.Core
 
 			if (count > ushort.MaxValue)
 			{
-				await eventRaiser.Raise(new Payload
-				{
-					Event = typeof(Error),
-					Data = new ErrorInfo
-					{
-						Reason = "Message size is too long"
-					}
-				}).ConfigureAwait(false);
-
+				await eventRaiser.Raise(new ErrorPayload("Message size is too long")).ConfigureAwait(false);
+				
 				throw new InvalidOperationException();
 			}
 

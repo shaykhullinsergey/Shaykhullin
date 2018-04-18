@@ -1,6 +1,5 @@
 ﻿using Shaykhullin.Network;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Shaykhullin.Sandbox.Server
@@ -15,7 +14,8 @@ namespace Shaykhullin.Sandbox.Server
 				.From<Event>()
 				.With<Handler>();
 
-			await config.Create("127.0.0.1", 4000).Run();
+			Console.WriteLine("Started");
+			await config.Create("127.0.0.1", 4002).Run();
 		}
 	}
 
@@ -33,28 +33,10 @@ namespace Shaykhullin.Sandbox.Server
 
 	struct Handler : IHandler<string, Event>
 	{
-		public Task Execute(Event @event)
+		public async Task Execute(Event @event)
 		{
 			Console.WriteLine(@event.Message);
-			return @event.Connection.Send("Echo: " + @event.Message).To<Event>();
-		}
-	}
-
-	class DisconnectHandler : IHandler<DisconnectInfo, Disconnect>
-	{
-		public Task Execute(Disconnect @event)
-		{
-			Console.WriteLine(@event.Message.Reason);
-			return Task.CompletedTask;
-		}
-	}
-
-	struct ConnectHandler : IHandler<ConnectInfo, Connect>
-	{
-		public Task Execute(Connect @event)
-		{
-			Console.WriteLine("CONNECT");
-			return Task.CompletedTask;
+			await @event.Connection.Send("Echo: " + @event.Message).To<Event>();
 		}
 	}
 }

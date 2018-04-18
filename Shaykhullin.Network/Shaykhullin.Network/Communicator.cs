@@ -1,6 +1,5 @@
 using System;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using Shaykhullin.DependencyInjection;
 
@@ -31,12 +30,7 @@ namespace Shaykhullin.Network.Core
 					if (!tcpClient.Connected)
 					{
 						tcpClient.ConnectAsync(configuration.Host, configuration.Port).Wait();
-						Task.Run(async () =>
-							await eventRaiser.Raise(new Payload
-							{
-								Event = typeof(Connect),
-								Data = new ConnectInfo()
-							}));
+						eventRaiser.Raise(new ConnectPayload()).Wait();
 					}
 				}
 			}
@@ -54,17 +48,13 @@ namespace Shaykhullin.Network.Core
 			}
 			catch (Exception exception)
 			{
-				await eventRaiser.Raise(new Payload
-				{
-					Event = typeof(Disconnect),
-					Data = new DisconnectInfo("Connection closed", exception)
-				}).ConfigureAwait(false);
+				await eventRaiser.Raise(new DisconnectPayload("Connection closed", exception)).ConfigureAwait(false);
 			}
 		}
 
 		public async Task<IPacket> Receive()
 		{
-			var buffer = await packetsComposer.GetBuffer();
+			var buffer = await packetsComposer.GetBuffer().ConfigureAwait(false);
 
 			while (!isConnected && !IsConnected)
 			{
@@ -73,14 +63,9 @@ namespace Shaykhullin.Network.Core
 
 			var read = await tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
-			if(read == 0 && !IsConnected)
+			if (read == 0 && !IsConnected)
 			{
-				await eventRaiser.Raise(new Payload
-				{
-					Event = typeof(Disconnect),
-					Data = new DisconnectInfo("Connection closed")
-				}).ConfigureAwait(false);
-
+				await eventRaiser.Raise(new DisconnectPayload("Connection closed")).ConfigureAwait(false);
 				throw new OperationCanceledException();
 			}
 
@@ -91,42 +76,35 @@ namespace Shaykhullin.Network.Core
 		{
 			tcpClient.Close();
 			tcpClient.Dispose();
-
-			await eventRaiser.Raise(new Payload
-			{
-				Event = typeof(Disconnect),
-				Data = new DisconnectInfo("Connection disposed")
-			}).ConfigureAwait(false);
-
+			await eventRaiser.Raise(new DisconnectPayload("Connection disposed")).ConfigureAwait(false);
 		}
 
-		private bool isConnected = false;
+		private bool isConnected;
+
 		public bool IsConnected
 		{
 			get
 			{
 				try
 				{
-					if (tcpClient != null && tcpClient.Client != null && tcpClient.Client.Connected)
-					{
-						if (tcpClient.Client.Poll(0, SelectMode.SelectRead))
-						{
-							byte[] buff = new byte[1];
-							if (tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
-							{
-								return false;
-							}
-							else
-							{
-								return isConnected = true;
-							}
-						}
-						return isConnected = true;
-					}
-					else
+					if (tcpClient?.Client?.Connected != true)
 					{
 						return false;
 					}
+
+					if (!tcpClient.Client.Poll(0, SelectMode.SelectRead))
+					{
+						return isConnected = true;
+					}
+
+					var buffer = new byte[1];
+
+					if (tcpClient.Client.Receive(buffer, SocketFlags.Peek) == 0)
+					{
+						return false;
+					}
+
+					return isConnected = true;
 				}
 				catch
 				{

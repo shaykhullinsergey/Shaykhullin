@@ -32,7 +32,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var input = new Person
 			{
-				Name = "Sergey"
+				Name = "WORKS"
 			};
 
 			using (var stream = CreateStream())
@@ -41,7 +41,35 @@ namespace Shaykhullin.Serializer.Tests
 				stream.Position = 0;
 				var result = serializer.Deserialize<Person>(stream);
 
-				Assert.Equal("Sergey", result.Name);
+				Assert.Equal("WORKS", result.Name);
+			}
+		}
+
+		[Fact]
+		public void StringNameInPersonIsSerializingInScope()
+		{
+			var config = new SerializerConfig();
+
+			var input = new Person
+			{
+				Name = "WORKS"
+			};
+
+			using (var scope = config.CreateScope())
+			{
+				scope.Match<string>();
+				
+				var serializer = scope.Create();
+				
+				
+				using (var stream = CreateStream())
+				{
+					serializer.Serialize(stream, input);
+					stream.Position = 0;
+					var result = serializer.Deserialize<Person>(stream);
+
+					Assert.Equal("WORKS", result.Name);
+				}
 			}
 		}
 	}

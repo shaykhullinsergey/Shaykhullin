@@ -15,14 +15,15 @@ namespace Shaykhullin.Sandbox.Client
 				.From<Event>()
 				.With<Handler>();
 
-			var client = config.Create("127.0.0.1", 4000);
+			var client = config.Create("127.0.0.1", 4002);
 
 			using (var connection = await client.Connect())
 			{
-				while (true)
-				{
-					await connection.Send(Console.ReadLine()).To<Event>();
-				}
+				Console.WriteLine("Connected");
+				await connection.Send("WORKS").To<Event>();
+				await connection.Send("WORKS").To<Event>();
+				await connection.Send("WORKS").To<Event>();
+				Thread.Sleep(-1);
 			}
 		}
 	}

@@ -24,7 +24,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public void RegisterTypeWithAlias(Type type)
 		{
-			if (!converters.ContainsKey(type))
+			if (TryGetDto(type) == null)
 			{
 				converters.Add(type, new ConverterDto(type));
 			}
@@ -32,7 +32,17 @@ namespace Shaykhullin.Serializer.Core
 
 		public void RegisterConverterTypeFor(Type type, Type converterType)
 		{
-			converters[type].ConverterType = converterType;
+			if (!converters.ContainsKey(type))
+			{
+				converters.Add(type, new ConverterDto(type)
+				{
+					ConverterType = converterType
+				});
+			}
+			else
+			{
+				converters[type].ConverterType = converterType;
+			}
 		}
 
 		public Type GetTypeFromAlias(int alias)
@@ -46,19 +56,6 @@ namespace Shaykhullin.Serializer.Core
 			}
 
 			return parent?.GetTypeFromAlias(alias);
-		}
-
-		public int GetAliasFromType(Type type)
-		{
-			foreach (var element in converters)
-			{
-				if (element.Value.Type == type)
-				{
-					return element.Value.Alias;
-				}
-			}
-
-			return parent?.GetAliasFromType(type) ?? throw new EntryPointNotFoundException();
 		}
 
 		public ConverterDto TryGetDto(Type type)

@@ -1,7 +1,8 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using Shaykhullin.DependencyInjection;
 using Shaykhullin.Serializer;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
@@ -23,6 +24,7 @@ namespace Shaykhullin.Network.Core
 		public async Task<IMessage> GetMessage(IPayload payload)
 		{
 			byte[] data;
+
 			using (var stream = new MemoryStream())
 			{
 				serializer.Serialize(stream, payload.Data);
@@ -33,7 +35,11 @@ namespace Shaykhullin.Network.Core
 			data = encryption.Encrypt(data);
 			var eventId = eventHolder.GetEvent(payload.Event);
 
-			return await Task.FromResult((IMessage)new Message { EventId = eventId, Data = data }).ConfigureAwait(false);
+			return await Task.FromResult((IMessage)new Message
+			{
+				EventId = eventId,
+				Data = data
+			}).ConfigureAwait(false);
 		}
 
 		public async Task<IPayload> GetPayload(IMessage message)
@@ -45,13 +51,16 @@ namespace Shaykhullin.Network.Core
 			var dataType = @event.GetInterfaces()[0].GetGenericArguments()[0];
 
 			object @object;
-
 			using (var stream = new MemoryStream(data))
 			{
 				@object = serializer.Deserialize(stream, dataType);
 			}
 
-			return await Task.FromResult((IPayload)new Payload { Event = @event, Data = @object }).ConfigureAwait(false);
+			return await Task.FromResult((IPayload)new Payload
+			{
+				Event = @event,
+				Data = @object
+			}).ConfigureAwait(false);
 		}
 	}
 }
