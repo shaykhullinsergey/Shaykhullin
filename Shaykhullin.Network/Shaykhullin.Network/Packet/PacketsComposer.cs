@@ -23,7 +23,7 @@ namespace Shaykhullin.Network.Core
 		{
 			var chunk = await GetBuffer().ConfigureAwait(false);
 			Array.Copy(data, HeaderSize, chunk, 0, PayloadSize);
-			
+
 			return new Packet
 			{
 				Id = data[0],
@@ -64,7 +64,7 @@ namespace Shaykhullin.Network.Core
 			if (count > ushort.MaxValue)
 			{
 				await eventRaiser.Raise(new ErrorPayload("Message size is too long")).ConfigureAwait(false);
-				
+
 				throw new InvalidOperationException();
 			}
 
@@ -98,7 +98,9 @@ namespace Shaykhullin.Network.Core
 
 			var eventId = BitConverter.ToInt32(data.Take(4).ToArray(), 0);
 
-			return await Task.FromResult((IMessage) new Message { EventId = eventId, Data = data.Skip(4).ToArray() }).ConfigureAwait(false);
+			return await Task.FromResult(
+				(IMessage)new Message { EventId = eventId, Data = data.Skip(4).ToArray() })
+					.ConfigureAwait(false);
 		}
 
 		private static int GetPacketCount(int length) => length / PayloadSize + (length % PayloadSize == 0 ? 0 : 1);

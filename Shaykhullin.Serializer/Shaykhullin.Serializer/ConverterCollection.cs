@@ -9,11 +9,13 @@ namespace Shaykhullin.Serializer.Core
 		private readonly IContainerConfig config;
 		private readonly ConverterContainer parent;
 		private readonly Dictionary<Type, ConverterDto> converters;
+		private readonly Dictionary<int, Type> aliases;
 
 		public ConverterContainer(IContainerConfig config)
 		{
 			this.config = config;
 			converters = new Dictionary<Type, ConverterDto>();
+			aliases = new Dictionary<int, Type>();
 		}
 
 		internal ConverterContainer(IContainerConfig config, ConverterContainer parent) 
@@ -26,53 +28,52 @@ namespace Shaykhullin.Serializer.Core
 		{
 			if (TryGetDto(type) == null)
 			{
-				converters.Add(type, new ConverterDto(type));
+				var dto = new ConverterDto(type);
+				aliases.Add(dto.Alias, dto.Type);
+				converters.Add(type, dto);
 			}
 		}
 
 		public void RegisterConverterTypeFor(Type type, Type converterType)
 		{
-			if (!converters.ContainsKey(type))
+			if (converters.TryGetValue(type, out var dto))
+			{
+				dto.ConverterType = converterType;
+			}
+			else
 			{
 				converters.Add(type, new ConverterDto(type)
 				{
 					ConverterType = converterType
 				});
-			}
-			else
-			{
-				converters[type].ConverterType = converterType;
+				aliases.Add(dto.Alias, dto.Type);
 			}
 		}
 
 		public Type GetTypeFromAlias(int alias)
 		{
-			foreach (var element in converters)
-			{
-				if(element.Value.Alias == alias)
-				{
-					return element.Key;
-				}
-			}
-
-			return parent?.GetTypeFromAlias(alias);
+			return aliases.TryGetValue(alias, out var type) 
+				? type 
+				: parent?.GetTypeFromAlias(alias);
 		}
 
 		public ConverterDto TryGetDto(Type type)
 		{
-			if (converters.TryGetValue(type, out var dto))
+			// Try find from current collection
+			if (converters.TryGetValue(type, out var currentDto))
 			{
-				if (dto.Converter == null && dto.ConverterType != null)
+				if (currentDto.Converter == null && currentDto.ConverterType != null)
 				{
 					using (var container = config.Create())
 					{
-						dto.Converter = (IConverter)container.Resolve(dto.ConverterType);
+						currentDto.Converter = (IConverter)container.Resolve(currentDto.ConverterType);
 					}
 				}
 
-				return dto;
+				return currentDto;
 			}
-
+			
+			// Or search for assignment
 			foreach (var pair in converters)
 			{
 				if (pair.Key.IsAssignableFrom(type))

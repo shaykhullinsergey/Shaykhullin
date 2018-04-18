@@ -35,11 +35,9 @@ namespace Shaykhullin.Network.Core
 			data = encryption.Encrypt(data);
 			var eventId = eventHolder.GetEvent(payload.Event);
 
-			return await Task.FromResult((IMessage)new Message
-			{
-				EventId = eventId,
-				Data = data
-			}).ConfigureAwait(false);
+			return await Task.FromResult(
+				(IMessage)new Message { EventId = eventId, Data = data})
+					.ConfigureAwait(false);
 		}
 
 		public async Task<IPayload> GetPayload(IMessage message)
@@ -56,11 +54,9 @@ namespace Shaykhullin.Network.Core
 				@object = serializer.Deserialize(stream, dataType);
 			}
 
-			return await Task.FromResult((IPayload)new Payload
-			{
-				Event = @event,
-				Data = @object
-			}).ConfigureAwait(false);
+			return await Task.FromResult(
+				(IPayload)new Payload { Event = @event, Data = @object })
+					.ConfigureAwait(false);
 		}
 	}
 }

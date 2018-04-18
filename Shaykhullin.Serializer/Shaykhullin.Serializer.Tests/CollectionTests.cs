@@ -103,7 +103,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var serializer = config.Create();
 
-			Collection<ComplexPerson> input = new Collection<ComplexPerson>
+			var input = new Collection<ComplexPerson>
 			{
 				new ComplexPerson
 				{
