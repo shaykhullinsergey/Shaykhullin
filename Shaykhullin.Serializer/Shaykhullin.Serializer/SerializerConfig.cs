@@ -9,19 +9,18 @@ namespace Shaykhullin.Serializer
 {
 	public class SerializerConfig : ISerializerConfig
 	{
-		private readonly IContainerConfig root;
-		private readonly IContainerConfig scope;
+		private readonly IContainerConfig config;
 		private readonly ConverterContainer converterContainer;
 
 		public SerializerConfig()
 		{
-			root = new ContainerConfig();
+			config = new ContainerConfig();
 
-			root.Register<IActivator>()
+			config.Register<IActivator>()
 				.ImplementedBy(c => new ActivatorConfig().Create())
 				.As<Singleton>();
 
-			var innerScope = root.CreateScope();
+			var innerScope = config.CreateScope();
 			converterContainer = new ConverterContainer(innerScope);
 
 			Match<byte>().With<ByteConverter>();
@@ -36,35 +35,35 @@ namespace Shaykhullin.Serializer
 			Match<bool>().With<BoolConverter>();
 			Match<float>().With<SingleConverter>();
 			Match<double>().With<DoubleConverter>();
-			Match<Array>().With<ArrayConverter>();
 			Match<DateTime>().With<DateTimeConverter>();
+			Match<Array>().With<ArrayConverter>();
 			Match<IList>().With<IListConverter>();
 			Match<ICollection>().With<CollectionConverter>();
 			Match<IEnumerable>().With<IEnumerableConverter>();
 
-			scope = innerScope;
+			config = innerScope;
+			converterContainer = new ConverterContainer(config, converterContainer);
 		}
 
 		internal SerializerConfig(SerializerConfig parent)
 		{
-			scope = parent.scope.CreateScope();
-			converterContainer = new ConverterContainer(scope, parent.converterContainer);
+			config = parent.config.CreateScope();
+			converterContainer = new ConverterContainer(config, parent.converterContainer);
 		}
 
 		public IUseBuilder<TData> Match<TData>()
 		{
 			converterContainer.RegisterTypeWithAlias(typeof(TData));
-			return new UseBuilder<TData>(scope ?? root, converterContainer);
+			return new UseBuilder<TData>(config, converterContainer);
 		}
 
 		public ISerializerConfig CreateScope() => new SerializerConfig(this);
 
-		public ISerializer Create() => new Core.Serializer(scope, converterContainer);
+		public ISerializer Create() => new Core.Serializer(config, converterContainer);
 
 		public void Dispose()
 		{
-			root?.Dispose();
-			scope?.Dispose();
+			config?.Dispose();
 		}
 	}
 }
