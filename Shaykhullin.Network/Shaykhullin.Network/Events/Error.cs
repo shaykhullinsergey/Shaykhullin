@@ -1,6 +1,4 @@
-﻿using Shaykhullin.Network;
-
-namespace Shaykhullin.Network
+﻿namespace Shaykhullin.Network
 {
 	public class Error : IEvent<ErrorInfo>
 	{

@@ -12,18 +12,23 @@ namespace Shaykhullin.Serializer.Core
 	internal class Serializer : ISerializer
 	{
 		private readonly IActivator activator;
-		private readonly Configuration configuration;
+		private readonly ConverterContainer converterContainer;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
-		public Serializer(IContainerConfig config, Configuration configuration)
+		public Serializer(IContainerConfig config, ConverterContainer converterContainer)
 		{
 			config.Register<ISerializer>()
 				.ImplementedBy(c => this)
 				.As<Singleton>();
 
-			activator = config.Container.Resolve<IActivator>();
-			this.configuration = configuration;
+			using (var container = config.Create())
+			{
+				activator = container.Resolve<IActivator>();
+			}
+			
 			properties = new Dictionary<Type, PropertyInfo[]>();
+			
+			this.converterContainer = converterContainer;
 		}
 
 		public void Serialize<TData>(Stream stream, TData data)
@@ -56,12 +61,12 @@ namespace Shaykhullin.Serializer.Core
 				stream.WriteByte(1);
 			}
 
-			var dto = configuration.TryGetDto(dataType);
+			var dto = converterContainer.TryGetDto(dataType);
 
 			if (dto == null)
 			{
 				dataType = dataTypeOverride;
-				dto = configuration.TryGetDto(dataTypeOverride);
+				dto = converterContainer.TryGetDto(dataTypeOverride);
 			}
 			else
 			{
@@ -103,7 +108,7 @@ namespace Shaykhullin.Serializer.Core
 				}
 			}
 
-			var dto = configuration.TryGetDto(dataType);
+			var dto = converterContainer.TryGetDto(dataType);
 
 			if(dto != null)
 			{
@@ -118,7 +123,7 @@ namespace Shaykhullin.Serializer.Core
 				var aliasBytes = new byte[4];
 				stream.Read(aliasBytes, 0, aliasBytes.Length);
 				var alias = BitConverter.ToInt32(aliasBytes, 0);
-				dataType = configuration.GetTypeFromAlias(alias);
+				dataType = converterContainer.GetTypeFromAlias(alias);
 			}
 			
 			var instance = activator.Create(dataType);
@@ -144,6 +149,10 @@ namespace Shaykhullin.Serializer.Core
 			}
 
 			return propertiesInfo;
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }

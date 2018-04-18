@@ -6,24 +6,27 @@ namespace Shaykhullin.Network.Core
 	internal class HandlerBuilder<TData, TEvent> : IHandlerBuilder<TData, TEvent>
 		where TEvent : IEvent<TData>
 	{
-		private readonly IContainer container;
+		private readonly IContainerConfig config;
 
-		public HandlerBuilder(IContainer container)
+		public HandlerBuilder(IContainerConfig config)
 		{
-			this.container = container;
+			this.config = config;
 		}
 
 		public void With<THandler>() where THandler 
 			: IHandler<TData, TEvent>
 		{
-			container.Resolve<ISerializerConfig>()
-				.Match<TData>();
-
-			container.Resolve<EventCollection>()
-				.Add<TData, TEvent>();
-
-			container.Resolve<HandlerCollection>()
-				.Add<TData, TEvent, THandler>();
+			using (var container = config.Create())
+			{
+				container.Resolve<ISerializerConfig>()
+					.Match<TData>();
+	
+				container.Resolve<EventCollection>()
+					.Add<TData, TEvent>();
+	
+				container.Resolve<HandlerCollection>()
+					.Add<TData, TEvent, THandler>();
+			}
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.DependencyInjection
 {
-	public interface IContainer
+	public interface IContainer : IDisposable
 	{
 		object Resolve(Type type);
 

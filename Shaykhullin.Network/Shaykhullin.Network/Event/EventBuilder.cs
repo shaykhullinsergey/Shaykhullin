@@ -4,17 +4,17 @@ namespace Shaykhullin.Network.Core
 {
 	internal class EventBuilder<TData> : IEventBuilder<TData>
 	{
-		private readonly IContainer container;
+		private readonly IContainerConfig config;
 
-		public EventBuilder(IContainer container)
+		public EventBuilder(IContainerConfig config)
 		{
-			this.container = container;
+			this.config = config;
 		}
 		
 		public IHandlerBuilder<TData, TEvent> From<TEvent>()
 			where TEvent : IEvent<TData>
 		{
-			return new HandlerBuilder<TData, TEvent>(container);
+			return new HandlerBuilder<TData, TEvent>(config);
 		}
 	}
 }

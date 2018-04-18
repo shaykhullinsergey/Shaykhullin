@@ -10,11 +10,13 @@ namespace Shaykhullin.Network
 	public abstract class Config<TNode> : IConfig<TNode>
 		where TNode : INode
 	{
-		private readonly IContainerConfig rootConfig = new ContainerConfig();
+		private readonly IContainerConfig rootConfig;
 		private readonly IContainerConfig config;
 
 		protected Config()
 		{
+			rootConfig = new ContainerConfig();
+			
 			var serializerConfig = new SerializerConfig();
 
 			rootConfig.Register<ISerializerConfig>()
@@ -53,7 +55,7 @@ namespace Shaykhullin.Network
 			rootConfig.Register<Connect>();
 			rootConfig.Register<Error>();
 
-			config = rootConfig.Scope();
+			config = rootConfig.CreateScope();
 
 			config.Register<IContainerConfig>()
 				.ImplementedBy(c => config)
@@ -65,11 +67,13 @@ namespace Shaykhullin.Network
 		{
 			return new SerializerBuilder(config).UseSerializer(serializer);
 		}
+		
 		public IEncryptionBuilder UseCompression<TCompression>()
 			where TCompression : ICompression
 		{
 			return new SerializerBuilder(config).UseCompression<TCompression>();
 		}
+		
 		public void UseEncryption<TEncryption>()
 			where TEncryption : IEncryption
 		{
@@ -78,12 +82,12 @@ namespace Shaykhullin.Network
 
 		public IImplementedByBuilder<TRegister> Register<TRegister>() 
 		{
-			return Register<TRegister>(typeof(TRegister));
+			return config.Register<TRegister>();
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
 		{
-			return Register<object>(register);
+			return config.Register(register);
 		}
 
 		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
@@ -91,21 +95,20 @@ namespace Shaykhullin.Network
 			return config.Register<TRegister>(register);
 		}
 
-		public abstract TNode Create(string host, int port);
-
-
 		public IEventBuilder<TData> Match<TData>()
 		{
-			return new EventBuilder<TData>(config.Container);
+			return new EventBuilder<TData>(config);
 		}
 
 		protected IContainerConfig Configure(string host, int port)
 		{
 			config.Register<IConfiguration>()
-				.ImplementedBy(c => new Core.Configuration(host, port))
+				.ImplementedBy(c => new Configuration(host, port))
 				.As<Singleton>();
 
 			return config;
 		}
+		
+		public abstract TNode Create(string host, int port);
 	}
 }

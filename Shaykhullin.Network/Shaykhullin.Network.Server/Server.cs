@@ -16,7 +16,7 @@ namespace Shaykhullin.Network.Core
 
 		public async Task Run()
 		{
-			var rootContainer = config.Container;
+			var rootContainer = config.Create();
 
 			var configuration = rootContainer.Resolve<IConfiguration>();
 
@@ -33,13 +33,13 @@ namespace Shaykhullin.Network.Core
 				tcpClient.ReceiveBufferSize = 256;
 				tcpClient.SendBufferSize = 256;
 
-				using (var scope = config.Scope())
+				using (var scope = config.CreateScope())
 				{
 					scope.Register<IContainerConfig>()
 						.ImplementedBy(c => scope)
 						.As<Singleton>();
 
-					var container = scope.Container;
+					var container = scope.Create();
 
 					scope.Register<IContainer>()
 						.ImplementedBy(c => container)

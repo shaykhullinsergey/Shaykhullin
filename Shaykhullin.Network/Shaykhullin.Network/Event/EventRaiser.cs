@@ -17,19 +17,19 @@ namespace Shaykhullin.Network.Core
 
 		public async Task Raise(IPayload payload)
 		{
-			var handlers = config.Container
+			var handlers = config.Create()
 				.Resolve<IEventHolder>()
 				.GetHandlers(payload);
 
 			foreach (var handler in handlers)
 			{
-				using (var scope = config.Scope())
+				using (var scope = config.CreateScope())
 				{
 					scope.Register<object>(payload.Data.GetType())
 						.ImplementedBy(c => payload.Data)
 						.As<Singleton>();
 
-					var container = scope.Container;
+					var container = scope.Create();
 				
 					var instanse = container.Resolve(handler);
 					var @event = container.Resolve(payload.Event);

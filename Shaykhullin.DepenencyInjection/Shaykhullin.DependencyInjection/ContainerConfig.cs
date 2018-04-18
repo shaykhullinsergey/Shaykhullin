@@ -8,19 +8,18 @@ namespace Shaykhullin.DependencyInjection
 {
 	public class ContainerConfig : IContainerConfig
 	{
-		private IContainer container;
-		private readonly IActivatorConfig activatorConfig;
+		private readonly IActivator activator;
 		private readonly DependencyContainer dependencyContainer;
 
 		public ContainerConfig()
 		{
-			activatorConfig = new ActivatorConfig();
-			dependencyContainer = new DependencyContainer(null);
+			activator = new ActivatorConfig().Create();
+			dependencyContainer = new DependencyContainer();
 		}
 
 		internal ContainerConfig(ContainerConfig parent) 
 		{
-			activatorConfig = parent.activatorConfig;
+			activator = parent.activator;
 			dependencyContainer = new DependencyContainer(parent.dependencyContainer);
 		}
 
@@ -40,12 +39,10 @@ namespace Shaykhullin.DependencyInjection
 				.Register<TRegister>(register);
 		}
 
-		public IContainerConfig Scope() => new ContainerConfig(this);
+		public IContainerConfig CreateScope() => new ContainerConfig(this);
 
-		public IContainer Container => container ?? (container = new Container(activatorConfig.Create(), dependencyContainer));
+		public IContainer Create() => new Container(activator, dependencyContainer);
 
 		public void Dispose() { }
-
-	
 	}
 }

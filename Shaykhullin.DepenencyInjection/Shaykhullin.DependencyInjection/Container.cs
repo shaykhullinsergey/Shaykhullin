@@ -8,10 +8,10 @@ namespace Shaykhullin.DependencyInjection.Core
 		private readonly IActivator activator;
 		private readonly DependencyContainer dependencyContainer;
 
-		public Container(IActivator activator, DependencyContainer dependencies)
+		public Container(IActivator activator, DependencyContainer dependencyContainer)
 		{
 			this.activator = activator;
-			this.dependencyContainer = dependencies;
+			this.dependencyContainer = dependencyContainer;
 		}
 
 		public TResolve Resolve<TResolve>()
@@ -77,6 +77,10 @@ namespace Shaykhullin.DependencyInjection.Core
 					}
 				}
 			}
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }

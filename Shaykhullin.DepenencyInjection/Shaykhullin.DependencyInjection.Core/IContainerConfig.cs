@@ -5,7 +5,7 @@ namespace Shaykhullin.DependencyInjection
 {
 	public interface IContainerConfig : IRegisterBuilder, IDisposable
 	{
-		IContainerConfig Scope();
-		IContainer Container { get; }
+		IContainerConfig CreateScope();
+		IContainer Create();
 	}
 }

@@ -30,7 +30,7 @@ namespace Shaykhullin.Network
 				.ImplementedBy(c => tcpClient)
 				.As<Singleton>();
 
-			var container = config.Container;
+			var container = config.Create();
 
 			config.Register<IContainer>()
 				.ImplementedBy(c => container)

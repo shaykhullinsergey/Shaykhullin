@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Shaykhullin.Serializer.Tests
 {
@@ -338,6 +340,36 @@ namespace Shaykhullin.Serializer.Tests
 				Assert.Equal("Derived", derivedClass.Name);
 				Assert.Equal(22, derivedClass.Age);
 				Assert.Equal(33, derivedClass.House);
+			}
+		}
+
+		[Fact]
+		public void ArrayOfDateTimesSerializing()
+		{
+			var serializer = new SerializerConfig().Create();
+
+			var inputDateTime = new DateTime(2018, 01, 02, 03, 04, 05, DateTimeKind.Unspecified);
+
+			var input = new[] { inputDateTime, inputDateTime, inputDateTime, inputDateTime, inputDateTime, };
+
+			using (var stream = CreateStream())
+			{
+				serializer.Serialize(stream, input);
+				stream.Position = 0;
+				var result = serializer.Deserialize<DateTime[]>(stream);
+
+				Assert.Equal(5, result.Length);
+
+				foreach (var date in result)
+				{
+					Assert.Equal(2018, date.Year);
+					Assert.Equal(01, date.Month);
+					Assert.Equal(2, date.Day);
+					Assert.Equal(3, date.Hour);
+					Assert.Equal(4, date.Minute);
+					Assert.Equal(5, date.Second);
+					Assert.Equal(DateTimeKind.Unspecified, date.Kind);
+				}
 			}
 		}
 	}

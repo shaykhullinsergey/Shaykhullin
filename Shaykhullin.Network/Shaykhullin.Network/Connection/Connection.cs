@@ -28,7 +28,7 @@ namespace Shaykhullin.Network.Core
 				.ImplementedBy<Communicator>()
 				.As<Singleton>();
 
-			container = config.Container;
+			container = config.Create();
 
 			Task.Run(async () => await ReceiveLoop());
 		}

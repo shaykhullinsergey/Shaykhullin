@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Shaykhullin.Serializer
 {
-	public interface ISerializer
+	public interface ISerializer : IDisposable
 	{
 		void Serialize<TData>(Stream stream, TData data);
 		TData Deserialize<TData>(Stream stream);

@@ -9,9 +9,13 @@ namespace Shaykhullin.DependencyInjection
 		private readonly DependencyContainer parent;
 		private readonly IList<Dependency> dependencies;
 
-		public DependencyContainer(DependencyContainer parent)
+		public DependencyContainer()
 		{
 			dependencies = new List<Dependency>();
+		}
+		
+		public DependencyContainer(DependencyContainer parent) : this()
+		{
 			this.parent = parent;
 		}
 
