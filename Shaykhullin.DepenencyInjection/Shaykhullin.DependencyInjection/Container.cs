@@ -47,7 +47,7 @@ namespace Shaykhullin.DependencyInjection.Core
 				throw new ArgumentNullException(nameof(registry));
 			}
 			
-			var dependency = dependencyContainer.Get(registry, @for) 
+			var dependency = dependencyContainer.TryGetDependency(registry, @for) 
 				?? throw new InvalidOperationException($"{registry} not found");
 
 			EnsureLifecycle(dependency);

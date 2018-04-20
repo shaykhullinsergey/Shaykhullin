@@ -68,22 +68,5 @@ namespace Shaykhullin.Serializer.Tests
 				}
 			}
 		}
-
-		[Fact]
-		public void Test()
-		{
-			using (var config = new SerializerConfig())
-			{
-				using (var serializer = config.Create())
-				{
-					
-				}
-
-				using (var serializer = config.Create())
-				{
-					
-				}
-			}
-		}
 	}
 }

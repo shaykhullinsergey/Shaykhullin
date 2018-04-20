@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shaykhullin.DependencyInjection.Core;
 
 namespace Shaykhullin.DependencyInjection
@@ -9,14 +10,10 @@ namespace Shaykhullin.DependencyInjection
 		private readonly DependencyContainer parent;
 		private readonly IList<Dependency> dependencies;
 
-		public DependencyContainer()
-		{
-			dependencies = new List<Dependency>();
-		}
-		
-		public DependencyContainer(DependencyContainer parent) : this()
+		public DependencyContainer(DependencyContainer parent = null)
 		{
 			this.parent = parent;
+			dependencies = new List<Dependency>();
 		}
 
 		public Dependency Register(Type register)
@@ -26,28 +23,21 @@ namespace Shaykhullin.DependencyInjection
 			return dto;
 		}
 
-		public Dependency Get(Type register, Type @for = null)
+		public Dependency TryGetDependency(Type register, Type @for = null)
 		{
 			if (@for == null)
 			{
-				for (var i = 0; i < dependencies.Count; i++)
+				foreach (var dependency in dependencies.Where(dependency => dependency.Registry == register && dependency.For == null))
 				{
-					var dependency = dependencies[i];
-
-					if (dependency.Registry == register && dependency.For == null)
-					{
-						return dependency;
-					}
+					return dependency;
 				}
 			}
 			else
 			{
 				Dependency forNullFor = null;
 
-				for (var i = 0; i < dependencies.Count; i++)
+				foreach (var dependency in dependencies)
 				{
-					var dependency = dependencies[i];
-
 					if (dependency.Registry == register && dependency.For == @for)
 					{
 						return dependency;
@@ -65,7 +55,7 @@ namespace Shaykhullin.DependencyInjection
 				}
 			}
 
-			return parent?.Get(register, @for);
+			return parent?.TryGetDependency(register, @for);
 		}
 	}
 }

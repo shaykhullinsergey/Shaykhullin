@@ -11,7 +11,7 @@ namespace Shaykhullin.DependencyInjection.Tests
 				Entity3 = entity3;
 			}
 			
-			public Entity3 Entity3 { get; set; }
+			public Entity3 Entity3 { get; }
 		}
 
 		class Entity2
@@ -21,7 +21,7 @@ namespace Shaykhullin.DependencyInjection.Tests
 				Entity3 = entity3;
 			}
 			
-			public Entity3 Entity3 { get; set; }
+			public Entity3 Entity3 { get; }
 		}
 
 		class Entity3
@@ -36,14 +36,20 @@ namespace Shaykhullin.DependencyInjection.Tests
 
 			config.Register<Entity1>();
 			config.Register<Entity2>();
-			
+
 			config.Register<Entity3>()
-				.ImplementedBy(c => new Entity3{Id = 11})
+				.ImplementedBy(c => new Entity3
+				{
+					Id = 11
+				})
 				.As<Singleton>()
 				.For<Entity1>();
-			
+
 			config.Register<Entity3>()
-				.ImplementedBy(c => new Entity3{Id = 12})
+				.ImplementedBy(c => new Entity3
+				{
+					Id = 12
+				})
 				.As<Singleton>()
 				.For<Entity2>();
 
@@ -51,24 +57,9 @@ namespace Shaykhullin.DependencyInjection.Tests
 			{
 				var entity1 = container.Resolve<Entity1>();
 				var entity2 = container.Resolve<Entity2>();
-				
+
 				Assert.Equal(11, entity1.Entity3.Id);
 				Assert.Equal(12, entity2.Entity3.Id);
-			}
-		}
-
-		public void Works()
-		{
-			using (var config = new ContainerConfig())
-			{
-				config.Register<Entity1>();
-				config.Register<Entity2>();
-
-				using (var container = config.Create())
-				{
-					var entity1 = container.Resolve<Entity1>();
-					var entity2 = container.Resolve<Entity2>();
-				}
 			}
 		}
 	}
