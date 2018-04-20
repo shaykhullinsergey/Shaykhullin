@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-
 using Shaykhullin.Activator;
 using Shaykhullin.Serializer.Core;
 using Shaykhullin.DependencyInjection;
@@ -58,7 +57,7 @@ namespace Shaykhullin.Serializer
 			{
 				throw new ObjectDisposedException(nameof(SerializerConfig));
 			}
-			
+
 			converterContainer.RegisterTypeWithAlias(typeof(TData));
 			return new UseBuilder<TData>(config, converterContainer);
 		}
@@ -69,10 +68,9 @@ namespace Shaykhullin.Serializer
 			{
 				throw new ObjectDisposedException(nameof(SerializerConfig));
 			}
-			
+
 			return new SerializerConfig(this);
 		}
-
 
 		public ISerializer Create()
 		{
@@ -81,7 +79,20 @@ namespace Shaykhullin.Serializer
 				throw new ObjectDisposedException(nameof(SerializerConfig));
 			}
 
-			return new Core.Serializer(config, converterContainer);
+			var scope = config.CreateScope();
+			var converter = new ConverterContainer(scope, converterContainer);
+
+			using (var container = scope.Create())
+			{
+				var activator = container.Resolve<IActivator>();
+				var serializer = new Core.Serializer(activator, converter);
+				
+				scope.Register<ISerializer>()
+					.ImplementedBy(c => serializer)
+					.As<Singleton>();
+				
+				return serializer;
+			}
 		}
 
 		public void Dispose()

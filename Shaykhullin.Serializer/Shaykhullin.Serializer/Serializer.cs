@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using Shaykhullin.Activator;
-using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -16,20 +15,11 @@ namespace Shaykhullin.Serializer.Core
 		private readonly ConverterContainer converterContainer;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
 
-		public Serializer(IContainerConfig config, ConverterContainer converterContainer)
+		public Serializer(IActivator activator, ConverterContainer converterContainer)
 		{
-			config.Register<ISerializer>()
-				.ImplementedBy(c => this)
-				.As<Singleton>();
-
-			using (var container = config.Create())
-			{
-				activator = container.Resolve<IActivator>();
-			}
-			
-			properties = new Dictionary<Type, PropertyInfo[]>();
-			
+			this.activator = activator;
 			this.converterContainer = converterContainer;
+			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
 
 		public void Serialize<TData>(Stream stream, TData data)

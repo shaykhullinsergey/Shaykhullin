@@ -7,12 +7,12 @@ using Shaykhullin.DependencyInjection.Core;
 
 namespace Shaykhullin.Network
 {
-	public abstract class Config<TNode> : IConfig<TNode>
+	public abstract class NodeConfig<TNode> : IConfig<TNode>
 		where TNode : INode
 	{
 		private readonly IContainerConfig config;
 
-		protected Config()
+		protected NodeConfig()
 		{
 			var rootConfig = new ContainerConfig();
 			

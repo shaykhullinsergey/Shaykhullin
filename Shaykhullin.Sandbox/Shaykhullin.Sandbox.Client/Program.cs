@@ -1,7 +1,7 @@
-﻿using Shaykhullin.Network;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Shaykhullin.Network;
 
 namespace Shaykhullin.Sandbox.Client
 {

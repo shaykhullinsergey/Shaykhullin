@@ -96,81 +96,84 @@ namespace Shaykhullin.Serializer.Tests
 		[Fact]
 		public void ComplexPersonSerializing()
 		{
-			var config = new SerializerConfig();
-			config.Match<ComplexPerson>();
-
-			var serializer = config.Create();
-
-			IList<ComplexPerson> input = new List<ComplexPerson>
+			using (var config = new SerializerConfig())
 			{
-				new ComplexPerson
+				config.Match<ComplexPerson>();
+
+				using (var serializer = config.Create())
 				{
-					Name = "Sarah",
-					Age = 37,
-					Children = new List<ComplexPerson>
+					IList<ComplexPerson> input = new List<ComplexPerson>
 					{
 						new ComplexPerson
 						{
-							Name = "John",
+							Name = "Sarah",
+							Age = 37,
+							Children = new List<ComplexPerson>
+							{
+								new ComplexPerson
+								{
+									Name = "John",
+									Age = 14,
+									Children = new List<ComplexPerson>()
+								}
+							}
+						},
+						new ComplexPerson
+						{
+							Name = "Julia",
+							Age = 42,
+							Children = new List<ComplexPerson>
+							{
+								new ComplexPerson
+								{
+									Name = "Sandra",
+									Age = 20,
+									Children = null
+								}
+							}
+						},
+						new ComplexPerson
+						{
+							Name = "Sam",
 							Age = 14,
-							Children = new List<ComplexPerson>()
-						}
-					}
-				},
-				new ComplexPerson
-				{
-					Name = "Julia",
-					Age = 42,
-					Children = new List<ComplexPerson>
-					{
-						new ComplexPerson
-						{
-							Name = "Sandra",
-							Age = 20,
 							Children = null
 						}
-					}
-				},
-				new ComplexPerson
-				{
-					Name = "Sam",
-					Age = 14,
-					Children = null
+					};
+
+					using (var stream = CreateStream())
+					{
+						serializer.Serialize(stream, input);
+						stream.Position = 0;
+						var result = serializer.Deserialize<IList<ComplexPerson>>(stream);
+
+						Assert.Equal(3, result.Count);
+
+						var sarah = result[0];
+						Assert.Equal("Sarah", sarah.Name);
+						Assert.Equal(37, sarah.Age);
+						Assert.Single(sarah.Children);
+
+						var john = sarah.Children[0];
+						Assert.Equal("John", john.Name);
+						Assert.Equal(14, john.Age);
+						Assert.Empty(john.Children);
+
+						var julia = result[1];
+						Assert.Equal("Julia", julia.Name);
+						Assert.Equal(42, julia.Age);
+						Assert.Single(julia.Children);
+
+						var sandra = julia.Children[0];
+						Assert.Equal("Sandra", sandra.Name);
+						Assert.Equal(20, sandra.Age);
+						Assert.Null(sandra.Children);
+
+						var sam = result[2];
+						Assert.Equal("Sam", sam.Name);
+						Assert.Equal(14, sam.Age);
+						Assert.Null(sam.Children);
+					}		
 				}
-			};
-
-			using (var stream = CreateStream())
-			{
-				serializer.Serialize(stream, input);
-				stream.Position = 0;
-				var result = serializer.Deserialize<IList<ComplexPerson>>(stream);
-
-				Assert.Equal(3, result.Count);
-
-				var sarah = result[0];
-				Assert.Equal("Sarah", sarah.Name);
-				Assert.Equal(37, sarah.Age);
-				Assert.Single(sarah.Children);
-
-				var john = sarah.Children[0];
-				Assert.Equal("John", john.Name);
-				Assert.Equal(14, john.Age);
-				Assert.Empty(john.Children);
-
-				var julia = result[1];
-				Assert.Equal("Julia", julia.Name);
-				Assert.Equal(42, julia.Age);
-				Assert.Single(julia.Children);
-
-				var sandra = julia.Children[0];
-				Assert.Equal("Sandra", sandra.Name);
-				Assert.Equal(20, sandra.Age);
-				Assert.Null(sandra.Children);
-
-				var sam = result[2];
-				Assert.Equal("Sam", sam.Name);
-				Assert.Equal(14, sam.Age);
-				Assert.Null(sam.Children);
 			}
 		}
 

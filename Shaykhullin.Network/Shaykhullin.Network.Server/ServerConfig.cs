@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.Network
 {
-	public sealed class ServerConfig : Config<IServer>
+	public sealed class ServerConfig : NodeConfig<IServer>
 	{
 		public override IServer Create(string host, int port)
 		{

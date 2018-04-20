@@ -59,43 +59,44 @@ namespace Shaykhullin.Serializer.Core
 
 		public ConverterDto TryGetDto(Type type)
 		{
-			// Try find from current collection
-			if (converters.TryGetValue(type, out var currentDto))
+			var converterDto = TryGetDtoRecursive(type);
+
+			if (converterDto != null)
 			{
-				if (currentDto.Converter == null && currentDto.ConverterType != null)
+				if (converterDto.Converter == null && converterDto.ConverterType != null)
 				{
 					using (var container = config.Create())
 					{
-						currentDto.Converter = (IConverter)container.Resolve(currentDto.ConverterType);
+						converterDto.Converter = (IConverter)container.Resolve(converterDto.ConverterType);
 					}
 				}
-
-				return currentDto;
 			}
-			
-			// Or search for assignment
-			foreach (var pair in converters)
+
+			return converterDto;
+		}
+
+		private ConverterDto TryGetDtoRecursive(Type type)
+		{
+			converters.TryGetValue(type, out var converterDto);
+
+			if (converterDto == null)
 			{
-				if (pair.Key.IsAssignableFrom(type))
+				foreach (var pair in converters)
 				{
-					if (pair.Value.ConverterType == null)
+					if (pair.Key.IsAssignableFrom(type))
 					{
+						if (pair.Value.ConverterType == null)
+						{
+							break;
+						}
+
+						converterDto = pair.Value;
 						break;
 					}
-
-					if (pair.Value.Converter == null)
-					{
-						using (var container = config.Create())
-						{
-							pair.Value.Converter = (IConverter)container.Resolve(pair.Value.ConverterType);
-						}
-					}
-
-					return pair.Value;
 				}
 			}
 
-			return parent?.TryGetDto(type);
+			return converterDto ?? parent?.TryGetDtoRecursive(type);
 		}
 	}
 }

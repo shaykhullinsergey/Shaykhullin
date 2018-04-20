@@ -15,15 +15,15 @@ namespace Shaykhullin.Network.Core
 		public ICompressionBuilder UseSerializer<TSerializer>(TSerializer serializer = default) 
 			where TSerializer : ISerializer
 		{
-			var register = config.Register<ISerializer>();
+			var registry = config.Register<ISerializer>();
 
 			if(serializer == null)
 			{
-				register.ImplementedBy<TSerializer>().As<Singleton>();
+				registry.ImplementedBy<TSerializer>().As<Singleton>();
 			}
 			else
 			{
-				register.ImplementedBy(c => serializer).As<Singleton>();
+				registry.ImplementedBy(c => serializer).As<Singleton>();
 			}
 			
 			return new CompressionBuilder(config);
