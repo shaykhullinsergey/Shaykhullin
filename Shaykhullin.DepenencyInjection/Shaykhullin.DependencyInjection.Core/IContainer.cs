@@ -6,7 +6,6 @@ namespace Shaykhullin.DependencyInjection
 	{
 		object Resolve(Type type);
 
-		TResolve Resolve<TResolve>()
-			where TResolve : class;
+		TResolve Resolve<TResolve>();
 	}
 }

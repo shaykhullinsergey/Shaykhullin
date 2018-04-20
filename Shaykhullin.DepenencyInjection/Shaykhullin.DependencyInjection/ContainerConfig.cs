@@ -23,9 +23,9 @@ namespace Shaykhullin.DependencyInjection
 			dependencyContainer = new DependencyContainer(parent.dependencyContainer);
 		}
 
-		public IImplementedByBuilder<TRegister> Register<TRegister>()
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>()
 		{
-			return Register<TRegister>(typeof(TRegister));
+			return Register<TRegistry>(typeof(TRegistry));
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
@@ -33,10 +33,10 @@ namespace Shaykhullin.DependencyInjection
 			return Register<object>(register);
 		}
 
-		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
 		{
 			return new RegisterBuilder(dependencyContainer)
-				.Register<TRegister>(register);
+				.Register<TRegistry>(register);
 		}
 
 		public IContainerConfig CreateScope() => new ContainerConfig(this);

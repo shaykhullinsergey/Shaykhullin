@@ -80,9 +80,9 @@ namespace Shaykhullin.Network
 			new SerializerBuilder(config).UseEncryption<TEncryption>();
 		}
 
-		public IImplementedByBuilder<TRegister> Register<TRegister>() 
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>() 
 		{
-			return config.Register<TRegister>();
+			return config.Register<TRegistry>();
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
@@ -90,9 +90,9 @@ namespace Shaykhullin.Network
 			return config.Register(register);
 		}
 
-		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
 		{
-			return config.Register<TRegister>(register);
+			return config.Register<TRegistry>(register);
 		}
 
 		public IEventBuilder<TData> Match<TData>()

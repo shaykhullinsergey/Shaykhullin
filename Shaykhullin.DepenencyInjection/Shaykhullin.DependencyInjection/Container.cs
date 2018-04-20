@@ -15,7 +15,6 @@ namespace Shaykhullin.DependencyInjection.Core
 		}
 
 		public TResolve Resolve<TResolve>()
-			where TResolve : class
 		{
 			return (TResolve)Resolve(typeof(TResolve));
 		}
@@ -45,7 +44,7 @@ namespace Shaykhullin.DependencyInjection.Core
 				arguments[i] = ResolveRecursive(dependency.Parameters[i], register);
 			}
 
-			return dependency.Instance.Resolve(dependency.Implemented, arguments);
+			return dependency.Instance.Resolve(dependency.Implementation, arguments);
 		}
 
 		private void EnsureLifecycle(Dependency dependency)
@@ -56,11 +55,15 @@ namespace Shaykhullin.DependencyInjection.Core
 			}
 		}
 
-		private void EnsureParameters(Dependency dependency)
+		public void Dispose()
+		{
+		}
+
+		private static void EnsureParameters(Dependency dependency)
 		{
 			if (dependency.Parameters == null)
 			{
-				var constructors = dependency.Implemented.GetConstructors();
+				var constructors = dependency.Implementation.GetConstructors();
 
 				if (constructors.Length == 0)
 				{
@@ -77,10 +80,6 @@ namespace Shaykhullin.DependencyInjection.Core
 					}
 				}
 			}
-		}
-
-		public void Dispose()
-		{
 		}
 	}
 }

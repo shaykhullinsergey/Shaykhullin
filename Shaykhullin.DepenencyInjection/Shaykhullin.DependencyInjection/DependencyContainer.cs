@@ -34,7 +34,7 @@ namespace Shaykhullin.DependencyInjection
 				{
 					var dependency = dependencies[i];
 
-					if (dependency.Register == register && dependency.For == null)
+					if (dependency.Registry == register && dependency.For == null)
 					{
 						return dependency;
 					}
@@ -48,12 +48,12 @@ namespace Shaykhullin.DependencyInjection
 				{
 					var dependency = dependencies[i];
 
-					if (dependency.Register == register && dependency.For == @for)
+					if (dependency.Registry == register && dependency.For == @for)
 					{
 						return dependency;
 					}
 
-					if (dependency.Register == register && dependency.For == null)
+					if (dependency.Registry == register && dependency.For == null)
 					{
 						forNullFor = dependency;
 					}

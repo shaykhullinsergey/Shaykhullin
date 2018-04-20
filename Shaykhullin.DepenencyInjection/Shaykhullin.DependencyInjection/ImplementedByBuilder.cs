@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.DependencyInjection.Core
 {
-	internal class ImplementedByBuilder<TRegister> : IImplementedByBuilder<TRegister>
+	internal class ImplementedByBuilder<TRegistry> : IImplementedByBuilder<TRegistry>
 	{
 		private readonly Dependency dto;
 		
@@ -12,7 +12,7 @@ namespace Shaykhullin.DependencyInjection.Core
 		}
 
 		public ILifecycleBuilder ImplementedBy<TImplemented>(Func<IContainer, TImplemented> factory = null) 
-			where TImplemented : TRegister
+			where TImplemented : TRegistry
 		{
 			return ImplementedBy(typeof(TImplemented), 
 				factory == null 
@@ -27,7 +27,7 @@ namespace Shaykhullin.DependencyInjection.Core
 				dto.Factory = container => factory(container);
 			}
 
-			dto.Implemented = implemented;
+			dto.Implementation = implemented;
 			
 			return new LifecycleBuilder(dto);
 		}

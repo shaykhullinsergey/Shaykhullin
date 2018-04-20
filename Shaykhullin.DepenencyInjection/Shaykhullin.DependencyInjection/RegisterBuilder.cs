@@ -12,9 +12,9 @@ namespace Shaykhullin.DependencyInjection.Core
 			this.dependencies = dependencies;
 		}
 		
-		public IImplementedByBuilder<TRegister> Register<TRegister>() 
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>() 
 		{
-			return Register<TRegister>(typeof(TRegister));
+			return Register<TRegistry>(typeof(TRegistry));
 		}
 
 		public IImplementedByBuilder<object> Register(Type register)
@@ -22,10 +22,10 @@ namespace Shaykhullin.DependencyInjection.Core
 			return Register<object>(register);
 		}
 
-		public IImplementedByBuilder<TRegister> Register<TRegister>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
 		{
 			var dto = dependencies.Register(register);
-			return new ImplementedByBuilder<TRegister>(dto);
+			return new ImplementedByBuilder<TRegistry>(dto);
 		}
 	}
 }
