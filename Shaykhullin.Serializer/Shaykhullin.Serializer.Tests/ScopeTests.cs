@@ -35,6 +35,8 @@ namespace Shaykhullin.Serializer.Tests
 						var result = serializer.Deserialize<Base>(stream);
 						
 						Assert.IsType<Base>(result);
+						
+						Assert.Equal(10, result.Id);
 					}
 				}
 				
