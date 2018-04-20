@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Shaykhullin.DependencyInjection;
@@ -8,6 +7,7 @@ namespace Shaykhullin.Network.Core
 {
 	internal class Connection : IConnection
 	{
+		private bool disposed;
 		private readonly IContainer container;
 
 		public Connection(IContainerConfig config)
@@ -32,14 +32,14 @@ namespace Shaykhullin.Network.Core
 
 			Task.Run(async () => await ReceiveLoop());
 		}
-
-		public void Dispose()
-		{
-			container.Resolve<ICommunicator>().Dispose();
-		}
-
+		
 		public ISendBuilder<TData> Send<TData>(TData data)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Connection));
+			}
+			
 			return new SendBuilder<TData>(container, data);
 		}
 
@@ -51,11 +51,9 @@ namespace Shaykhullin.Network.Core
 			var messageComposer = container.Resolve<IMessageComposer>();
 			var eventRaiser = container.Resolve<IEventRaiser>();
 
-			IPacket packet = null;
-
 			while (true)
 			{
-				packet = await communicator.Receive().ConfigureAwait(false);
+				var packet = await communicator.Receive().ConfigureAwait(false);
 
 				if (messages.TryGetValue(packet.Id, out var packets))
 				{
@@ -66,6 +64,7 @@ namespace Shaykhullin.Network.Core
 					packets = new List<IPacket> { packet };
 					messages.Add(packet.Id, packets);
 				}
+				messages.Remove(packet.Id);
 
 				if (packet.End)
 				{
@@ -73,11 +72,19 @@ namespace Shaykhullin.Network.Core
 					{
 						var message = await packetsComposer.GetMessage(packets).ConfigureAwait(false);
 						var payload = await messageComposer.GetPayload(message).ConfigureAwait(false);
-						messages.Remove(packet.Id);
 
 						await eventRaiser.Raise(payload).ConfigureAwait(false);
 					}).ConfigureAwait(false);
 				}
+			}
+		}
+
+		public void Dispose()
+		{
+			if (!disposed)
+			{
+				disposed = true;
+				container.Resolve<ICommunicator>().Dispose();
 			}
 		}
 	}

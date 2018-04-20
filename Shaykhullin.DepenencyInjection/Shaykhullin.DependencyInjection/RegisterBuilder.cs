@@ -17,14 +17,14 @@ namespace Shaykhullin.DependencyInjection.Core
 			return Register<TRegistry>(typeof(TRegistry));
 		}
 
-		public IImplementedByBuilder<object> Register(Type register)
+		public IImplementedByBuilder<object> Register(Type registry)
 		{
-			return Register<object>(register);
+			return Register<object>(registry);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
 		{
-			var dto = dependencies.Register(register);
+			var dto = dependencies.Register(registry);
 			return new ImplementedByBuilder<TRegistry>(dto);
 		}
 	}

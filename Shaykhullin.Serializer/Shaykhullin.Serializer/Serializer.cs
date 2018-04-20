@@ -11,6 +11,7 @@ namespace Shaykhullin.Serializer.Core
 {
 	internal class Serializer : ISerializer
 	{
+		private bool disposed;
 		private readonly IActivator activator;
 		private readonly ConverterContainer converterContainer;
 		private readonly Dictionary<Type, PropertyInfo[]> properties;
@@ -33,19 +34,54 @@ namespace Shaykhullin.Serializer.Core
 
 		public void Serialize<TData>(Stream stream, TData data)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Serializer));
+			}
+			
+			if (stream == null)
+			{
+				throw new ArgumentNullException(nameof(stream));
+			}
+
+			if (data == null)
+			{
+				throw new ArgumentNullException(nameof(data));
+			}
+			
 			Serialize(stream, data, typeof(TData));
 		}
 
 		public TData Deserialize<TData>(Stream stream)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Serializer));
+			}
+			
+			if (stream == null)
+			{
+				throw new ArgumentNullException(nameof(stream));
+			}
+			
 			return (TData)Deserialize(stream, typeof(TData));
 		}
 
 		public void Serialize(Stream stream, object data, Type dataTypeOverride)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Serializer));
+			}
+			
 			if (stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
+			}
+
+			if (dataTypeOverride == null)
+			{
+				throw new ArgumentNullException(nameof(dataTypeOverride));
 			}
 
 			if (data == null)
@@ -56,7 +92,7 @@ namespace Shaykhullin.Serializer.Core
 
 			var dataType = data.GetType();
 
-			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
+			if (!dataType.IsValueType || Nullable.GetUnderlyingType(dataType) != null)
 			{
 				stream.WriteByte(1);
 			}
@@ -95,11 +131,21 @@ namespace Shaykhullin.Serializer.Core
 
 		public object Deserialize(Stream stream, Type dataType)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Serializer));
+			}
+			
 			if (stream == null)
 			{
 				throw new ArgumentNullException(nameof(stream));
 			}
 
+			if (dataType == null)
+			{
+				throw new ArgumentNullException(nameof(dataType));
+			}
+			
 			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
 			{
 				if (stream.ReadByte() == 0)
@@ -110,12 +156,9 @@ namespace Shaykhullin.Serializer.Core
 
 			var dto = converterContainer.TryGetDto(dataType);
 
-			if(dto != null)
+			if (dto?.Converter != null)
 			{
-				if (dto.Converter != null)
-				{
-					return dto.Converter.DeserializeObject(stream, dataType);
-				}
+				return dto.Converter.DeserializeObject(stream, dataType);
 			}
 
 			if (stream.ReadByte() == 1)
@@ -136,8 +179,18 @@ namespace Shaykhullin.Serializer.Core
 			return instance;
 		}
 
-		private PropertyInfo[] EnsureProperties(Type type)
+		private IEnumerable<PropertyInfo> EnsureProperties(Type type)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Serializer));
+			}
+			
+			if (type == null)
+			{
+				throw new ArgumentNullException(nameof(type));
+			}
+			
 			if (!properties.TryGetValue(type, out var propertiesInfo))
 			{
 				propertiesInfo = type
@@ -153,6 +206,10 @@ namespace Shaykhullin.Serializer.Core
 
 		public void Dispose()
 		{
+			if (!disposed)
+			{
+				disposed = true;
+			}
 		}
 	}
 }

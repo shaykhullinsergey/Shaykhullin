@@ -9,6 +9,7 @@ namespace Shaykhullin.Serializer
 {
 	public class SerializerConfig : ISerializerConfig
 	{
+		private bool disposed;
 		private readonly IContainerConfig config;
 		private readonly ConverterContainer converterContainer;
 
@@ -53,17 +54,43 @@ namespace Shaykhullin.Serializer
 
 		public IUseBuilder<TData> Match<TData>()
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(SerializerConfig));
+			}
+			
 			converterContainer.RegisterTypeWithAlias(typeof(TData));
 			return new UseBuilder<TData>(config, converterContainer);
 		}
 
-		public ISerializerConfig CreateScope() => new SerializerConfig(this);
+		public ISerializerConfig CreateScope()
+		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(SerializerConfig));
+			}
+			
+			return new SerializerConfig(this);
+		}
 
-		public ISerializer Create() => new Core.Serializer(config, converterContainer);
+
+		public ISerializer Create()
+		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(SerializerConfig));
+			}
+
+			return new Core.Serializer(config, converterContainer);
+		}
 
 		public void Dispose()
 		{
-			config?.Dispose();
+			if (!disposed)
+			{
+				disposed = true;
+				config?.Dispose();
+			}
 		}
 	}
 }

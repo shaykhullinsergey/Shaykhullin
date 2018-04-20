@@ -6,7 +6,7 @@ namespace Shaykhullin.DependencyInjection.Core
 	{
 		IImplementedByBuilder<TRegistry> Register<TRegistry>();
 
-		IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register);
-		IImplementedByBuilder<object> Register(Type register);
+		IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry);
+		IImplementedByBuilder<object> Register(Type registry);
 	}
 }

@@ -8,6 +8,7 @@ namespace Shaykhullin.DependencyInjection
 {
 	public class ContainerConfig : IContainerConfig
 	{
+		private bool disposed;
 		private readonly IActivator activator;
 		private readonly DependencyContainer dependencyContainer;
 
@@ -25,24 +26,71 @@ namespace Shaykhullin.DependencyInjection
 
 		public IImplementedByBuilder<TRegistry> Register<TRegistry>()
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(ContainerConfig));
+			}
+			
 			return Register<TRegistry>(typeof(TRegistry));
 		}
 
-		public IImplementedByBuilder<object> Register(Type register)
+		public IImplementedByBuilder<object> Register(Type registry)
 		{
-			return Register<object>(register);
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(ContainerConfig));
+			}
+
+			if (registry == null)
+			{
+				throw new ArgumentNullException(nameof(registry));
+			}
+			
+			return Register<object>(registry);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(ContainerConfig));
+			}
+
+			if (registry == null)
+			{
+				throw new ArgumentNullException(nameof(registry));
+			}
+			
 			return new RegisterBuilder(dependencyContainer)
-				.Register<TRegistry>(register);
+				.Register<TRegistry>(registry);
 		}
 
-		public IContainerConfig CreateScope() => new ContainerConfig(this);
+		public IContainerConfig CreateScope()
+		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(ContainerConfig));
+			}
+			
+			return new ContainerConfig(this);
+		}
 
-		public IContainer Create() => new Container(activator, dependencyContainer);
+		public IContainer Create()
+		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(ContainerConfig));
+			}
+			
+			return new Container(activator, dependencyContainer);
+		}
 
-		public void Dispose() { }
+		public void Dispose()
+		{
+			if (!disposed)
+			{
+				disposed = true;
+			}
+		}
 	}
 }

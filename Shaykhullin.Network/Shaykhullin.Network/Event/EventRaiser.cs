@@ -17,29 +17,35 @@ namespace Shaykhullin.Network.Core
 
 		public async Task Raise(IPayload payload)
 		{
-			var handlers = config.Create()
-				.Resolve<IEventHolder>()
-				.GetHandlers(payload);
-
-			foreach (var handler in handlers)
+			using (var container = config.Create())
 			{
-				using (var scope = config.CreateScope())
+				var handlers = container.Resolve<IEventHolder>()
+					.GetHandlers(payload);
+
+				foreach (var handler in handlers)
 				{
-					scope.Register<object>(payload.Data.GetType())
-						.ImplementedBy(c => payload.Data)
-						.As<Singleton>();
+					using (var scope = config.CreateScope())
+					{
+						scope.Register<object>(payload.Data.GetType())
+							.ImplementedBy(c => payload.Data)
+							.As<Singleton>();
 
-					var container = scope.Create();
-				
-					var instanse = container.Resolve(handler);
-					var @event = container.Resolve(payload.Event);
+						using (var scopeContainer = scope.Create())
+						{
+							var instanse = scopeContainer.Resolve(handler);
+							var @event = scopeContainer.Resolve(payload.Event);
 
-					await ((Task)handler.InvokeMember(
-						"Execute",
-						BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod,
-						null, 
-						instanse, 
-						new[] { @event })).ConfigureAwait(false);
+							await ((Task)handler.InvokeMember(
+								"Execute",
+								BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod,
+								null,
+								instanse,
+								new[]
+								{
+									@event
+								})).ConfigureAwait(false);
+						}
+					}
 				}
 			}
 		}

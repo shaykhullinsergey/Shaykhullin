@@ -5,6 +5,7 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class Container : IContainer
 	{
+		private bool disposed;
 		private readonly IActivator activator;
 		private readonly DependencyContainer dependencyContainer;
 
@@ -16,18 +17,38 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public TResolve Resolve<TResolve>()
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Container));
+			}
+			
 			return (TResolve)Resolve(typeof(TResolve));
 		}
 
 		public object Resolve(Type type)
 		{
+			if (disposed)
+			{
+				throw new ObjectDisposedException(nameof(Container));
+			}
+
+			if (type == null)
+			{
+				throw new ArgumentNullException(nameof(type));
+			}
+			
 			return ResolveRecursive(type, null);
 		}
 
-		private object ResolveRecursive(Type register, Type @for)
+		private object ResolveRecursive(Type registry, Type @for)
 		{
-			var dependency = dependencyContainer.Get(register, @for) 
-				?? throw new InvalidOperationException($"{register} not found");
+			if (registry == null)
+			{
+				throw new ArgumentNullException(nameof(registry));
+			}
+			
+			var dependency = dependencyContainer.Get(registry, @for) 
+				?? throw new InvalidOperationException($"{registry} not found");
 
 			EnsureLifecycle(dependency);
 
@@ -41,7 +62,7 @@ namespace Shaykhullin.DependencyInjection.Core
 			var arguments = new object[dependency.Parameters.Length];
 			for (var i = 0; i < arguments.Length; i++)
 			{
-				arguments[i] = ResolveRecursive(dependency.Parameters[i], register);
+				arguments[i] = ResolveRecursive(dependency.Parameters[i], registry);
 			}
 
 			return dependency.Instance.Resolve(dependency.Implementation, arguments);
@@ -53,10 +74,6 @@ namespace Shaykhullin.DependencyInjection.Core
 			{
 				dependency.Instance = (ILifecycle)activator.Create(dependency.Lifecycle, activator);
 			}
-		}
-
-		public void Dispose()
-		{
 		}
 
 		private static void EnsureParameters(Dependency dependency)
@@ -79,6 +96,14 @@ namespace Shaykhullin.DependencyInjection.Core
 						dependency.Parameters[i] = parameters[i].ParameterType;
 					}
 				}
+			}
+		}
+
+		public void Dispose()
+		{
+			if (!disposed)
+			{
+				disposed = true;
 			}
 		}
 	}

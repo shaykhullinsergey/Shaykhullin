@@ -33,28 +33,27 @@ namespace Shaykhullin.Network.Core
 				tcpClient.ReceiveBufferSize = 256;
 				tcpClient.SendBufferSize = 256;
 
-				using (var scope = config.CreateScope())
-				{
-					scope.Register<IContainerConfig>()
-						.ImplementedBy(c => scope)
-						.As<Singleton>();
-
-					var container = scope.Create();
-
-					scope.Register<IContainer>()
-						.ImplementedBy(c => container)
-						.As<Singleton>();
-
-					scope.Register<TcpClient>()
-						.ImplementedBy(c => tcpClient)
-						.As<Singleton>();
-
-					var connection = container.Resolve<IConnection>();
+				var scope = config.CreateScope();
 				
-					scope.Register<IConnection>()
-						.ImplementedBy(c => connection)
-						.As<Singleton>();
-				}
+				scope.Register<IContainerConfig>()
+					.ImplementedBy(c => scope)
+					.As<Singleton>();
+
+				var container = scope.Create();
+
+				scope.Register<IContainer>()
+					.ImplementedBy(c => container)
+					.As<Singleton>();
+
+				scope.Register<TcpClient>()
+					.ImplementedBy(c => tcpClient)
+					.As<Singleton>();
+
+				var connection = container.Resolve<IConnection>();
+
+				scope.Register<IConnection>()
+					.ImplementedBy(c => connection)
+					.As<Singleton>();
 			}
 		}
 	}

@@ -10,12 +10,11 @@ namespace Shaykhullin.Network
 	public abstract class Config<TNode> : IConfig<TNode>
 		where TNode : INode
 	{
-		private readonly IContainerConfig rootConfig;
 		private readonly IContainerConfig config;
 
 		protected Config()
 		{
-			rootConfig = new ContainerConfig();
+			var rootConfig = new ContainerConfig();
 			
 			var serializerConfig = new SerializerConfig();
 
@@ -85,14 +84,14 @@ namespace Shaykhullin.Network
 			return config.Register<TRegistry>();
 		}
 
-		public IImplementedByBuilder<object> Register(Type register)
+		public IImplementedByBuilder<object> Register(Type registry)
 		{
-			return config.Register(register);
+			return config.Register(registry);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type register)
+		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
 		{
-			return config.Register<TRegistry>(register);
+			return config.Register<TRegistry>(registry);
 		}
 
 		public IEventBuilder<TData> Match<TData>()
