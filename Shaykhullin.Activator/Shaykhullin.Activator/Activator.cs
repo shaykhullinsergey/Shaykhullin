@@ -6,6 +6,11 @@ namespace Shaykhullin.Activator.Core
 	{
 		public TObject Create<TObject>(params object[] args)
 		{
+			if(args.Length == 0)
+			{
+				return System.Activator.CreateInstance<TObject>();
+			}
+
 			return (TObject)Create(typeof(TObject), args);
 		}
 
