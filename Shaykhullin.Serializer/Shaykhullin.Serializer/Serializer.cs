@@ -34,11 +34,6 @@ namespace Shaykhullin.Serializer.Core
 				throw new ArgumentNullException(nameof(stream));
 			}
 
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
-			
 			Serialize(stream, data, typeof(TData));
 		}
 
