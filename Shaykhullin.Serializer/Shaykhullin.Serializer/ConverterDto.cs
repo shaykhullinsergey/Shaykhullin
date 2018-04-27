@@ -6,7 +6,7 @@ namespace Shaykhullin.Serializer.Core
 	internal class ConverterDto
 	{
 		public int Alias { get; }
-		public Type Type { get;  }
+		public Type Type { get; }
 		public Type ConverterType { get; set; }
 		public IConverter Converter { get; set; }
 

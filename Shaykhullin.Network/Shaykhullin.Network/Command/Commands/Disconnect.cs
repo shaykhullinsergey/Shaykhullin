@@ -1,6 +1,6 @@
 ﻿namespace Shaykhullin.Network
 {
-	public class Disconnect : IEvent<DisconnectInfo>
+	public class Disconnect : ICommand<DisconnectInfo>
 	{
 		public Disconnect(IConnection connection, DisconnectInfo message)
 		{

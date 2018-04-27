@@ -1,10 +1,14 @@
-﻿namespace Shaykhullin.Network.Core
+﻿using System;
+
+namespace Shaykhullin.Network.Core
 {
 	internal class ErrorPayload : Payload
 	{
+		private static readonly Type ErrorCommandType = typeof(Error);
+		
 		public ErrorPayload(string reason)
 		{
-			Event = typeof(Error);
+			CommandType = ErrorCommandType;
 			Data = new ErrorInfo
 			{
 				Reason = reason

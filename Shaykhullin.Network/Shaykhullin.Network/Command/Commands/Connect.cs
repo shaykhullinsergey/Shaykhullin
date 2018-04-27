@@ -1,6 +1,6 @@
 ﻿namespace Shaykhullin.Network
 {
-	public class Connect : IEvent<ConnectInfo>
+	public class Connect : ICommand<ConnectInfo>
 	{
 		public Connect(IConnection connection, ConnectInfo message)
 		{

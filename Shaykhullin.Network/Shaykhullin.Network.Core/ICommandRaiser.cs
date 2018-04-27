@@ -2,8 +2,8 @@
 
 namespace Shaykhullin.Network.Core
 {
-	public interface IEventRaiser
+	public interface ICommandRaiser
 	{
-		Task Raise(IPayload payload);
+		Task RaiseCommand(IPayload payload);
 	}
 }

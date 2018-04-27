@@ -105,7 +105,12 @@ namespace Shaykhullin.Serializer.Core
 			else
 			{
 				stream.WriteByte(1);
-				stream.Write(BitConverter.GetBytes(dto?.Alias ?? 0), 0, 4);
+				
+				var union = new Shaykhullin.ByteConverter(dto.Alias);
+				stream.WriteByte(union.Byte1);
+				stream.WriteByte(union.Byte2);
+				stream.WriteByte(union.Byte3);
+				stream.WriteByte(union.Byte4);
 			}
 
 			foreach (var property in EnsureProperties(dataType))
@@ -150,7 +155,9 @@ namespace Shaykhullin.Serializer.Core
 			{
 				var aliasBytes = new byte[4];
 				stream.Read(aliasBytes, 0, aliasBytes.Length);
-				var alias = BitConverter.ToInt32(aliasBytes, 0);
+				
+				var alias = new Shaykhullin.ByteConverter(aliasBytes[0], aliasBytes[1], aliasBytes[2], aliasBytes[3]).Int32;
+				
 				dataType = converterContainer.GetTypeFromAlias(alias);
 			}
 			

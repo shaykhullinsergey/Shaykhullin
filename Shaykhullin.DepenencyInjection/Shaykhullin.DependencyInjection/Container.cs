@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Shaykhullin.Activator;
 
 namespace Shaykhullin.DependencyInjection.Core
@@ -11,8 +12,8 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public Container(IActivator activator, DependencyContainer dependencyContainer)
 		{
-			this.activator = activator;
-			this.dependencyContainer = dependencyContainer;
+			this.activator = activator ?? throw new ArgumentNullException(nameof(activator));
+			this.dependencyContainer = dependencyContainer ?? throw new ArgumentNullException(nameof(dependencyContainer));
 		}
 
 		public TResolve Resolve<TResolve>()
@@ -21,22 +22,22 @@ namespace Shaykhullin.DependencyInjection.Core
 			{
 				throw new ObjectDisposedException(nameof(Container));
 			}
-			
+
 			return (TResolve)Resolve(typeof(TResolve));
 		}
 
 		public object Resolve(Type type)
 		{
+			if (type == null)
+			{
+				throw new ArgumentNullException(nameof(type));
+			}
+
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Container));
 			}
 
-			if (type == null)
-			{
-				throw new ArgumentNullException(nameof(type));
-			}
-			
 			return ResolveRecursive(type, null);
 		}
 
@@ -46,57 +47,37 @@ namespace Shaykhullin.DependencyInjection.Core
 			{
 				throw new ArgumentNullException(nameof(registry));
 			}
-			
-			var dependency = dependencyContainer.TryGetDependency(registry, @for) 
+
+			var dependency = dependencyContainer.TryGetDependency(registry, @for)
 				?? throw new InvalidOperationException($"{registry} not found");
 
-			EnsureLifecycle(dependency);
+			dependency.EnsureLifecycle(activator);
 
 			if (dependency.Factory != null)
 			{
-				return dependency.Instance.Resolve(() => dependency.Factory(this));
+				var factory = dependency.Factory;
+				return dependency.Lifecycle.Resolve(factory, this);
 			}
 
-			EnsureParameters(dependency);
-			
-			var arguments = new object[dependency.Parameters.Length];
+			dependency.EnsureParameters();
+
+			var arguments = CreateArguments(registry, dependency.ConstructorParameters);
+
+			return dependency.Lifecycle.Resolve(dependency.Implementation, arguments);
+		}
+
+		private object[] CreateArguments(Type registry, Type[] parameters)
+		{
+			var arguments = parameters.Length == 0
+				? Array.Empty<object>()
+				: new object[parameters.Length];
+
 			for (var i = 0; i < arguments.Length; i++)
 			{
-				arguments[i] = ResolveRecursive(dependency.Parameters[i], registry);
+				arguments[i] = ResolveRecursive(parameters[i], registry);
 			}
 
-			return dependency.Instance.Resolve(dependency.Implementation, arguments);
-		}
-
-		private void EnsureLifecycle(Dependency dependency)
-		{
-			if (dependency.Instance == null)
-			{
-				dependency.Instance = (ILifecycle)activator.Create(dependency.Lifecycle, activator);
-			}
-		}
-
-		private static void EnsureParameters(Dependency dependency)
-		{
-			if (dependency.Parameters == null)
-			{
-				var constructors = dependency.Implementation.GetConstructors();
-
-				if (constructors.Length == 0)
-				{
-					dependency.Parameters = Array.Empty<Type>();
-				}
-				else
-				{
-					var parameters = constructors[0].GetParameters();
-
-					dependency.Parameters = new Type[parameters.Length];
-					for (var i = 0; i < parameters.Length; i++)
-					{
-						dependency.Parameters[i] = parameters[i].ParameterType;
-					}
-				}
-			}
+			return arguments;
 		}
 
 		public void Dispose()

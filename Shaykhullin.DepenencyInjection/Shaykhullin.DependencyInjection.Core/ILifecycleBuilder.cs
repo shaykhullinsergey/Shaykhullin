@@ -13,6 +13,6 @@ namespace Shaykhullin.DependencyInjection.Core
 	public interface IForBuilder
 	{
 		void For<TDependency>();
-		void For(Type dependency);
+		void For(Type type);
 	}
 }

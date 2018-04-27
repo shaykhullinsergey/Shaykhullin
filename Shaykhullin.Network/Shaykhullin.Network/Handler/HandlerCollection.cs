@@ -14,30 +14,30 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 
-		public void Add<TData, TEvent, THandler>()
-			where TEvent : IEvent<TData>
-			where THandler : IHandler<TData, TEvent>
+		public void Add<TData, TCommand, THandler>()
+			where TCommand : ICommand<TData>
+			where THandler : IHandler<TData, TCommand>
 		{
-			var @event = typeof(TEvent);
+			var command = typeof(TCommand);
 			var handler = typeof(THandler);
 			
-			if (handlers.TryGetValue(@event, out var list))
+			if (handlers.TryGetValue(command, out var list))
 			{
 				list.Add(handler);
 			}
 			else
 			{
 				config.Register<THandler>();
-				handlers.Add(@event, new List<Type> { handler });
+				handlers.Add(command, new List<Type> { handler });
 			}
 		}
 
-		public IList<Type> GetHandlers(Type @event)
+		public IList<Type> GetHandlers(Type command)
 		{
-			if(!handlers.TryGetValue(@event, out var list))
+			if(!handlers.TryGetValue(command, out var list))
 			{
 				list = new List<Type>();
-				handlers.Add(@event, list);
+				handlers.Add(command, list);
 			}
 
 			return list;

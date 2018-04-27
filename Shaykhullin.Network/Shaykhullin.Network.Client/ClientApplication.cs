@@ -6,11 +6,11 @@ using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network
 {
-	internal class Client : IClient
+	internal class ClientApplication : IClient
 	{
 		private readonly IContainerConfig config;
 
-		public Client(IContainerConfig config)
+		public ClientApplication(IContainerConfig config)
 		{
 			this.config = config;
 		}
@@ -33,7 +33,7 @@ namespace Shaykhullin.Network
 			var container = config.Create();
 
 			config.Register<IContainer>()
-				.ImplementedBy(c => container)
+				.ImplementedBy(c => c)
 				.As<Singleton>();
 
 			var connection = container.Resolve<IConnection>();
@@ -42,11 +42,16 @@ namespace Shaykhullin.Network
 				.ImplementedBy(c => connection)
 				.As<Singleton>();
 
-			var communicator = container.Resolve<ICommunicator>();
+			var communicator = container.Resolve<ITransport>();
 
 			await communicator.Connect().ConfigureAwait(false);
 
 			return connection;
+		}
+
+		public void Dispose()
+		{
+			config?.Dispose();
 		}
 	}
 }

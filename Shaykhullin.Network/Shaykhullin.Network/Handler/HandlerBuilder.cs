@@ -3,8 +3,8 @@ using Shaykhullin.Serializer;
 
 namespace Shaykhullin.Network.Core
 {
-	internal class HandlerBuilder<TData, TEvent> : IHandlerBuilder<TData, TEvent>
-		where TEvent : IEvent<TData>
+	internal class HandlerBuilder<TData, TCommand> : IHandlerBuilder<TData, TCommand>
+		where TCommand : ICommand<TData>
 	{
 		private readonly IContainerConfig config;
 
@@ -13,19 +13,21 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 
-		public void With<THandler>() where THandler 
-			: IHandler<TData, TEvent>
+		public IHandlerBuilder<TData, TCommand> Call<THandler>() where THandler 
+			: IHandler<TData, TCommand>
 		{
 			using (var container = config.Create())
 			{
 				container.Resolve<ISerializerConfig>()
 					.Match<TData>();
 	
-				container.Resolve<EventCollection>()
-					.Add<TData, TEvent>();
+				container.Resolve<CommandCollection>()
+					.Add<TData, TCommand>();
 	
 				container.Resolve<HandlerCollection>()
-					.Add<TData, TEvent, THandler>();
+					.Add<TData, TCommand, THandler>();
+
+				return this;
 			}
 		}
 	}

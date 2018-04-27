@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
@@ -9,6 +10,7 @@ namespace Shaykhullin.Network.Core
 	{
 		private bool disposed;
 		private readonly IContainer container;
+		private readonly Task receiveLoopTask;
 
 		public Connection(IContainerConfig config)
 		{
@@ -20,40 +22,40 @@ namespace Shaykhullin.Network.Core
 				.ImplementedBy<MessageComposer>()
 				.As<Singleton>();
 
-			config.Register<IEventRaiser>()
-				.ImplementedBy<EventRaiser>()
+			config.Register<ICommandRaiser>()
+				.ImplementedBy<CommandRaiser>()
 				.As<Singleton>();
 
-			config.Register<ICommunicator>()
-				.ImplementedBy<Communicator>()
+			config.Register<ITransport>()
+				.ImplementedBy<Transport>()
 				.As<Singleton>();
 
 			container = config.Create();
 
-			Task.Run(async () => await ReceiveLoop());
+			receiveLoopTask = Task.Run(ReceiveLoop);
 		}
-		
+
 		public ISendBuilder<TData> Send<TData>(TData data)
 		{
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Connection));
 			}
-			
+
 			return new SendBuilder<TData>(container, data);
 		}
 
 		private async Task ReceiveLoop()
 		{
-			var messages = new Dictionary<int, IList<IPacket>>();
-			var communicator = container.Resolve<ICommunicator>();
+			var messages = new Dictionary<byte, IList<IPacket>>();
+			var communicator = container.Resolve<ITransport>();
 			var packetsComposer = container.Resolve<IPacketsComposer>();
 			var messageComposer = container.Resolve<IMessageComposer>();
-			var eventRaiser = container.Resolve<IEventRaiser>();
+			var commandRaiser = container.Resolve<ICommandRaiser>();
 
 			while (true)
 			{
-				var packet = await communicator.Receive().ConfigureAwait(false);
+				var packet = await communicator.ReadPacket().ConfigureAwait(false);
 
 				if (messages.TryGetValue(packet.Id, out var packets))
 				{
@@ -61,20 +63,21 @@ namespace Shaykhullin.Network.Core
 				}
 				else
 				{
-					packets = new List<IPacket> { packet };
+					packets = new List<IPacket>
+					{
+						packet
+					};
 					messages.Add(packet.Id, packets);
 				}
-				messages.Remove(packet.Id);
 
-				if (packet.End)
+
+				if (packet.IsLast)
 				{
-					Task.Run(async () =>
-					{
-						var message = await packetsComposer.GetMessage(packets).ConfigureAwait(false);
-						var payload = await messageComposer.GetPayload(message).ConfigureAwait(false);
+					messages.Remove(packet.Id);
+					var message = packetsComposer.GetMessage(packets);
+					var payload = messageComposer.GetPayload(message);
 
-						await eventRaiser.Raise(payload).ConfigureAwait(false);
-					}).ConfigureAwait(false);
+					await commandRaiser.RaiseCommand(payload).ConfigureAwait(false);
 				}
 			}
 		}
@@ -84,7 +87,8 @@ namespace Shaykhullin.Network.Core
 			if (!disposed)
 			{
 				disposed = true;
-				container.Resolve<ICommunicator>().Dispose();
+				container.Resolve<ITransport>().Dispose();
+				receiveLoopTask.Dispose();
 			}
 		}
 	}

@@ -1,10 +1,14 @@
-﻿namespace Shaykhullin.Network.Core
+﻿using System;
+
+namespace Shaykhullin.Network.Core
 {
 	internal class ConnectPayload : Payload
 	{
+		private static readonly Type ConnectCommandType = typeof(Connect);
+		
 		public ConnectPayload()
 		{
-			Event = typeof(Connect);
+			CommandType = ConnectCommandType;
 			Data = new ConnectInfo();
 		}
 	}

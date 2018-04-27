@@ -7,63 +7,75 @@ namespace Shaykhullin.Network.Core
 {
 	internal class PacketsComposer : IPacketsComposer
 	{
-		private static int UniqueId;
 		private const int PacketSize = 256;
 		private const int HeaderSize = 5;
 		private const int PayloadSize = PacketSize - HeaderSize;
 
-		private readonly IEventRaiser eventRaiser;
+		private int uniqueMessageId;
+		private readonly ICommandRaiser commandRaiser;
 
-		public PacketsComposer(IEventRaiser eventRaiser)
+		public PacketsComposer(ICommandRaiser commandRaiser)
 		{
-			this.eventRaiser = eventRaiser;
+			this.commandRaiser = commandRaiser;
 		}
 
-		public async Task<IPacket> GetPacket(byte[] data)
+		public IPacket GetPacket(byte[] data)
 		{
-			var chunk = await GetBuffer().ConfigureAwait(false);
+			var chunk = GetBuffer();
 			Array.Copy(data, HeaderSize, chunk, 0, PayloadSize);
 
+			var order = new ByteConverter(data[1], data[2]).UInt16;
+			
 			return new Packet
 			{
 				Id = data[0],
-				Order = BitConverter.ToUInt16(data, 1),
+				Order = order,
 				Length = data[3],
-				End = data[4] == 1,
+				IsLast = data[4] == 1,
 				Chunk = chunk
 			};
 		}
 
-		public async Task<byte[]> GetBytes(IPacket packet)
+		public byte[] GetBytes(IPacket packet)
 		{
-			var data = await GetBuffer().ConfigureAwait(false);
-
+			var data = GetBuffer();
 			data[0] = packet.Id;
-			Array.Copy(BitConverter.GetBytes(packet.Order), 0, data, 1, 2);
+			
+			var union = new ByteConverter(packet.Order);
+			data[1] = union.Byte1;
+			data[2] = union.Byte2;
+			
 			data[3] = packet.Length;
-			data[4] = (byte)(packet.End ? 1 : 0);
+			data[4] = (byte)(packet.IsLast ? 1 : 0);
+			
 			Array.Copy(packet.Chunk, 0, data, HeaderSize, PayloadSize);
 			return data;
 		}
 
-		public async Task<byte[]> GetBuffer()
+		public byte[] GetBuffer()
 		{
-			return await Task.FromResult(new byte[PacketSize]).ConfigureAwait(false);
+			return new byte[PacketSize];
 		}
 
 		public async Task<IPacket[]> GetPackets(IMessage message)
 		{
-			var id = (byte)(UniqueId++ % byte.MaxValue);
+			var id = (byte)(uniqueMessageId++ % byte.MaxValue);
 
 			var data = new byte[message.Data.Length + 4];
-			Array.Copy(BitConverter.GetBytes(message.EventId), data, 4);
+			
+			var union = new ByteConverter(message.CommandId);
+			data[0] = union.Byte1;
+			data[1] = union.Byte2;
+			data[2] = union.Byte3;
+			data[3] = union.Byte4;
+			
 			Array.Copy(message.Data, 0, data, 4, message.Data.Length);
 
 			var count = GetPacketCount(data.Length);
 
 			if (count > ushort.MaxValue)
 			{
-				await eventRaiser.Raise(new ErrorPayload("Message size is too long")).ConfigureAwait(false);
+				await commandRaiser.RaiseCommand(new ErrorPayload("Message size is too long")).ConfigureAwait(false);
 
 				throw new InvalidOperationException();
 			}
@@ -83,24 +95,45 @@ namespace Shaykhullin.Network.Core
 					Id = id,
 					Order = (ushort)(order + 1),
 					Length = length,
-					End = end,
+					IsLast = end,
 					Chunk = chunk
 				};
 			}
 
-			return await Task.FromResult(packets).ConfigureAwait(false);
+			return packets;
 		}
 
-		public async Task<IMessage> GetMessage(IList<IPacket> packets)
+		public IMessage GetMessage(IList<IPacket> packets)
 		{
+			var chunk = packets[0].Chunk;
+			
+			var union = new ByteConverter(chunk[0], chunk[1], chunk[2], chunk[3]);
+			var commandId = union.Int32;
+
+			var dataLength = 0;
+			for (var i = 0; i < packets.Count; i++)
+			{
+				dataLength += packets[i].Length;
+			}
+
+			var data = new byte[dataLength - 4];
+			var firstPacketLength = packets[0].Length - 4;
+			Array.Copy(packets[0].Chunk, 4, data, 0, firstPacketLength);
+			var position = firstPacketLength;
+
+			for (var i = 1; i < packets.Count; i++)
+			{
+				chunk = packets[i].Chunk;
+				Array.Copy(packets[i].Chunk, 0, data, position, packets[i].Length);
+				position += chunk.Length;
+			}
+			
 			// TODO: Performace!!
-			var data = packets.SelectMany(x => x.Chunk.Take(x.Length));
-
-			var eventId = BitConverter.ToInt32(data.Take(4).ToArray(), 0);
-
-			return await Task.FromResult(
-				(IMessage)new Message { EventId = eventId, Data = data.Skip(4).ToArray() })
-					.ConfigureAwait(false);
+//			var data2 = packets.SelectMany(x => x.Chunk.Take(x.Length))
+//				.Skip(4)
+//				.ToArray();
+			
+			return new Message { CommandId = commandId, Data = data };
 		}
 
 		private static int GetPacketCount(int length) => length / PayloadSize + (length % PayloadSize == 0 ? 0 : 1);

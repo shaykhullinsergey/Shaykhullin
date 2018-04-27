@@ -5,32 +5,35 @@ using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
-	internal class Communicator : ICommunicator
+	internal class Transport : ITransport
 	{
 		private readonly object @lock = new object();
 		private readonly TcpClient tcpClient;
 		private readonly IPacketsComposer packetsComposer;
 		private readonly IConfiguration configuration;
-		private readonly IEventRaiser eventRaiser;
+		private readonly ICommandRaiser commandRaiser;
 
-		public Communicator(IContainer container)
+		public Transport(IContainer container)
 		{
 			tcpClient = container.Resolve<TcpClient>();
 			packetsComposer = container.Resolve<IPacketsComposer>();
 			configuration = container.Resolve<IConfiguration>();
-			eventRaiser = container.Resolve<IEventRaiser>();
+			commandRaiser = container.Resolve<ICommandRaiser>();
 		}
 
 		public Task Connect()
 		{
-			if (!isConnected && !IsConnected)
+			if (!isAlive && !IsAlive)
 			{
 				lock (@lock)
 				{
 					if (!tcpClient.Connected)
 					{
-						tcpClient.ConnectAsync(configuration.Host, configuration.Port).Wait();
-						eventRaiser.Raise(new ConnectPayload()).Wait();
+						tcpClient.ConnectAsync(configuration.Host, configuration.Port)
+							.GetAwaiter().GetResult();
+						
+						commandRaiser.RaiseCommand(new ConnectPayload())
+							.GetAwaiter().GetResult();
 					}
 				}
 			}
@@ -38,9 +41,9 @@ namespace Shaykhullin.Network.Core
 			return Task.CompletedTask;
 		}
 
-		public async Task Send(IPacket packet)
+		public async Task WritePacket(IPacket packet)
 		{
-			var data = await packetsComposer.GetBytes(packet).ConfigureAwait(false);
+			var data = packetsComposer.GetBytes(packet);
 
 			try
 			{
@@ -48,40 +51,39 @@ namespace Shaykhullin.Network.Core
 			}
 			catch (Exception exception)
 			{
-				await eventRaiser.Raise(new DisconnectPayload("Connection closed", exception)).ConfigureAwait(false);
+				await commandRaiser.RaiseCommand(new DisconnectPayload("Connection closed", exception)).ConfigureAwait(false);
 			}
 		}
 
-		public async Task<IPacket> Receive()
+		public async Task<IPacket> ReadPacket()
 		{
-			var buffer = await packetsComposer.GetBuffer().ConfigureAwait(false);
+			var buffer = packetsComposer.GetBuffer();
 
-			while (!isConnected && !IsConnected)
+			while (!isAlive && !IsAlive)
 			{
 				await Connect().ConfigureAwait(false);
 			}
 
 			var read = await tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
-			if (read == 0 && !IsConnected)
+			if (read == 0 && !IsAlive)
 			{
-				await eventRaiser.Raise(new DisconnectPayload("Connection closed")).ConfigureAwait(false);
+				await commandRaiser.RaiseCommand(new DisconnectPayload("Connection closed")).ConfigureAwait(false);
 				throw new OperationCanceledException();
 			}
 
-			return await packetsComposer.GetPacket(buffer).ConfigureAwait(false);
+			return packetsComposer.GetPacket(buffer);
 		}
 
 		public async void Dispose()
 		{
 			tcpClient.Close();
 			tcpClient.Dispose();
-			await eventRaiser.Raise(new DisconnectPayload("Connection disposed")).ConfigureAwait(false);
+			await commandRaiser.RaiseCommand(new DisconnectPayload("Connection disposed")).ConfigureAwait(false);
 		}
 
-		private bool isConnected;
-
-		public bool IsConnected
+		private bool isAlive;
+		private bool IsAlive
 		{
 			get
 			{
@@ -94,7 +96,7 @@ namespace Shaykhullin.Network.Core
 
 					if (!tcpClient.Client.Poll(0, SelectMode.SelectRead))
 					{
-						return isConnected = true;
+						return isAlive = true;
 					}
 
 					var buffer = new byte[1];
@@ -104,7 +106,7 @@ namespace Shaykhullin.Network.Core
 						return false;
 					}
 
-					return isConnected = true;
+					return isAlive = true;
 				}
 				catch
 				{

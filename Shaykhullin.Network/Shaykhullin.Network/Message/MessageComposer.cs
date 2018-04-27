@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Shaykhullin.Serializer;
@@ -8,20 +9,22 @@ namespace Shaykhullin.Network.Core
 {
 	internal class MessageComposer : IMessageComposer
 	{
+		private static readonly Dictionary<Type, Type> GenericArgumentsCache = new Dictionary<Type, Type>();
+
 		private readonly ISerializer serializer;
 		private readonly ICompression compression;
 		private readonly IEncryption encryption;
-		private readonly IEventHolder eventHolder;
+		private readonly ICommandHolder commandHolder;
 
 		public MessageComposer(IContainer container)
 		{
 			serializer = container.Resolve<ISerializer>();
 			compression = container.Resolve<ICompression>();
 			encryption = container.Resolve<IEncryption>();
-			eventHolder = container.Resolve<IEventHolder>();
+			commandHolder = container.Resolve<ICommandHolder>();
 		}
 
-		public async Task<IMessage> GetMessage(IPayload payload)
+		public IMessage GetMessage(IPayload payload)
 		{
 			byte[] data;
 
@@ -33,30 +36,28 @@ namespace Shaykhullin.Network.Core
 
 			data = compression.Compress(data);
 			data = encryption.Encrypt(data);
-			var eventId = eventHolder.GetEvent(payload.Event);
+			var commandId = commandHolder.GetCommand(payload.CommandType);
 
-			return await Task.FromResult(
-				(IMessage)new Message { EventId = eventId, Data = data})
-					.ConfigureAwait(false);
+			return new Message
+			{
+				CommandId = commandId,
+				Data = data
+			};
 		}
 
-		public async Task<IPayload> GetPayload(IMessage message)
+		public IPayload GetPayload(IMessage message)
 		{
-			var data = encryption.Decrypt(message.Data);
-			data = compression.Decompress(data);
+			var messageData = encryption.Decrypt(message.Data);
+			messageData = compression.Decompress(messageData);
 
-			var @event = eventHolder.GetEvent(message.EventId);
-			var dataType = @event.GetInterfaces()[0].GetGenericArguments()[0];
+			var command = commandHolder.GetCommand(message.CommandId);
+			var genericArgument = commandHolder.GetGenericArgument(command);
 
-			object @object;
-			using (var stream = new MemoryStream(data))
+			using (var stream = new MemoryStream(messageData))
 			{
-				@object = serializer.Deserialize(stream, dataType);
+				var data = serializer.Deserialize(stream, genericArgument);
+				return new Payload { CommandType = command, Data = data };
 			}
-
-			return await Task.FromResult(
-				(IPayload)new Payload { Event = @event, Data = @object })
-					.ConfigureAwait(false);
 		}
 	}
 }

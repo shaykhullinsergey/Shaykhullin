@@ -5,7 +5,7 @@
 		byte Id { get; }
 		ushort Order { get; }
 		byte Length { get; }
-		bool End { get; }
+		bool IsLast { get; }
 		byte[] Chunk { get; }
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace Shaykhullin.Network
 {
-	public class Error : IEvent<ErrorInfo>
+	public class Error : ICommand<ErrorInfo>
 	{
 		public Error(IConnection connection, ErrorInfo message)
 		{

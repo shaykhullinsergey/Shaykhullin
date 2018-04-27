@@ -23,7 +23,7 @@ namespace Shaykhullin.Serializer
 			var innerScope = config.CreateScope();
 			converterContainer = new ConverterContainer(innerScope);
 
-			Match<byte>().With<ByteConverter>();
+			Match<byte>().With<Core.ByteConverter>();
 			Match<sbyte>().With<SByteConverter>();
 			Match<short>().With<ShortConverter>();
 			Match<ushort>().With<UShortConverter>();
@@ -40,6 +40,7 @@ namespace Shaykhullin.Serializer
 			Match<IList>().With<IListConverter>();
 			Match<ICollection>().With<CollectionConverter>();
 			Match<IEnumerable>().With<IEnumerableConverter>();
+			Match<Guid>().With<GuidConverter>();
 
 			config = innerScope;
 			converterContainer = new ConverterContainer(config, converterContainer);

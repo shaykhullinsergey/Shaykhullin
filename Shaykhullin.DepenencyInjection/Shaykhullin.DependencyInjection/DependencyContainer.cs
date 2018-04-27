@@ -27,31 +27,34 @@ namespace Shaykhullin.DependencyInjection
 		{
 			if (@for == null)
 			{
-				foreach (var dependency in dependencies.Where(dependency => dependency.Registry == register && dependency.For == null))
+				for (var i = 0; i < dependencies.Count; i++)
 				{
-					return dependency;
+					if (dependencies[i].Registry == register && dependencies[i].ForDependency == null)
+					{
+						return dependencies[i];
+					}
 				}
 			}
 			else
 			{
-				Dependency forNullFor = null;
+				Dependency nullDependency = null;
 
-				foreach (var dependency in dependencies)
+				for (var i = 0; i < dependencies.Count; i++)
 				{
-					if (dependency.Registry == register && dependency.For == @for)
+					if (dependencies[i].Registry == register && dependencies[i].ForDependency == @for)
 					{
-						return dependency;
+						return dependencies[i];
 					}
-
-					if (dependency.Registry == register && dependency.For == null)
+					
+					if (dependencies[i].Registry == register && dependencies[i].ForDependency == null)
 					{
-						forNullFor = dependency;
+						nullDependency = dependencies[i];
 					}
 				}
 
-				if (forNullFor != null)
+				if (nullDependency != null)
 				{
-					return forNullFor;
+					return nullDependency;
 				}
 			}
 

@@ -4,32 +4,31 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class ImplementedByBuilder<TRegistry> : IImplementedByBuilder<TRegistry>
 	{
-		private readonly Dependency dto;
+		private readonly Dependency dependency;
 		
-		public ImplementedByBuilder(Dependency dto)
+		public ImplementedByBuilder(Dependency dependency)
 		{
-			this.dto = dto;
+			this.dependency = dependency;
 		}
 
 		public ILifecycleBuilder ImplementedBy<TImplemented>(Func<IContainer, TImplemented> factory = null) 
 			where TImplemented : TRegistry
 		{
-			return ImplementedBy(typeof(TImplemented), 
-				factory == null 
-					? default(Func<IContainer, object>)
-					: c => factory(c));
+			return factory == null 
+				? ImplementedBy(typeof(TImplemented)) 
+				: ImplementedBy(typeof(TImplemented), c => factory(c));
 		}
 
 		public ILifecycleBuilder ImplementedBy(Type implemented, Func<IContainer, object> factory = null)
 		{
 			if (factory != null)
 			{
-				dto.Factory = container => factory(container);
+				dependency.Factory = factory;
 			}
 
-			dto.Implementation = implemented;
+			dependency.Implementation = implemented;
 			
-			return new LifecycleBuilder(dto);
+			return new LifecycleBuilder(dependency);
 		}
 
 		public void For<TDependency>()
@@ -37,10 +36,10 @@ namespace Shaykhullin.DependencyInjection.Core
 			For(typeof(TDependency));
 		}
 
-		public void For(Type dependency)
+		public void For(Type type)
 		{
-			new LifecycleBuilder(dto)
-				.For(dependency);
+			new LifecycleBuilder(dependency)
+				.For(type);
 		}
 
 		public IForBuilder As<TLifecycle>() where TLifecycle : ILifecycle
@@ -50,7 +49,7 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public IForBuilder As(Type lifecycle)
 		{
-			return new LifecycleBuilder(dto)
+			return new LifecycleBuilder(dependency)
 				.As(lifecycle);
 		}
 	}

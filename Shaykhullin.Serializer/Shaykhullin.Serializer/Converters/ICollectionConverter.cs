@@ -23,13 +23,13 @@ namespace Shaykhullin.Serializer.Core
 			throw new InvalidOperationException();
 		}
 
-		public override void Serialize(Stream stream, ICollection data)
+		public override void Serialize(Stream stream, ICollection elements)
 		{
-			var elementType = data.GetType().GetGenericArguments()[0];
+			var elementType = elements.GetType().GetGenericArguments()[0];
 
-			stream.Write(BitConverter.GetBytes(data.Count), 0, 4);
+			stream.Write(BitConverter.GetBytes(elements.Count), 0, 4);
 
-			foreach (var element in data)
+			foreach (var element in elements)
 			{
 				serializer.Serialize(stream, element, elementType);
 			}

@@ -14,8 +14,8 @@ namespace Shaykhullin.Serializer.Core
 		public ConverterContainer(IContainerConfig config)
 		{
 			this.config = config;
-			converters = new Dictionary<Type, ConverterDto>();
 			aliases = new Dictionary<int, Type>();
+			converters = new Dictionary<Type, ConverterDto>();
 		}
 
 		internal ConverterContainer(IContainerConfig config, ConverterContainer parent) 

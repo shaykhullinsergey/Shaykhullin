@@ -11,7 +11,7 @@ namespace Shaykhullin.DependencyInjection
 
 		public Singleton(IActivator activator)
 		{
-			this.activator = activator;
+			this.activator = activator ?? throw new ArgumentNullException(nameof(activator));
 		}
 
 		public object Resolve(Type type, object[] arguments)
@@ -19,9 +19,9 @@ namespace Shaykhullin.DependencyInjection
 			return instance ?? (instance = activator.Create(type, arguments));
 		}
 
-		public object Resolve(Func<object> factory)
+		public object Resolve<TState>(Func<TState, object> factory, TState state)
 		{
-			return instance ?? (instance = factory());
+			return instance ?? (instance = factory(state));
 		}
 	}
 }

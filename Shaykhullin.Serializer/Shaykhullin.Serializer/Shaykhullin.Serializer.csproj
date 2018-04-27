@@ -1,15 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>1.0.10</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />
     <ProjectReference Include="..\..\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\Shaykhullin.DependencyInjection.csproj" />
     <ProjectReference Include="..\Shaykhullin.Serializer.Core\Shaykhullin.Serializer.Core.csproj" />
   </ItemGroup>
-
 </Project>

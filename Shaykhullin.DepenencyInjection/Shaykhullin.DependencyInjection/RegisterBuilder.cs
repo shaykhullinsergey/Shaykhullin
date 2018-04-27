@@ -9,7 +9,7 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public RegisterBuilder(DependencyContainer dependencies)
 		{
-			this.dependencies = dependencies;
+			this.dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
 		}
 		
 		public IImplementedByBuilder<TRegistry> Register<TRegistry>() 

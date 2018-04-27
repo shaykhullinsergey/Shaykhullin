@@ -4,25 +4,25 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class LifecycleBuilder : ILifecycleBuilder
 	{
-		private readonly Dependency dto;
+		private readonly Dependency dependency;
 		
-		public LifecycleBuilder(Dependency dto)
+		public LifecycleBuilder(Dependency dependency)
 		{
-			this.dto = dto;
+			this.dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
 		}
 
 		public IForBuilder As<TLifecycle>() where TLifecycle : ILifecycle => As(typeof(TLifecycle));
 		public IForBuilder As(Type lifecycle)
 		{
-			dto.Lifecycle = lifecycle;
-			return new ForBuilder(dto);
+			dependency.LifecycleType = lifecycle;
+			return new ForBuilder(dependency);
 		}
 
 		public void For<TDependency>() => For(typeof(TDependency));
-		public void For(Type dependency)
+		public void For(Type type)
 		{
-			new ForBuilder(dto)
-				.For(dependency);
+			new ForBuilder(dependency)
+				.For(type);
 		}
 	}
 }

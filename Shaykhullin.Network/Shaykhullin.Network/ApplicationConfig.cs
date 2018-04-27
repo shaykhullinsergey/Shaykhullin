@@ -7,19 +7,17 @@ using Shaykhullin.DependencyInjection.Core;
 
 namespace Shaykhullin.Network
 {
-	public abstract class NodeConfig<TNode> : IConfig<TNode>
-		where TNode : INode
+	public abstract class ApplicationConfig<TNode> : IConfig<TNode>
+		where TNode : IApplication
 	{
 		private readonly IContainerConfig config;
 
-		protected NodeConfig()
+		protected ApplicationConfig()
 		{
 			var rootConfig = new ContainerConfig();
 			
-			var serializerConfig = new SerializerConfig();
-
 			rootConfig.Register<ISerializerConfig>()
-				.ImplementedBy(c => serializerConfig)
+				.ImplementedBy(c => new SerializerConfig())
 				.As<Singleton>();
 				
 			rootConfig.Register<ISerializer>()
@@ -38,16 +36,16 @@ namespace Shaykhullin.Network
 				.ImplementedBy<Connection>()
 				.As<Transient>();
 
-			rootConfig.Register<EventCollection>()
-				.ImplementedBy<EventCollection>()
+			rootConfig.Register<CommandCollection>()
+				.ImplementedBy<CommandCollection>()
 				.As<Singleton>();
 
 			rootConfig.Register<HandlerCollection>()
 				.ImplementedBy<HandlerCollection>()
 				.As<Singleton>();
 
-			rootConfig.Register<IEventHolder>()
-				.ImplementedBy<EventHolder>()
+			rootConfig.Register<ICommandHolder>()
+				.ImplementedBy<CommandHolder>()
 				.As<Singleton>();
 
 			rootConfig.Register<Disconnect>();
@@ -94,9 +92,9 @@ namespace Shaykhullin.Network
 			return config.Register<TRegistry>(registry);
 		}
 
-		public IEventBuilder<TData> Match<TData>()
+		public ICommandBuilder<TData> On<TData>()
 		{
-			return new EventBuilder<TData>(config);
+			return new CommandBuilder<TData>(config);
 		}
 
 		protected IContainerConfig Configure(string host, int port)

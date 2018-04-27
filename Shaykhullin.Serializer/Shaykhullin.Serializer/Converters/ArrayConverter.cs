@@ -17,13 +17,13 @@ namespace Shaykhullin.Serializer.Core
 			throw new InvalidOperationException();
 		}
 
-		public override void Serialize(Stream stream, Array data)
+		public override void Serialize(Stream stream, Array elements)
 		{
-			var elementType = data.GetType().GetElementType();
+			var elementType = elements.GetType().GetElementType();
 
-			stream.Write(BitConverter.GetBytes(data.Length), 0, 4);
+			stream.Write(BitConverter.GetBytes(elements.Length), 0, 4);
 
-			foreach (var element in data)
+			foreach (var element in elements)
 			{
 				serializer.Serialize(stream, element, elementType);
 			}

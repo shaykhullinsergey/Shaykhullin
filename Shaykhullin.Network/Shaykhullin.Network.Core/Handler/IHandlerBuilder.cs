@@ -1,9 +1,9 @@
 ﻿namespace Shaykhullin.Network.Core
 {
-	public interface IHandlerBuilder<TData, TEvent>
-		where TEvent : IEvent<TData> 
+	public interface IHandlerBuilder<TData, TCommand>
+		where TCommand : ICommand<TData> 
 	{
-		void With<THandler>()
-			where THandler : IHandler<TData, TEvent>;
+		IHandlerBuilder<TData, TCommand> Call<THandler>()
+			where THandler : IHandler<TData, TCommand>;
 	}
 }

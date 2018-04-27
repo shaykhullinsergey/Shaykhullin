@@ -10,7 +10,7 @@ namespace Shaykhullin.DependencyInjection
 
 		public Transient(IActivator activator)
 		{
-			this.activator = activator;
+			this.activator = activator ?? throw new ArgumentNullException(nameof(activator));
 		}
 
 		public object Resolve(Type type, object[] arguments)
@@ -18,9 +18,9 @@ namespace Shaykhullin.DependencyInjection
 			return activator.Create(type, arguments);
 		}
 
-		public object Resolve(Func<object> factory)
+		public object Resolve<TState>(Func<TState, object> factory, TState state)
 		{
-			return factory();
+			return factory(state);
 		}
 	}
 }

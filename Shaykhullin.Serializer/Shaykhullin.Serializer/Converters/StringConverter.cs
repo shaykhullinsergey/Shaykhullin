@@ -9,9 +9,13 @@ namespace Shaykhullin.Serializer.Core
 	{
 		public override string Deserialize(Stream stream)
 		{
-			var lengthBuffer = new byte[4];
-			stream.Read(lengthBuffer, 0, lengthBuffer.Length);
-			var length = BitConverter.ToInt32(lengthBuffer, 0);
+			var union = new Shaykhullin.ByteConverter(
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte());
+
+			var length = union.Int32;
 
 			var stringBuffer = new byte[length];
 			stream.Read(stringBuffer, 0, stringBuffer.Length);
@@ -20,9 +24,12 @@ namespace Shaykhullin.Serializer.Core
 
 		public override void Serialize(Stream stream, string data)
 		{
-			var lengthBuffer = BitConverter.GetBytes(data.Length);
-			stream.Write(lengthBuffer, 0, lengthBuffer.Length);
-
+			var union = new Shaykhullin.ByteConverter(data.Length);
+			stream.WriteByte(union.Byte1);
+			stream.WriteByte(union.Byte2);
+			stream.WriteByte(union.Byte3);
+			stream.WriteByte(union.Byte4);
+			
 			var stringBuffer = Encoding.UTF8.GetBytes(data);
 			stream.Write(stringBuffer, 0, stringBuffer.Length);
 		}

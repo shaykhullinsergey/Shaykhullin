@@ -23,7 +23,8 @@ namespace Shaykhullin.Network.Core
 			}
 			else
 			{
-				registry.ImplementedBy(c => serializer).As<Singleton>();
+				var serializerClosure = serializer;
+				registry.ImplementedBy(c => serializerClosure).As<Singleton>();
 			}
 			
 			return new CompressionBuilder(config);

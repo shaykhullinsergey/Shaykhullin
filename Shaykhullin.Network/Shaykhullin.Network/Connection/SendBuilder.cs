@@ -6,30 +6,30 @@ namespace Shaykhullin.Network.Core
 	internal class SendBuilder<TData> : ISendBuilder<TData>
 	{
 		private readonly IContainer container;
-		private readonly object data;
+		private readonly TData data;
 
-		public SendBuilder(IContainer container, object data)
+		public SendBuilder(IContainer container, TData data)
 		{
 			this.container = container;
 			this.data = data;
 		}
 		
-		public async Task To<TEvent>() 
-			where TEvent : IEvent<TData>
+		public async Task To<TCommand>() 
+			where TCommand : ICommand<TData>
 		{
-			var payload = new Payload { Event = typeof(TEvent), Data = data };
-			
-			var message = await container.Resolve<IMessageComposer>()
-				.GetMessage(payload).ConfigureAwait(false);
+			var payload = new Payload { CommandType = typeof(TCommand), Data = data };
+
+			var message = container.Resolve<IMessageComposer>().GetMessage(payload);
 			
 			var packets = await container.Resolve<IPacketsComposer>()
-				.GetPackets(message).ConfigureAwait(false);
+				.GetPackets(message)
+				.ConfigureAwait(false);
 
-			var communicator = container.Resolve<ICommunicator>();
+			var transport = container.Resolve<ITransport>();
 			
 			foreach (var packet in packets)
 			{
-				await communicator.Send(packet).ConfigureAwait(false);
+				await transport.WritePacket(packet).ConfigureAwait(false);
 			}
 		}
 	}

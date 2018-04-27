@@ -2,9 +2,9 @@
 
 namespace Shaykhullin.Network
 {
-	public interface IHandler<TData, TEvent>
-		where TEvent : IEvent<TData>
+	public interface IHandler<TData, TCommand>
+		where TCommand : ICommand<TData>
 	{
-		Task Execute(TEvent @event);
+		Task Execute(TCommand command);
 	}
 }

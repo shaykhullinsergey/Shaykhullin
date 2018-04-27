@@ -4,11 +4,11 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class ForBuilder : IForBuilder
 	{
-		private readonly Dependency dto;
+		private readonly Dependency dependency;
 
-		public ForBuilder(Dependency dto)
+		public ForBuilder(Dependency dependency)
 		{
-			this.dto = dto;
+			this.dependency = dependency;
 		}
 
 		public void For<TDependency>()
@@ -16,9 +16,9 @@ namespace Shaykhullin.DependencyInjection.Core
 			For(typeof(TDependency));
 		}
 
-		public void For(Type dependency)
+		public void For(Type type)
 		{
-			dto.For = dependency;
+			dependency.ForDependency = type;
 		}
 	}
 }

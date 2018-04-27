@@ -1,42 +1,51 @@
-﻿using Shaykhullin.Network;
-using System;
+﻿using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+
+using Shaykhullin.Network;
 
 namespace Shaykhullin.Sandbox.Server
 {
 	class Program
 	{
-		static async Task Main(string[] args)
+		static async Task Main()
 		{
 			var config = new ServerConfig();
 
-			config.Match<string>()
-				.From<Event>()
-				.With<Handler>();
+			config.On<int>().In<Command>().Call<Handler>();
 
-			Console.WriteLine("Started");
-			await config.Create("127.0.0.1", 4002).Run();
+			using (var app = config.Create("127.0.0.1", 4002))
+			{
+				await app.Run();
+			}
 		}
 	}
 
-	struct Event : IEvent<string>
+	struct Command : ICommand<int>
 	{
-		public Event(IConnection connection, string message)
+		public Command(IConnection connection, int message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public string Message { get; }
+		public int Message { get; }
 	}
 
-	struct Handler : IHandler<string, Event>
+	struct Handler : IHandler<int, Command>
 	{
-		public async Task Execute(Event @event)
+		public async Task Execute(Command command)
 		{
-			Console.WriteLine(@event.Message);
-			await @event.Connection.Send("Echo: " + @event.Message).To<Event>();
+			Console.WriteLine(command.Message);
+			await command.Connection.Send(command.Message + 1).To<Command>();
+
+			if (command.Message > 30000)
+			{
+				Console.WriteLine();
+			}
 		}
 	}
 }

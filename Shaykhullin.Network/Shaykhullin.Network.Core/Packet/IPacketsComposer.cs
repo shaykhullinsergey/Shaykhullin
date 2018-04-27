@@ -5,10 +5,10 @@ namespace Shaykhullin.Network.Core
 {
 	public interface IPacketsComposer
 	{
-		Task<byte[]> GetBuffer();
-		Task<byte[]> GetBytes(IPacket packet);
-		Task<IMessage> GetMessage(IList<IPacket> packets);
-		Task<IPacket> GetPacket(byte[] data);
+		byte[] GetBuffer();
+		byte[] GetBytes(IPacket packet);
+		IMessage GetMessage(IList<IPacket> packets);
+		IPacket GetPacket(byte[] data);
 		Task<IPacket[]> GetPackets(IMessage message);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace Shaykhullin.Network.Core
 {
-	public interface INode
+	public interface IApplication
 	{
 		
 	}

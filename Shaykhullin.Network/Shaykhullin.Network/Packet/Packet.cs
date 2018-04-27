@@ -5,7 +5,7 @@ namespace Shaykhullin.Network.Core
 		public byte Id { get; set; }
     public ushort Order { get; set; }
     public byte Length { get; set; }
-    public bool End { get; set; }
+    public bool IsLast { get; set; }
     public byte[] Chunk { get; set; }
 	}
 }
