@@ -7,15 +7,16 @@ namespace Shaykhullin.Serializer.Core
 	{
 		public override void Serialize(Stream stream, short data)
 		{
-			var bytes = BitConverter.GetBytes(data);
-			stream.Write(bytes, 0, bytes.Length);
+			var union = new ByteUnion(data);
+			stream.WriteByte(union.Byte1);
+			stream.WriteByte(union.Byte2);
 		}
 
 		public override short Deserialize(Stream stream)
 		{
-			var bytes = new byte[2];
-			stream.Read(bytes, 0, bytes.Length);
-			return BitConverter.ToInt16(bytes, 0);
+			return new ByteUnion(
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte()).Int16;
 		}
 	}
 }

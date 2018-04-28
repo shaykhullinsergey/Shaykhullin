@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Shaykhullin.Serializer;
 using Shaykhullin.DependencyInjection;
 
@@ -9,8 +6,6 @@ namespace Shaykhullin.Network.Core
 {
 	internal class MessageComposer : IMessageComposer
 	{
-		private static readonly Dictionary<Type, Type> GenericArgumentsCache = new Dictionary<Type, Type>();
-
 		private readonly ISerializer serializer;
 		private readonly ICompression compression;
 		private readonly IEncryption encryption;
@@ -38,11 +33,7 @@ namespace Shaykhullin.Network.Core
 			data = encryption.Encrypt(data);
 			var commandId = commandHolder.GetCommand(payload.CommandType);
 
-			return new Message
-			{
-				CommandId = commandId,
-				Data = data
-			};
+			return new Message {CommandId = commandId, Data = data};
 		}
 
 		public IPayload GetPayload(IMessage message)
@@ -56,7 +47,7 @@ namespace Shaykhullin.Network.Core
 			using (var stream = new MemoryStream(messageData))
 			{
 				var data = serializer.Deserialize(stream, genericArgument);
-				return new Payload { CommandType = command, Data = data };
+				return new Payload {CommandType = command, Data = data};
 			}
 		}
 	}

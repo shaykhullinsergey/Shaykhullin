@@ -5,15 +5,15 @@ namespace Shaykhullin.Serializer.Core
 {
 	internal class ConverterDto
 	{
-		public int Alias { get; }
-		public Type Type { get; }
+		public int EntityAlias { get; }
+		public Type EntityType { get; }
 		public Type ConverterType { get; set; }
 		public IConverter Converter { get; set; }
 
-		public ConverterDto(Type type)
+		public ConverterDto(Type entityType)
 		{
-			Type = type;
-			Alias = GetHash(type.Name);
+			EntityType = entityType;
+			EntityAlias = GetHash(entityType.Name);
 		}
 
 		private static unsafe int GetHash(string name)

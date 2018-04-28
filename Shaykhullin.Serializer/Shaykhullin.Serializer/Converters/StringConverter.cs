@@ -9,7 +9,7 @@ namespace Shaykhullin.Serializer.Core
 	{
 		public override string Deserialize(Stream stream)
 		{
-			var union = new Shaykhullin.ByteConverter(
+			var union = new ByteUnion(
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),
@@ -24,7 +24,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public override void Serialize(Stream stream, string data)
 		{
-			var union = new Shaykhullin.ByteConverter(data.Length);
+			var union = new ByteUnion(data.Length);
 			stream.WriteByte(union.Byte1);
 			stream.WriteByte(union.Byte2);
 			stream.WriteByte(union.Byte3);

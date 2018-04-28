@@ -7,9 +7,8 @@ namespace Shaykhullin.DependencyInjection.Core
 {
 	internal class Dependency
 	{
-		private static readonly Dictionary<Type, ConstructorInfo[]> ConstructorCache = new Dictionary<Type, ConstructorInfo[]>();
-		private static readonly Dictionary<Type, Type[]> ParameterCache = new Dictionary<Type, Type[]>();
 		private static readonly Type TransientLifecycleType = typeof(Transient);
+		private static readonly Dictionary<Type, Type[]> ParameterCache = new Dictionary<Type, Type[]>();
 		
 		public Type Registry { get; }
 		public Type Implementation { get; set; }
@@ -49,12 +48,13 @@ namespace Shaykhullin.DependencyInjection.Core
 				ConstructorParameters = parameters;
 				return;
 			}
-				
-			var constructors = GetConstructors();
+
+			var constructors = Implementation.GetConstructors();
 
 			if (constructors.Length == 0)
 			{
 				ConstructorParameters = Array.Empty<Type>();
+				ParameterCache.Add(Implementation, ConstructorParameters);
 			}
 			else
 			{
@@ -69,21 +69,9 @@ namespace Shaykhullin.DependencyInjection.Core
 					parameters[i] = parametersInfo[i].ParameterType;
 				}
 
-				ParameterCache.Add(Implementation, parameters);
 				ConstructorParameters = parameters;
+				ParameterCache.Add(Implementation, ConstructorParameters);
 			}
-		}
-		
-		private ConstructorInfo[] GetConstructors()
-		{
-			if (!ConstructorCache.TryGetValue(Implementation, out var constructors))
-			{
-				constructors = Implementation.GetConstructors();
-
-				ConstructorCache.Add(Implementation, constructors);
-			}
-
-			return constructors;
 		}
 	}
 }

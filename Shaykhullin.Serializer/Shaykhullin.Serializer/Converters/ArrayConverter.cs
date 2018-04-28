@@ -20,12 +20,16 @@ namespace Shaykhullin.Serializer.Core
 		public override void Serialize(Stream stream, Array elements)
 		{
 			var elementType = elements.GetType().GetElementType();
+			
+			var union = new ByteUnion(elements.Length);
+			stream.WriteByte(union.Byte1);
+			stream.WriteByte(union.Byte2);
+			stream.WriteByte(union.Byte3);
+			stream.WriteByte(union.Byte4);
 
-			stream.Write(BitConverter.GetBytes(elements.Length), 0, 4);
-
-			foreach (var element in elements)
+			for (var i = 0; i < elements.Length; i++)
 			{
-				serializer.Serialize(stream, element, elementType);
+				serializer.Serialize(stream, elements.GetValue(i), elementType);
 			}
 		}
 
@@ -33,13 +37,15 @@ namespace Shaykhullin.Serializer.Core
 		{
 			var elementType = type.GetElementType();
 
-			var lengthBuffer = new byte[4];
-			stream.Read(lengthBuffer, 0, 4);
-			var length = BitConverter.ToInt32(lengthBuffer, 0);
-
+			var length = new ByteUnion(
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte()).Int32;
+			
 			var array = Array.CreateInstance(elementType, length);
 
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				array.SetValue(serializer.Deserialize(stream, elementType), i);
 			}

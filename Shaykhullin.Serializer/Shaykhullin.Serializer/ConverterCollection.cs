@@ -29,7 +29,7 @@ namespace Shaykhullin.Serializer.Core
 			if (TryGetDto(type) == null)
 			{
 				var dto = new ConverterDto(type);
-				aliases.Add(dto.Alias, dto.Type);
+				aliases.Add(dto.EntityAlias, dto.EntityType);
 				converters.Add(type, dto);
 			}
 		}
@@ -46,7 +46,7 @@ namespace Shaykhullin.Serializer.Core
 				{
 					ConverterType = converterType
 				});
-				aliases.Add(dto.Alias, dto.Type);
+				aliases.Add(dto.EntityAlias, dto.EntityType);
 			}
 		}
 

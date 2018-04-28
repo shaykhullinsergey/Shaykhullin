@@ -24,7 +24,7 @@ namespace Shaykhullin.Network.Core
 			var chunk = GetBuffer();
 			Array.Copy(data, HeaderSize, chunk, 0, PayloadSize);
 
-			var order = new ByteConverter(data[1], data[2]).UInt16;
+			var order = new ByteUnion(data[1], data[2]).UInt16;
 			
 			return new Packet
 			{
@@ -41,7 +41,7 @@ namespace Shaykhullin.Network.Core
 			var data = GetBuffer();
 			data[0] = packet.Id;
 			
-			var union = new ByteConverter(packet.Order);
+			var union = new ByteUnion(packet.Order);
 			data[1] = union.Byte1;
 			data[2] = union.Byte2;
 			
@@ -63,7 +63,7 @@ namespace Shaykhullin.Network.Core
 
 			var data = new byte[message.Data.Length + 4];
 			
-			var union = new ByteConverter(message.CommandId);
+			var union = new ByteUnion(message.CommandId);
 			data[0] = union.Byte1;
 			data[1] = union.Byte2;
 			data[2] = union.Byte3;
@@ -107,7 +107,7 @@ namespace Shaykhullin.Network.Core
 		{
 			var chunk = packets[0].Chunk;
 			
-			var union = new ByteConverter(chunk[0], chunk[1], chunk[2], chunk[3]);
+			var union = new ByteUnion(chunk[0], chunk[1], chunk[2], chunk[3]);
 			var commandId = union.Int32;
 
 			var dataLength = 0;

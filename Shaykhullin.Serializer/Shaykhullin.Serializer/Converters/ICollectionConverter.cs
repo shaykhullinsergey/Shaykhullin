@@ -9,6 +9,8 @@ namespace Shaykhullin.Serializer.Core
 {
 	internal class CollectionConverter : Converter<ICollection>
 	{
+		private static readonly Type OpenCollectionType = typeof(Collection<>);
+		
 		private readonly IActivator activator;
 		private readonly ISerializer serializer;
 
@@ -27,7 +29,11 @@ namespace Shaykhullin.Serializer.Core
 		{
 			var elementType = elements.GetType().GetGenericArguments()[0];
 
-			stream.Write(BitConverter.GetBytes(elements.Count), 0, 4);
+			var union = new ByteUnion(elements.Count);
+			stream.WriteByte(union.Byte1);
+			stream.WriteByte(union.Byte2);
+			stream.WriteByte(union.Byte3);
+			stream.WriteByte(union.Byte4);
 
 			foreach (var element in elements)
 			{
@@ -39,18 +45,20 @@ namespace Shaykhullin.Serializer.Core
 		{
 			var elementType = type.GetGenericArguments()[0];
 
-			var lengthBuffer = new byte[4];
-			stream.Read(lengthBuffer, 0, 4);
-			var length = BitConverter.ToInt32(lengthBuffer, 0);
+			var length = new ByteUnion(
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte(),
+				(byte)stream.ReadByte()).Int32;
 
 			if (type.IsInterface)
 			{
-				type = typeof(Collection<>).MakeGenericType(elementType);
+				type = OpenCollectionType.MakeGenericType(elementType);
 			}
 
 			var list = (IList)activator.Create(type);
 
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				list.Add(serializer.Deserialize(stream, elementType));
 			}

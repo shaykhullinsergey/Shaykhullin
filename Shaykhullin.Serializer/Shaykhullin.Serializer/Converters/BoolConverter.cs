@@ -11,7 +11,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public override bool Deserialize(Stream stream)
 		{
-			return stream.ReadByte() == 1 ? true : false;
+			return stream.ReadByte() == 1;
 		}
 	}
 }

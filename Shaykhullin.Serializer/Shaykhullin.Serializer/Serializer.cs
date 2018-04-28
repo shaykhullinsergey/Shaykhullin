@@ -106,7 +106,7 @@ namespace Shaykhullin.Serializer.Core
 			{
 				stream.WriteByte(1);
 				
-				var union = new Shaykhullin.ByteConverter(dto.Alias);
+				var union = new ByteUnion(dto.EntityAlias);
 				stream.WriteByte(union.Byte1);
 				stream.WriteByte(union.Byte2);
 				stream.WriteByte(union.Byte3);
@@ -136,7 +136,7 @@ namespace Shaykhullin.Serializer.Core
 				throw new ArgumentNullException(nameof(dataType));
 			}
 			
-			if (!dataType.IsValueType || (Nullable.GetUnderlyingType(dataType) != null))
+			if (!dataType.IsValueType || Nullable.GetUnderlyingType(dataType) != null)
 			{
 				if (stream.ReadByte() == 0)
 				{
@@ -156,22 +156,23 @@ namespace Shaykhullin.Serializer.Core
 				var aliasBytes = new byte[4];
 				stream.Read(aliasBytes, 0, aliasBytes.Length);
 				
-				var alias = new Shaykhullin.ByteConverter(aliasBytes[0], aliasBytes[1], aliasBytes[2], aliasBytes[3]).Int32;
+				var alias = new ByteUnion(aliasBytes[0], aliasBytes[1], aliasBytes[2], aliasBytes[3]).Int32;
 				
 				dataType = converterContainer.GetTypeFromAlias(alias);
 			}
 			
 			var instance = activator.Create(dataType);
 
-			foreach (var propertyInfo in EnsureProperties(dataType))
+			var propertyInfo = EnsureProperties(dataType);
+			for (var i = 0; i < propertyInfo.Length; i++)
 			{
-				propertyInfo.SetValue(instance, Deserialize(stream, propertyInfo.PropertyType));
+				propertyInfo[i].SetValue(instance, Deserialize(stream, propertyInfo[i].PropertyType));
 			}
 
 			return instance;
 		}
 
-		private IEnumerable<PropertyInfo> EnsureProperties(Type type)
+		private PropertyInfo[] EnsureProperties(Type type)
 		{
 			if (disposed)
 			{
@@ -200,6 +201,7 @@ namespace Shaykhullin.Serializer.Core
 		{
 			if (!disposed)
 			{
+				properties.Clear();
 				disposed = true;
 			}
 		}
