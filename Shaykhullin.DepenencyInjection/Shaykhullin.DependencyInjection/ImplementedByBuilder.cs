@@ -38,8 +38,7 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public void For(Type type)
 		{
-			new LifecycleBuilder(dependency)
-				.For(type);
+			new LifecycleBuilder(dependency).For(type);
 		}
 
 		public IForBuilder As<TLifecycle>() where TLifecycle : ILifecycle
@@ -49,8 +48,7 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public IForBuilder As(Type lifecycle)
 		{
-			return new LifecycleBuilder(dependency)
-				.As(lifecycle);
+			return new LifecycleBuilder(dependency).As(lifecycle);
 		}
 	}
 }

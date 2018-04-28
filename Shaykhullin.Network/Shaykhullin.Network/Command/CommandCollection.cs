@@ -8,8 +8,8 @@ namespace Shaykhullin.Network.Core
 	{
 		private static readonly Dictionary<Type, Type> GenericArgumentsCache = new Dictionary<Type, Type>();
 		
-		private readonly Dictionary<int, Type> commands = new Dictionary<int, Type>();
 		private readonly IContainerConfig config;
+		private readonly Dictionary<int, Type> commands = new Dictionary<int, Type>();
 
 		public CommandCollection(IContainerConfig config)
 		{

@@ -16,12 +16,9 @@ namespace Shaykhullin.Activator.Core
 
 		public object Create(Type type, params object[] args)
 		{
-			if(args.Length == 0)
-			{
-				return System.Activator.CreateInstance(type);
-			}
-
-			return System.Activator.CreateInstance(type, args);
+			return args.Length == 0 
+				? System.Activator.CreateInstance(type) 
+				: System.Activator.CreateInstance(type, args);
 		}
 	}
 }

@@ -23,9 +23,9 @@ namespace Shaykhullin.DependencyInjection
 			return dto;
 		}
 
-		public Dependency TryGetDependency(Type register, Type @for = null)
+		public Dependency TryGetDependency(Type register, Type forDependency = null)
 		{
-			if (@for == null)
+			if (forDependency == null)
 			{
 				for (var i = 0; i < dependencies.Count; i++)
 				{
@@ -41,7 +41,7 @@ namespace Shaykhullin.DependencyInjection
 
 				for (var i = 0; i < dependencies.Count; i++)
 				{
-					if (dependencies[i].Registry == register && dependencies[i].ForDependency == @for)
+					if (dependencies[i].Registry == register && dependencies[i].ForDependency == forDependency)
 					{
 						return dependencies[i];
 					}
@@ -58,7 +58,7 @@ namespace Shaykhullin.DependencyInjection
 				}
 			}
 
-			return parent?.TryGetDependency(register, @for);
+			return parent?.TryGetDependency(register, forDependency);
 		}
 	}
 }
