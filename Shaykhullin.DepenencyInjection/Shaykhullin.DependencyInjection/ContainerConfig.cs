@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Shaykhullin.Activator;
+using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection.Core;
 
 
@@ -10,17 +11,20 @@ namespace Shaykhullin.DependencyInjection
 	{
 		private bool disposed;
 		private readonly IActivator activator;
+		private readonly IArrayPool arrayPool;
 		private readonly DependencyContainer dependencyContainer;
-
+		
 		public ContainerConfig()
 		{
 			activator = new ActivatorConfig().Create();
+			arrayPool = new ArrayPoolConfig().Create();
 			dependencyContainer = new DependencyContainer();
 		}
 
 		internal ContainerConfig(ContainerConfig parent) 
 		{
 			activator = parent.activator;
+			arrayPool = parent.arrayPool;
 			dependencyContainer = new DependencyContainer(parent.dependencyContainer);
 		}
 
@@ -82,7 +86,7 @@ namespace Shaykhullin.DependencyInjection
 				throw new ObjectDisposedException(nameof(ContainerConfig));
 			}
 			
-			return new Container(activator, dependencyContainer);
+			return new Container(activator, dependencyContainer, arrayPool);
 		}
 
 		public void Dispose()

@@ -1,4 +1,8 @@
+using System;
 using System.IO;
+using System.Numerics;
+using System.Security.Cryptography;
+using Shaykhullin.ArrayPool;
 using Shaykhullin.Serializer;
 using Shaykhullin.DependencyInjection;
 
@@ -21,33 +25,57 @@ namespace Shaykhullin.Network.Core
 
 		public IMessage GetMessage(IPayload payload)
 		{
-			byte[] data;
-
 			using (var stream = new MemoryStream())
 			{
+				var commandId = commandHolder.GetCommand(payload.CommandType);
+				
+				var union = new ByteUnion(commandId);
+				stream.WriteByte(union.Byte1);
+				stream.WriteByte(union.Byte2);
+				stream.WriteByte(union.Byte3);
+				stream.WriteByte(union.Byte4);
+
 				serializer.Serialize(stream, payload.Data);
-				data = stream.ToArray();
+				compression.Compress(stream);
+				encryption.Encrypt(stream);
+	
+				return new Message
+				{
+					DataStreamBuffer = stream.GetBuffer(),
+					DataStreamLength = (int)stream.Length
+				};
 			}
-
-			data = compression.Compress(data);
-			data = encryption.Encrypt(data);
-			var commandId = commandHolder.GetCommand(payload.CommandType);
-
-			return new Message {CommandId = commandId, Data = data};
 		}
 
 		public IPayload GetPayload(IMessage message)
 		{
-			var messageData = encryption.Decrypt(message.Data);
-			messageData = compression.Decompress(messageData);
-
-			var command = commandHolder.GetCommand(message.CommandId);
-			var genericArgument = commandHolder.GetGenericArgument(command);
-
-			using (var stream = new MemoryStream(messageData))
+			using (var stream = new MemoryStream(message.DataStreamBuffer, 0, message.DataStreamLength))
 			{
-				var data = serializer.Deserialize(stream, genericArgument);
-				return new Payload {CommandType = command, Data = data};
+				stream.Position = 0;
+				
+				var commandId = new ByteUnion(
+					(byte)stream.ReadByte(),
+					(byte)stream.ReadByte(),
+					(byte)stream.ReadByte(),
+					(byte)stream.ReadByte()).Int32;
+				
+				var commandType = commandHolder.GetCommand(commandId);
+				var genericArgument = commandHolder.GetGenericArgument(commandType);
+				
+				encryption.Decrypt(stream);
+				compression.Decompress(stream);
+
+				try
+				{
+					var data = serializer.Deserialize(stream, genericArgument);
+					return new Payload { CommandType = commandType, Data = data };
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e);
+					throw;
+				}
+				
 			}
 		}
 	}

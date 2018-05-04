@@ -10,6 +10,8 @@ namespace Shaykhullin.Serializer.Core
 {
 	internal class Serializer : ISerializer
 	{
+		private static BindingFlags PublicInstanceBindingFlags = BindingFlags.Public | BindingFlags.Instance;
+		
 		private bool disposed;
 		private readonly IActivator activator;
 		private readonly ConverterContainer converterContainer;
@@ -187,7 +189,7 @@ namespace Shaykhullin.Serializer.Core
 			if (!properties.TryGetValue(type, out var propertiesInfo))
 			{
 				propertiesInfo = type
-					.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+					.GetProperties(PublicInstanceBindingFlags)
 					.Where(x => x.CanRead && x.CanWrite)
 					.ToArray();
 

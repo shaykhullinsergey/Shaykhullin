@@ -1,8 +1,10 @@
-﻿namespace Shaykhullin.Network.Core
+﻿using System.IO;
+
+namespace Shaykhullin.Network.Core
 {
 	public interface ICompression
 	{
-		byte[] Compress(byte[] data);
-		byte[] Decompress(byte[] data);
+		void Compress(Stream stream);
+		void Decompress(Stream stream);
 	}
 }

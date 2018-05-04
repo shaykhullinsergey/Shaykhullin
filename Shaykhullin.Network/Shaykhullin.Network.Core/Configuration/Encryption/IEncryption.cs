@@ -1,8 +1,10 @@
-﻿namespace Shaykhullin.Network.Core
+﻿using System.IO;
+
+namespace Shaykhullin.Network.Core
 {
 	public interface IEncryption
 	{
-		byte[] Encrypt(byte[] data);
-		byte[] Decrypt(byte[] data);
+		void Encrypt(Stream stream);
+		void Decrypt(Stream stream);
 	}
 }

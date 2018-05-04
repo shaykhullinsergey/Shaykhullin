@@ -14,7 +14,7 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.On<int>().In<Command>().Call<Handler>();
+			config.On<string>().In<Command>().Call<Handler>();
 
 			using (var app = config.Create("127.0.0.1", 4002))
 			{
@@ -23,29 +23,24 @@ namespace Shaykhullin.Sandbox.Server
 		}
 	}
 
-	struct Command : ICommand<int>
+	class Command : ICommand<string>
 	{
-		public Command(IConnection connection, int message)
+		public Command(IConnection connection, string message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public int Message { get; }
+		public string Message { get; }
 	}
 
-	struct Handler : IHandler<int, Command>
+	class Handler : IHandler<string, Command>
 	{
-		public async Task Execute(Command command)
+		public Task Execute(Command command)
 		{
 			Console.WriteLine(command.Message);
-			await command.Connection.Send(command.Message + 1).To<Command>();
-
-			if (command.Message > 30000)
-			{
-				Console.WriteLine();
-			}
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace Shaykhullin.Network.Core
 {
 	public class HandlerCollection
 	{
-		private readonly Dictionary<Type, List<Type>> handlers = new Dictionary<Type, List<Type>>();
+		private readonly Dictionary<Type, List<IHandlerDto>> handlers = new Dictionary<Type, List<IHandlerDto>>();
 		private readonly IContainerConfig config;
 
 		public HandlerCollection(IContainerConfig config)
@@ -23,24 +23,25 @@ namespace Shaykhullin.Network.Core
 			
 			if (handlers.TryGetValue(command, out var list))
 			{
-				list.Add(handler);
+				list.Add(new HandlerDto(handler));
 			}
 			else
 			{
 				config.Register<THandler>();
-				handlers.Add(command, new List<Type> { handler });
+				handlers.Add(command, new List<IHandlerDto> { new HandlerDto(handler) });
 			}
 		}
 
-		public IList<Type> GetHandlers(Type command)
+		public IList<IHandlerDto> GetHandlers(Type command)
 		{
 			if(!handlers.TryGetValue(command, out var list))
 			{
-				list = new List<Type>();
+				list = new List<IHandlerDto>();
 				handlers.Add(command, list);
 			}
 
 			return list;
 		}
 	}
+
 }

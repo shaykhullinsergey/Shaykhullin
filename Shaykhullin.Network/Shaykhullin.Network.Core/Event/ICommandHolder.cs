@@ -7,7 +7,7 @@ namespace Shaykhullin.Network.Core
 	{
 		Type GetCommand(int id);
 		int GetCommand(Type command);
-		IList<Type> GetHandlers(IPayload payload);
+		IList<IHandlerDto> GetHandlers(IPayload payload);
 		Type GetGenericArgument(Type command);
 	}
 }

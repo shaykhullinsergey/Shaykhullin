@@ -1,15 +1,15 @@
+using System.IO;
+
 namespace Shaykhullin.Network.Core
 {
-  internal class Compression : ICompression
-  {
-    public byte[] Compress(byte[] data)
-    {
-      return data;
-    }
+	internal class Compression : ICompression
+	{
+		public void Compress(Stream stream)
+		{
+		}
 
-    public byte[] Decompress(byte[] data)
-    {
-      return data;
-    }
-  }
+		public void Decompress(Stream stream)
+		{
+		}
+	}
 }

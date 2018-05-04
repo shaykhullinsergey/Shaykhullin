@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Shaykhullin.Activator;
+using Shaykhullin.ArrayPool;
 
 namespace Shaykhullin.DependencyInjection.Core
 {
@@ -9,11 +10,13 @@ namespace Shaykhullin.DependencyInjection.Core
 		private bool disposed;
 		private readonly IActivator activator;
 		private readonly DependencyContainer dependencyContainer;
+		private readonly IArrayPool arrayPool;
 
-		public Container(IActivator activator, DependencyContainer dependencyContainer)
+		public Container(IActivator activator, DependencyContainer dependencyContainer, IArrayPool arrayPool)
 		{
 			this.activator = activator ?? throw new ArgumentNullException(nameof(activator));
 			this.dependencyContainer = dependencyContainer ?? throw new ArgumentNullException(nameof(dependencyContainer));
+			this.arrayPool = arrayPool;
 		}
 
 		public TResolve Resolve<TResolve>()
@@ -63,14 +66,18 @@ namespace Shaykhullin.DependencyInjection.Core
 
 			var arguments = CreateArguments(registry, dependency.ConstructorParameters);
 
-			return dependency.Lifecycle.Resolve(dependency.Implementation, arguments);
+			var instance = dependency.Lifecycle.Resolve(dependency.Implementation, arguments); 
+			
+			arrayPool.ReleaseArray(arguments);
+
+			return instance;
 		}
 
 		private object[] CreateArguments(Type registry, Type[] parameters)
 		{
 			var arguments = parameters.Length == 0
 				? Array.Empty<object>()
-				: new object[parameters.Length];
+				: arrayPool.GetArrayExact<object>(parameters.Length);
 
 			for (var i = 0; i < arguments.Length; i++)
 			{

@@ -1,4 +1,5 @@
 ﻿using System;
+using Shaykhullin.ArrayPool;
 using Shaykhullin.Network.Core;
 
 using Shaykhullin.Serializer;
@@ -22,6 +23,10 @@ namespace Shaykhullin.Network
 				
 			rootConfig.Register<ISerializer>()
 				.ImplementedBy(c => c.Resolve<ISerializerConfig>().Create())
+				.As<Singleton>();
+
+			rootConfig.Register<IArrayPool>()
+				.ImplementedBy(c => new ArrayPoolConfig().Create())
 				.As<Singleton>();
 			
 			rootConfig.Register<ICompression>()

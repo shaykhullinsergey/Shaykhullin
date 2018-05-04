@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Shaykhullin.DependencyInjection.Tests
@@ -35,7 +38,7 @@ namespace Shaykhullin.DependencyInjection.Tests
 			var config = new ContainerConfig();
 
 			config.Register<Test>()
-				.ImplementedBy<NextTest>()
+				.ImplementedBy<NextTest>(c => new NextTest())
 				.As<Singleton>();
 
 			using (var container = config.Create())

@@ -1,13 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.2</LangVersion>
     <Version>1.0.10</Version>
   </PropertyGroup>
-
   <ItemGroup>
+    <ProjectReference Include="..\..\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin\Shaykhullin.csproj" />
     <ProjectReference Include="..\Shaykhullin.Activator.Core\Shaykhullin.Activator.Core.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,15 +1,15 @@
+using System.IO;
+
 namespace Shaykhullin.Network.Core
 {
-  internal class Encryption : IEncryption
-  {
-    public byte[] Encrypt(byte[] data)
-    {
-      return data;
-    }
+	internal class Encryption : IEncryption
+	{
+		public void Encrypt(Stream stream)
+		{
+		}
 
-    public byte[] Decrypt(byte[] data)
-    {
-      return data;
-    }
-  }
+		public void Decrypt(Stream stream)
+		{
+		}
+	}
 }

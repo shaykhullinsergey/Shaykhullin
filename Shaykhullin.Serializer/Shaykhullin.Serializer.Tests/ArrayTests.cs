@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
+using System;
 
 namespace Shaykhullin.Serializer.Tests
 {
@@ -13,7 +12,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			using (var stream = CreateStream())
 			{
-				var input = new int[] { 3, 2, 1, 2, 3 };
+				var input = new[] { 3, 2, 1, 2, 3 };
 				serializer.Serialize(stream, input);
 				stream.Position = 0;
 				var result = serializer.Deserialize<int[]>(stream);
@@ -30,7 +29,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			using (var stream = CreateStream())
 			{
-				var input = new string[] { "ABC", "DEG", "HIJ" };
+				var input = new[] { "ABC", "DEG", "HIJ" };
 				serializer.Serialize(stream, input);
 				stream.Position = 0;
 				var result = serializer.Deserialize<string[]>(stream);
@@ -55,7 +54,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			using (var stream = CreateStream())
 			{
-				var input = new SimplePerson[]
+				var input = new[]
 				{
 					new SimplePerson
 					{
@@ -75,7 +74,7 @@ namespace Shaykhullin.Serializer.Tests
 
 				Assert.Equal(2, result.Length);
 
-				for (int i = 0; i < input.Length; i++)
+				for (var i = 0; i < input.Length; i++)
 				{
 					Assert.Equal(input[i].Name, result[i].Name);
 					Assert.Equal(input[i].Age, result[i].Age);
@@ -97,13 +96,13 @@ namespace Shaykhullin.Serializer.Tests
 
 			var serializer = config.Create();
 
-			var input = new ComplexPerson[]
+			var input = new[]
 			{
 				new ComplexPerson
 				{
 					Name = "Sarah",
 					Age = 37,
-					Children = new ComplexPerson[]
+					Children = new[]
 					{
 						new ComplexPerson
 						{
@@ -117,7 +116,7 @@ namespace Shaykhullin.Serializer.Tests
 				{
 					Name = "Julia",
 					Age = 42,
-					Children = new ComplexPerson[]
+					Children = new[]
 					{
 						new ComplexPerson
 						{
@@ -200,7 +199,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var serializer = config.Create();
 
-			var input = new A[]
+			var input = new[]
 			{
 				new B
 				{
@@ -218,6 +217,12 @@ namespace Shaykhullin.Serializer.Tests
 				serializer.Serialize(stream, input);
 				stream.Position = 0;
 				var result = serializer.Deserialize<A[]>(stream);
+
+				var a1 = Assert.IsType<A>(result[0]);
+				Assert.Equal(11, a1.Prop1);
+				
+				var a2 = Assert.IsType<A>(result[1]);
+				Assert.Equal(33, a2.Prop1);
 			}
 		}
 
@@ -229,7 +234,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var serializer = config.Create();
 
-			var input = new BasePerson[]
+			var input = new[]
 			{
 				new BasePerson
 				{
@@ -350,7 +355,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var inputDateTime = new DateTime(2018, 01, 02, 03, 04, 05, DateTimeKind.Unspecified);
 
-			var input = new[] { inputDateTime, inputDateTime, inputDateTime, inputDateTime, inputDateTime, };
+			var input = new[] { inputDateTime, inputDateTime, inputDateTime, inputDateTime, inputDateTime };
 
 			using (var stream = CreateStream())
 			{

@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using Xunit;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Xunit;
 
 namespace Shaykhullin.Serializer.Tests
 {
@@ -12,7 +11,7 @@ namespace Shaykhullin.Serializer.Tests
 		{
 			var serializer = new SerializerConfig().Create();
 
-			Collection<int> input = new Collection<int> { 1, 2, 3 };
+			var input = new Collection<int> { 1, 2, 3 };
 
 			using (var stream = CreateStream())
 			{
@@ -32,7 +31,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			using (var stream = CreateStream())
 			{
-				Collection<string> input = new Collection<string> { "ABC", "DEG", "HIJ" };
+				var input = new Collection<string> { "ABC", "DEG", "HIJ" };
 				serializer.Serialize(stream, input);
 				stream.Position = 0;
 				var result = serializer.Deserialize<Collection<string>>(stream);
@@ -59,7 +58,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			using (var stream = CreateStream())
 			{
-				Collection<SimplePerson> input = new Collection<SimplePerson>
+				var input = new Collection<SimplePerson>
 				{
 					new SimplePerson
 					{
@@ -199,7 +198,7 @@ namespace Shaykhullin.Serializer.Tests
 
 			var serializer = config.Create();
 
-			Collection<BasePerson> input = new Collection<BasePerson>
+			var input = new Collection<BasePerson>
 			{
 				new BasePerson
 				{

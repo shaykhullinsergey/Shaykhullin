@@ -16,15 +16,14 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 
-		public Task RaiseCommand(IPayload payload)
+		public async Task RaiseCommand(IPayload payload)
 		{
 			using (var container = config.Create())
 			{
-				var handlerTypes = container.Resolve<ICommandHolder>()
+				var handlerDtos = container
+					.Resolve<ICommandHolder>()
 					.GetHandlers(payload);
 
-				var handlers = new List<Task>();
-				
 				using (var scope = config.CreateScope())
 				{
 					var data = payload.Data;
@@ -34,23 +33,23 @@ namespace Shaykhullin.Network.Core
 
 					using (var scopeContainer = scope.Create())
 					{
-						var command = new[] { scopeContainer.Resolve(payload.CommandType) };
+						var command = scopeContainer.Resolve(payload.CommandType);
 
-						for (var i = 0; i < handlerTypes.Count; i++)
+						for (var i = 0; i < handlerDtos.Count; i++)
 						{
-							var instanse = scopeContainer.Resolve(handlerTypes[i]);
+							var instanse = scopeContainer.Resolve(handlerDtos[i].HandlerType);
 
-							handlers.Add((Task)handlerTypes[i].InvokeMember(
-								"Execute",
-								BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod,
-								null,
-								instanse,
-								command));
+							try
+							{
+								await handlerDtos[i].ExecuteMethod(instanse, command);
+							}
+							catch (Exception exception)
+							{
+								await RaiseCommand(new ErrorPayload($"Handler {handlerDtos[i].GetType()}", exception));
+							}
 						}
 					}
 				}
-
-				return Task.WhenAll(handlers);
 			}
 		}
 	}

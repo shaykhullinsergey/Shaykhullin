@@ -6,12 +6,13 @@ namespace Shaykhullin.Network.Core
 	{
 		private static readonly Type ErrorCommandType = typeof(Error);
 		
-		public ErrorPayload(string reason)
+		public ErrorPayload(string reason, Exception exception = null)
 		{
 			CommandType = ErrorCommandType;
 			Data = new ErrorInfo
 			{
-				Reason = reason
+				Reason = reason,
+				Exception = exception
 			};
 		}
 	}

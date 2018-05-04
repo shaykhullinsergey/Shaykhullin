@@ -43,7 +43,7 @@ namespace Shaykhullin.Network.Core
 
 		public async Task WritePacket(IPacket packet)
 		{
-			var data = packetsComposer.GetBytes(packet);
+			var data = packet.Buffer;
 
 			try
 			{
@@ -82,6 +82,7 @@ namespace Shaykhullin.Network.Core
 			await commandRaiser.RaiseCommand(new DisconnectPayload("Connection disposed")).ConfigureAwait(false);
 		}
 
+		private readonly byte[] isAliveBuffer = new byte[1];
 		private bool isAlive;
 		private bool IsAlive
 		{
@@ -99,9 +100,7 @@ namespace Shaykhullin.Network.Core
 						return isAlive = true;
 					}
 
-					var buffer = new byte[1];
-
-					if (tcpClient.Client.Receive(buffer, SocketFlags.Peek) == 0)
+					if (tcpClient.Client.Receive(isAliveBuffer, SocketFlags.Peek) == 0)
 					{
 						return false;
 					}

@@ -6,6 +6,6 @@ namespace Shaykhullin.Network.Core
     public ushort Order { get; set; }
     public byte Length { get; set; }
     public bool IsLast { get; set; }
-    public byte[] Chunk { get; set; }
+    public byte[] Buffer { get; set; }
 	}
 }

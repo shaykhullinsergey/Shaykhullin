@@ -2,7 +2,7 @@
 {
 	public interface IMessage
 	{
-		int CommandId { get; }
-		byte[] Data { get; }
+		byte[] DataStreamBuffer { get; }
+		int DataStreamLength { get; }
 	}
 }

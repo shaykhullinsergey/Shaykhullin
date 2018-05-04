@@ -6,6 +6,6 @@
 		ushort Order { get; }
 		byte Length { get; }
 		bool IsLast { get; }
-		byte[] Chunk { get; }
+		byte[] Buffer { get; }
 	}
 }

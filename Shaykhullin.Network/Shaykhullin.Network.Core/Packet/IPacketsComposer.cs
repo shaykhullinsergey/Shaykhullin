@@ -6,9 +6,9 @@ namespace Shaykhullin.Network.Core
 	public interface IPacketsComposer
 	{
 		byte[] GetBuffer();
-		byte[] GetBytes(IPacket packet);
+		void ReleaseBuffer(byte[] buffer);
 		IMessage GetMessage(IList<IPacket> packets);
-		IPacket GetPacket(byte[] data);
+		IPacket GetPacket(byte[] buffer);
 		Task<IPacket[]> GetPackets(IMessage message);
 	}
 }

@@ -1,8 +1,10 @@
+using System.IO;
+
 namespace Shaykhullin.Network.Core
 {
 	internal class Message : IMessage
 	{
-		public int CommandId { get; set; }
-		public byte[] Data { get; set; }
+		public byte[] DataStreamBuffer { get; set; }
+		public int DataStreamLength { get; set; }
 	}
 }

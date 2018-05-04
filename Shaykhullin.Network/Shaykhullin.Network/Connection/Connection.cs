@@ -77,6 +77,13 @@ namespace Shaykhullin.Network.Core
 					var message = packetsComposer.GetMessage(packets);
 					var payload = messageComposer.GetPayload(message);
 
+					for (var i = 0; i < packets.Count; i++)
+					{
+						packetsComposer.ReleaseBuffer(packets[i].Buffer);
+					}
+					
+					packetsComposer.ReleaseBuffer(message.DataStreamBuffer);
+					
 					await commandRaiser.RaiseCommand(payload).ConfigureAwait(false);
 				}
 			}
