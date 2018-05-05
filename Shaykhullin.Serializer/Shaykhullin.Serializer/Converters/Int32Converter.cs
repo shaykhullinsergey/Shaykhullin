@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -7,7 +6,7 @@ namespace Shaykhullin.Serializer.Core
 	{
 		public override void Serialize(Stream stream, int data)
 		{
-			var union = new ByteUnion(data);
+			var union = new UnifiedUnion(data);
 			stream.WriteByte(union.Byte1);
 			stream.WriteByte(union.Byte2);
 			stream.WriteByte(union.Byte3);
@@ -16,7 +15,7 @@ namespace Shaykhullin.Serializer.Core
 
 		public override int Deserialize(Stream stream)
 		{
-			return new ByteUnion(
+			return new UnifiedUnion(
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),

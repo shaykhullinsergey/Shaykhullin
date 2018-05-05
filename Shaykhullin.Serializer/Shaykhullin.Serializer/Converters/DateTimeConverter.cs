@@ -9,7 +9,7 @@ namespace Shaykhullin.Serializer.Core
 		{
 			var binary = data.ToBinary();
 			
-			var union = new ByteUnion(binary);
+			var union = new UnifiedUnion(binary);
 			stream.WriteByte(union.Byte1);
 			stream.WriteByte(union.Byte2);
 			stream.WriteByte(union.Byte3);
@@ -22,7 +22,7 @@ namespace Shaykhullin.Serializer.Core
 		
 		public override DateTime Deserialize(Stream stream)
 		{
-			var binary = new ByteUnion(
+			var binary = new UnifiedUnion(
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),

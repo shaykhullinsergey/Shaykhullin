@@ -3,7 +3,7 @@
 namespace Shaykhullin
 {
 	[StructLayout(LayoutKind.Explicit)]
-	public readonly struct ByteUnion
+	public readonly struct UnifiedUnion
 	{
 		[FieldOffset(0)] public readonly byte Byte1;
 		[FieldOffset(1)] public readonly byte Byte2;
@@ -27,13 +27,13 @@ namespace Shaykhullin
 		
 		[FieldOffset(0)] public readonly double Double;
 
-		public ByteUnion(byte byte1, byte byte2) : this()
+		public UnifiedUnion(byte byte1, byte byte2) : this()
 		{
 			Byte1 = byte1;
 			Byte2 = byte2;
 		}
 
-		public ByteUnion(byte byte1, byte byte2, byte byte3, byte byte4) : this()
+		public UnifiedUnion(byte byte1, byte byte2, byte byte3, byte byte4) : this()
 		{
 			Byte1 = byte1;
 			Byte2 = byte2;
@@ -41,7 +41,7 @@ namespace Shaykhullin
 			Byte4 = byte4;
 		}
 
-		public ByteUnion(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) : this()
+		public UnifiedUnion(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) : this()
 		{
 			Byte1 = byte1;
 			Byte2 = byte2;
@@ -53,42 +53,42 @@ namespace Shaykhullin
 			Byte8 = byte8;
 		}
 
-		public ByteUnion(short int16) : this()
+		public UnifiedUnion(short int16) : this()
 		{
 			Int16 = int16;
 		}
 
-		public ByteUnion(ushort uInt16) : this()
+		public UnifiedUnion(ushort uInt16) : this()
 		{
 			UInt16 = uInt16;
 		}
 
-		public ByteUnion(int int32) : this()
+		public UnifiedUnion(int int32) : this()
 		{
 			Int32 = int32;
 		}
 
-		public ByteUnion(float single) : this()
+		public UnifiedUnion(float single) : this()
 		{
 			Single = single;
 		}
 
-		public ByteUnion(double d) : this()
+		public UnifiedUnion(double d) : this()
 		{
 			Double = d;
 		}
 
-		public ByteUnion(uint uInt32) : this()
+		public UnifiedUnion(uint uInt32) : this()
 		{
 			UInt32 = uInt32;
 		}
 
-		public ByteUnion(ulong uInt64) : this()
+		public UnifiedUnion(ulong uInt64) : this()
 		{
 			UInt64 = uInt64;
 		}
 
-		public ByteUnion(long int64) : this()
+		public UnifiedUnion(long int64) : this()
 		{
 			Int64 = int64;
 		}

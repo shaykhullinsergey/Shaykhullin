@@ -4,5 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin\Shaykhullin.csproj" />
   </ItemGroup>
 </Project>

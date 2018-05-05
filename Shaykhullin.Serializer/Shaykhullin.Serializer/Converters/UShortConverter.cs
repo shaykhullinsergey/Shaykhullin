@@ -7,14 +7,14 @@ namespace Shaykhullin.Serializer.Core
 	{
 		public override void Serialize(Stream stream, ushort data)
 		{
-			var union = new ByteUnion(data);
+			var union = new UnifiedUnion(data);
 			stream.WriteByte(union.Byte1);
 			stream.WriteByte(union.Byte2);
 		}
 
 		public override ushort Deserialize(Stream stream)
 		{
-			return new ByteUnion(
+			return new UnifiedUnion(
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte()).UInt16;
 		}

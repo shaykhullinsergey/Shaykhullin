@@ -29,12 +29,8 @@ namespace Shaykhullin.Network.Core
 			{
 				var commandId = commandHolder.GetCommand(payload.CommandType);
 
-				var union = new ByteUnion(commandId);
-				stream.WriteByte(union.Byte1);
-				stream.WriteByte(union.Byte2);
-				stream.WriteByte(union.Byte3);
-				stream.WriteByte(union.Byte4);
-
+				stream.WriteInt32(commandId);
+				
 				serializer.Serialize(stream, payload.Data);
 				compression.Compress(stream);
 				encryption.Encrypt(stream);
@@ -51,11 +47,7 @@ namespace Shaykhullin.Network.Core
 		{
 			using (var stream = new MemoryStream(message.DataStreamBuffer))
 			{
-				var commandId = new ByteUnion(
-					(byte)stream.ReadByte(),
-					(byte)stream.ReadByte(),
-					(byte)stream.ReadByte(),
-					(byte)stream.ReadByte()).Int32;
+				var commandId = stream.ReadInt32();
 
 				var commandType = commandHolder.GetCommand(commandId);
 				var genericArgument = commandHolder.GetGenericArgument(commandType);

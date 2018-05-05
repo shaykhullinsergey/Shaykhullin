@@ -31,7 +31,7 @@ namespace Shaykhullin.Serializer.Core
 			var elements = data.Cast<object>().ToList();
 			var elementType = data.GetType().GetGenericArguments()[0];
 
-			var union = new ByteUnion(elements.Count);
+			var union = new UnifiedUnion(elements.Count);
 			stream.WriteByte(union.Byte1);
 			stream.WriteByte(union.Byte2);
 			stream.WriteByte(union.Byte3);
@@ -47,7 +47,7 @@ namespace Shaykhullin.Serializer.Core
 		{
 			var elementType = type.GetGenericArguments()[0];
 
-			var length = new ByteUnion(
+			var length = new UnifiedUnion(
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),
 				(byte)stream.ReadByte(),

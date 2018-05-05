@@ -108,7 +108,7 @@ namespace Shaykhullin.Serializer.Core
 			{
 				stream.WriteByte(1);
 				
-				var union = new ByteUnion(dto.EntityAlias);
+				var union = new UnifiedUnion(dto.EntityAlias);
 				stream.WriteByte(union.Byte1);
 				stream.WriteByte(union.Byte2);
 				stream.WriteByte(union.Byte3);
@@ -158,7 +158,7 @@ namespace Shaykhullin.Serializer.Core
 				var aliasBytes = new byte[4];
 				stream.Read(aliasBytes, 0, aliasBytes.Length);
 				
-				var alias = new ByteUnion(aliasBytes[0], aliasBytes[1], aliasBytes[2], aliasBytes[3]).Int32;
+				var alias = new UnifiedUnion(aliasBytes[0], aliasBytes[1], aliasBytes[2], aliasBytes[3]).Int32;
 				
 				dataType = converterContainer.GetTypeFromAlias(alias);
 			}

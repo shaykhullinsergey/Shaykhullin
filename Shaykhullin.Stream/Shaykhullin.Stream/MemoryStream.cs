@@ -26,35 +26,49 @@ namespace Shaykhullin.Stream
 			Buffer = buffer;
 		}
 
-		private long pos = 0;
-
-		public override long Position
-		{
-			get => pos;
-			set => pos = value;
-		}
+		public override long Position { get; set; }
 
 		public override int Read(byte[] destination, int offset, int count)
 		{
 			CopyTo(Buffer, Position, destination, offset, count);
 			return count;
 		}
+		
+		public override int ReadByte()
+		{
+			return Buffer[Position++];
+		}
 
+		public int ReadInt32()
+		{
+			return new UnifiedUnion(
+				Buffer[Position++],
+				Buffer[Position++],
+				Buffer[Position++],
+				Buffer[Position++]).Int32;
+		}
+		
 		public override void Write(byte[] source, int offset, int count)
 		{
 			EnsureCapacity(count);
 			CopyTo(source, offset, Buffer, Position, count);
 		}
-
+		
 		public override void WriteByte(byte value)
 		{
 			EnsureCapacity(1);
 			Buffer[Position++] = value;
 		}
 
-		public override int ReadByte()
+		public void WriteInt32(int value)
 		{
-			return Buffer[Position++];
+			EnsureCapacity(4);
+			
+			var union = new UnifiedUnion(value);
+			Buffer[Position++] = union.Byte1;
+			Buffer[Position++] = union.Byte2;
+			Buffer[Position++] = union.Byte3;
+			Buffer[Position++] = union.Byte4;
 		}
 
 		private void EnsureCapacity(int count)
@@ -77,10 +91,10 @@ namespace Shaykhullin.Stream
 				}
 			}
 		}
-
+		
 		private static int CalculateLength(int current, int count)
 		{
-			var length = current == 0 ? 1 : current;
+			var length = current == 0 ? 8 : current;
 
 			while (length < count)
 			{
@@ -89,7 +103,7 @@ namespace Shaykhullin.Stream
 
 			return length;
 		}
-
+		
 		private void CopyTo(byte[] source, long from, byte[] destination, long to, int count)
 		{
 			for (var index = 0; index < count; index++)
@@ -99,7 +113,7 @@ namespace Shaykhullin.Stream
 			
 			Position += count;
 		}
-
+		
 		protected override void Dispose(bool disposing)
 		{
 			arrayPool?.ReleaseArray(Buffer);
