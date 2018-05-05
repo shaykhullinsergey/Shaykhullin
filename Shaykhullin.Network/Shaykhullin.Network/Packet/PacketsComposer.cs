@@ -20,14 +20,8 @@ namespace Shaykhullin.Network.Core
 
 		public IPacket GetPacket(byte[] buffer)
 		{
-			var order = new ByteUnion(buffer[1], buffer[2]).UInt16;
-			
 			return new Packet
 			{
-				Id = buffer[0],
-				Order = order,
-				Length = buffer[3],
-				IsLast = buffer[4] == 1,
 				Buffer = buffer
 			};
 		}
@@ -72,10 +66,6 @@ namespace Shaykhullin.Network.Core
 
 				packets[order] = new Packet
 				{
-					Id = id,
-					Order = (ushort)(order + 1),
-					Length = length,
-					IsLast = end,
 					Buffer = buffer
 				};
 			}

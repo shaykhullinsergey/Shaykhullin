@@ -3,7 +3,6 @@
 	public interface IPacket
 	{
 		byte Id { get; }
-		ushort Order { get; }
 		byte Length { get; }
 		bool IsLast { get; }
 		byte[] Buffer { get; }
