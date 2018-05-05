@@ -11,13 +11,13 @@ namespace Shaykhullin.Sandbox.Client
 		{
  			var config = new ClientConfig();
 
-			config.On<int>().In<Command>().Call<Handler>();
+			config.On<string>().In<Command>().Call<Handler>();
 			
-			using (var app = config.Create("127.0.0.1", 4001))
+			using (var app = config.Create("127.0.0.1", 4002))
 			{
 				using (var connection = await app.Connect())
 				{
-					await connection.Send(1).To<Command>();
+					await connection.Send("1").To<Command>();
 					
 					Thread.Sleep(-1);
 				}
@@ -25,43 +25,25 @@ namespace Shaykhullin.Sandbox.Client
 		}
 	}
 
-	class Command : ICommand<int>
+	class Command : ICommand<string>
 	{
-		public Command(IConnection connection, int message)
+		public Command(IConnection connection, string message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public int Message { get; }
+		public string Message { get; }
 	}
 	
-	class Handler : IHandler<int, Command>
+	class Handler : IHandler<string, Command>
 	{
 		public async Task Execute(Command command)
 		{
 			Console.WriteLine(command.Message);
 
-			if (command.Message == 10000)
-			{
-				
-			}
-
-			if (20000 == command.Message)
-			{
-				
-			}
-			
-			if (command.Message > 30000)
-			{
-				var g0 = GC.CollectionCount(0);
-				var g1 = GC.CollectionCount(1);
-				var g2 = GC.CollectionCount(2);
-				return;
-			}
-			
-			await command.Connection.Send(command.Message + 1).To<Command>();
+			await command.Connection.Send((int.Parse(command.Message) + 1).ToString()).To<Command>();
 		}
 	}
 }

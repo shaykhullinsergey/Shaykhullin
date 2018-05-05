@@ -52,9 +52,9 @@ namespace Shaykhullin.Network.Core
 			var packetsComposer = container.Resolve<IPacketsComposer>();
 			var messageComposer = container.Resolve<IMessageComposer>();
 			var commandRaiser = container.Resolve<ICommandRaiser>();
-			
+
 			var listQueue = new Queue<IList<IPacket>>();
-			
+
 			while (true)
 			{
 				var packet = await transport.ReadPacket().ConfigureAwait(false);
@@ -65,10 +65,10 @@ namespace Shaykhullin.Network.Core
 				}
 				else
 				{
-					packets = listQueue.Count > 0 
-						? listQueue.Dequeue() 
+					packets = listQueue.Count > 0
+						? listQueue.Dequeue()
 						: new List<IPacket>();
-					
+
 					packets.Add(packet);
 
 					messages.Add(packet.Id, packets);
@@ -84,12 +84,12 @@ namespace Shaykhullin.Network.Core
 					{
 						packetsComposer.ReleaseBuffer(packets[i].Buffer);
 					}
-					
+
 					packets.Clear();
 					listQueue.Enqueue(packets);
-					
+
 					packetsComposer.ReleaseBuffer(message.DataStreamBuffer);
-					
+
 					await commandRaiser.RaiseCommand(payload).ConfigureAwait(false);
 				}
 			}

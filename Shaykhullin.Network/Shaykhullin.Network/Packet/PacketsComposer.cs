@@ -7,7 +7,7 @@ namespace Shaykhullin.Network.Core
 	internal class PacketsComposer : IPacketsComposer
 	{
 		private const int PacketSize = 256;
-		private const int HeaderSize = 5;
+		private const int HeaderSize = 3;
 		private const int PayloadSize = PacketSize - HeaderSize;
 
 		private int uniqueMessageId;
@@ -54,20 +54,12 @@ namespace Shaykhullin.Network.Core
 				var buffer = GetBuffer();
 
 				buffer[0] = id;
-				
-				var orderBytes = new ByteUnion((ushort)(order + 1));
-				buffer[1] = orderBytes.Byte1;
-				buffer[2] = orderBytes.Byte2;
-				
-				buffer[3] = length;
-				buffer[4] = (byte)(end ? 1 : 0);
+				buffer[1] = length;
+				buffer[2] = (byte)(end ? 1 : 0);
 				
 				Array.Copy(data, order * PayloadSize, buffer, HeaderSize, length);
 
-				packets[order] = new Packet
-				{
-					Buffer = buffer
-				};
+				packets[order] = GetPacket(buffer);
 			}
 
 			return packets;

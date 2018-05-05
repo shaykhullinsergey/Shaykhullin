@@ -11,33 +11,33 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.On<int>().In<Command>().Call<Handler>();
+			config.On<string>().In<Command>().Call<Handler>();
 
-			using (var app = config.Create("127.0.0.1", 4001))
+			using (var app = config.Create("127.0.0.1", 4002))
 			{
 				await app.Run();
 			}
 		}
 	}
 
-	class Command : ICommand<int>
+	class Command : ICommand<string>
 	{
-		public Command(IConnection connection, int message)
+		public Command(IConnection connection, string message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public int Message { get; }
+		public string Message { get; }
 	}
 
-	class Handler : IHandler<int, Command>
+	class Handler : IHandler<string, Command>
 	{
 		public async Task Execute(Command command)
 		{
 			Console.WriteLine(command.Message);
-			await command.Connection.Send(command.Message + 1).To<Command>();
+			await command.Connection.Send((int.Parse(command.Message) + 1).ToString()).To<Command>();
 		}
 	}
 }
