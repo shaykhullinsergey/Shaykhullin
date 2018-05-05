@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Shaykhullin.ArrayPool;
 
 namespace Shaykhullin.Network.Core
@@ -12,12 +11,10 @@ namespace Shaykhullin.Network.Core
 		private const int PayloadSize = PacketSize - HeaderSize;
 
 		private int uniqueMessageId;
-		private readonly ICommandRaiser commandRaiser;
 		private readonly IArrayPool arrayPool;
 
-		public PacketsComposer(ICommandRaiser commandRaiser, IArrayPool arrayPool)
+		public PacketsComposer(IArrayPool arrayPool)
 		{
-			this.commandRaiser = commandRaiser;
 			this.arrayPool = arrayPool;
 		}
 
@@ -45,18 +42,12 @@ namespace Shaykhullin.Network.Core
 			arrayPool.ReleaseArray(buffer);
 		}
 
-		public async Task<IPacket[]> GetPackets(IMessage message)
+		public IPacket[] GetPackets(IMessage message)
 		{
 			var id = (byte)(uniqueMessageId++ % byte.MaxValue);
 
 			var data = message.DataStreamBuffer;
 			var count = GetPacketCount(message.DataStreamLength);
-			
-			if (count > ushort.MaxValue)
-			{
-				await commandRaiser.RaiseCommand(new ErrorPayload("Message size is too long")).ConfigureAwait(false);
-				throw new InvalidOperationException();
-			}
 			
 			var packets = new IPacket[count];
 			

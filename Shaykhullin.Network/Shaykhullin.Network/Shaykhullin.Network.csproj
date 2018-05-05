@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <LangVersion>7.2</LangVersion>
-    <Version>1.0.10</Version>
+    <Version>1.0.11</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.Serializer\Shaykhullin.Serializer\Shaykhullin.Serializer.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin.Stream\Shaykhullin.Stream\Shaykhullin.Stream.csproj" />
     <ProjectReference Include="..\Shaykhullin.Network.Core\Shaykhullin.Network.Core.csproj" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Tests
 {
 	public class SerializerTests
 	{
-		public Stream CreateStream()
+		public System.IO.Stream CreateStream()
 		{
 			return new MemoryStream();
 		}

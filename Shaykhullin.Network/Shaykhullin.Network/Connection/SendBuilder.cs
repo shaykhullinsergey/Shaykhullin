@@ -23,14 +23,14 @@ namespace Shaykhullin.Network.Core
 
 			var packetsComposer = container.Resolve<IPacketsComposer>();
 
-			var packets = await packetsComposer.GetPackets(message).ConfigureAwait(false);
+			var packets = packetsComposer.GetPackets(message);
 
 			var transport = container.Resolve<ITransport>();
-			
-			foreach (var packet in packets)
+
+			for (var i = 0; i < packets.Length; i++)
 			{
-				await transport.WritePacket(packet).ConfigureAwait(false);
-				packetsComposer.ReleaseBuffer(packet.Buffer);
+				await transport.WritePacket(packets[i]);
+				packetsComposer.ReleaseBuffer(packets[i].Buffer);
 			}
 		}
 	}

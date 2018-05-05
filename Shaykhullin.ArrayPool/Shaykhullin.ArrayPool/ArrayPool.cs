@@ -109,6 +109,8 @@ namespace Shaykhullin.ArrayPool
 			if (!disposed)
 			{
 				disposed = true;
+
+				pools.Clear();
 			}
 		}
 	}

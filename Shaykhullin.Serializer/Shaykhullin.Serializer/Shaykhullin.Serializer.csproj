@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>1.0.10</Version>
+    <Version>1.0.11</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />

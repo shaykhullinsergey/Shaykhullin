@@ -8,17 +8,19 @@ namespace Shaykhullin.Network.Core
 	internal class Transport : ITransport
 	{
 		private readonly object @lock = new object();
+		private readonly byte[] isAliveBuffer = new byte[1];
+		
 		private readonly TcpClient tcpClient;
-		private readonly IPacketsComposer packetsComposer;
 		private readonly IConfiguration configuration;
 		private readonly ICommandRaiser commandRaiser;
+		private readonly IPacketsComposer packetsComposer;
 
 		public Transport(IContainer container)
 		{
 			tcpClient = container.Resolve<TcpClient>();
-			packetsComposer = container.Resolve<IPacketsComposer>();
 			configuration = container.Resolve<IConfiguration>();
 			commandRaiser = container.Resolve<ICommandRaiser>();
+			packetsComposer = container.Resolve<IPacketsComposer>();
 		}
 
 		public Task Connect()
@@ -47,7 +49,7 @@ namespace Shaykhullin.Network.Core
 
 			try
 			{
-				await tcpClient.GetStream().WriteAsync(data, 0, data.Length).ConfigureAwait(false);
+				tcpClient.GetStream().Write(data, 0, data.Length);
 			}
 			catch (Exception exception)
 			{
@@ -64,7 +66,7 @@ namespace Shaykhullin.Network.Core
 				await Connect().ConfigureAwait(false);
 			}
 
-			var read = await tcpClient.GetStream().ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+			var read = tcpClient.GetStream().Read(buffer, 0, buffer.Length);
 
 			if (read == 0 && !IsAlive)
 			{
@@ -82,7 +84,6 @@ namespace Shaykhullin.Network.Core
 			await commandRaiser.RaiseCommand(new DisconnectPayload("Connection disposed")).ConfigureAwait(false);
 		}
 
-		private readonly byte[] isAliveBuffer = new byte[1];
 		private bool isAlive;
 		private bool IsAlive
 		{

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Shaykhullin.Network.Core
 {
@@ -9,6 +8,6 @@ namespace Shaykhullin.Network.Core
 		void ReleaseBuffer(byte[] buffer);
 		IMessage GetMessage(IList<IPacket> packets);
 		IPacket GetPacket(byte[] buffer);
-		Task<IPacket[]> GetPackets(IMessage message);
+		IPacket[] GetPackets(IMessage message);
 	}
 }

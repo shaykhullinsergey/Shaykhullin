@@ -10,7 +10,6 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shaykhullin.Stream\Shaykhullin.Stream\Shaykhullin.Stream.csproj" />
-    <ProjectReference Include="..\Shaykhullin.Serializer\Shaykhullin.Serializer.csproj" />
+    <ProjectReference Include="..\Shaykhullin.Stream\Shaykhullin.Stream.csproj" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace Shaykhullin.Activator
 		{
 			arrayPool = new ArrayPoolConfig().Create();
 		}
-		
+
 		public IActivator Create()
 		{
 			return new Core.Activator(arrayPool);

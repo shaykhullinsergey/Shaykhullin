@@ -2,7 +2,8 @@
 
 namespace Shaykhullin.DependencyInjection.Core
 {
-	internal class ImplementedByBuilder<TRegistry> : IImplementedByBuilder<TRegistry>
+	internal class ImplementedByBuilder<TRegistry> 
+		: IImplementedByBuilder<TRegistry>
 	{
 		private readonly Dependency dependency;
 		

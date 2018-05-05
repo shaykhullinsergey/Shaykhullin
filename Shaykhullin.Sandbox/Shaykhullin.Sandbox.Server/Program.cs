@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Shaykhullin.Network;
@@ -14,33 +11,33 @@ namespace Shaykhullin.Sandbox.Server
 		{
 			var config = new ServerConfig();
 
-			config.On<string>().In<Command>().Call<Handler>();
+			config.On<int>().In<Command>().Call<Handler>();
 
-			using (var app = config.Create("127.0.0.1", 4002))
+			using (var app = config.Create("127.0.0.1", 4001))
 			{
 				await app.Run();
 			}
 		}
 	}
 
-	class Command : ICommand<string>
+	class Command : ICommand<int>
 	{
-		public Command(IConnection connection, string message)
+		public Command(IConnection connection, int message)
 		{
 			Connection = connection;
 			Message = message;
 		}
 
 		public IConnection Connection { get; }
-		public string Message { get; }
+		public int Message { get; }
 	}
 
-	class Handler : IHandler<string, Command>
+	class Handler : IHandler<int, Command>
 	{
-		public Task Execute(Command command)
+		public async Task Execute(Command command)
 		{
 			Console.WriteLine(command.Message);
-			return Task.CompletedTask;
+			await command.Connection.Send(command.Message + 1).To<Command>();
 		}
 	}
 }

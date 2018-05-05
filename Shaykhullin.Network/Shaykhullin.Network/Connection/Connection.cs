@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading;
+using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
@@ -48,14 +48,16 @@ namespace Shaykhullin.Network.Core
 		private async Task ReceiveLoop()
 		{
 			var messages = new Dictionary<byte, IList<IPacket>>();
-			var communicator = container.Resolve<ITransport>();
+			var transport = container.Resolve<ITransport>();
 			var packetsComposer = container.Resolve<IPacketsComposer>();
 			var messageComposer = container.Resolve<IMessageComposer>();
 			var commandRaiser = container.Resolve<ICommandRaiser>();
-
+			
+			var listQueue = new Queue<IList<IPacket>>();
+			
 			while (true)
 			{
-				var packet = await communicator.ReadPacket().ConfigureAwait(false);
+				var packet = await transport.ReadPacket().ConfigureAwait(false);
 
 				if (messages.TryGetValue(packet.Id, out var packets))
 				{
@@ -63,13 +65,14 @@ namespace Shaykhullin.Network.Core
 				}
 				else
 				{
-					packets = new List<IPacket>
-					{
-						packet
-					};
+					packets = listQueue.Count > 0 
+						? listQueue.Dequeue() 
+						: new List<IPacket>();
+					
+					packets.Add(packet);
+
 					messages.Add(packet.Id, packets);
 				}
-
 
 				if (packet.IsLast)
 				{
@@ -81,6 +84,9 @@ namespace Shaykhullin.Network.Core
 					{
 						packetsComposer.ReleaseBuffer(packets[i].Buffer);
 					}
+					
+					packets.Clear();
+					listQueue.Enqueue(packets);
 					
 					packetsComposer.ReleaseBuffer(message.DataStreamBuffer);
 					
