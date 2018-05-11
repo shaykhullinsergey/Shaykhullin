@@ -18,7 +18,7 @@ namespace Shaykhullin.ArrayPool
 
 	internal class Queue
 	{
-		private readonly ConcurrentQueue<Array> queue = new ConcurrentQueue<Array>();
+		private readonly Queue<Array> queue = new Queue<Array>();
 		
 		public Queue(int length)
 		{
@@ -35,7 +35,7 @@ namespace Shaykhullin.ArrayPool
 
 		public Array Dequeue()
 		{
-			return queue.TryDequeue(out var array) ? array : null;
+			return queue.Count > 0 ? queue.Dequeue() : null;
 		}
 	}
 }

@@ -1,19 +1,19 @@
 ﻿using System;
-using System.IO;
 using Shaykhullin.Serializer.Core;
+using Shaykhullin.Stream;
 
-namespace Shaykhullin.Serializer
+namespace Shaykhullin.Serializer.Core
 {
 	public abstract class Converter<TData> : IConverter<TData>
 	{
-		public abstract TData Deserialize(Stream stream);
-		public abstract void Serialize(Stream stream, TData data);
+		public abstract TData Deserialize(ValueStream stream);
+		public abstract void Serialize(ValueStream stream, TData data);
 
-		public virtual object DeserializeObject(Stream stream, Type type)
+		public virtual object DeserializeObject(ValueStream stream, Type type)
 		{
 			return Deserialize(stream);
 		}
-		public virtual void SerializeObject(Stream stream, object obj)
+		public virtual void SerializeObject(ValueStream stream, object obj)
 		{
 			Serialize(stream, (TData)obj);
 		}

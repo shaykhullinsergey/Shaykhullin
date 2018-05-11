@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Shaykhullin.Network.Core
 {
-	public class HandlerDto : IHandlerDto
+	internal class HandlerDto : IHandlerDto
 	{
-		private static readonly Dictionary<Type, Func<object, object, Task>> MethodCache =
-			new Dictionary<Type, Func<object, object, Task>>();
+		private static readonly Dictionary<Type, Action<object, object>> MethodCache =
+			new Dictionary<Type, Action<object, object>>();
 
 		public Type HandlerType { get; }
-		public Func<object, object, Task> ExecuteMethod { get; }
+		public Action<object, object> ExecuteMethod { get; }
 
 		public HandlerDto(Type handlerType)
 		{
@@ -26,7 +25,7 @@ namespace Shaykhullin.Network.Core
 					.GetMethod("MagicMethod", BindingFlags.Static | BindingFlags.NonPublic)
 					.MakeGenericMethod(handlerType);
 				
-				executeMethod = (Func<object, object, Task>)magic.Invoke(null, new object[] {execute});
+				executeMethod = (Action<object, object>)magic.Invoke(null, new object[] {execute});
 				
 				MethodCache.Add(handlerType, executeMethod);
 			}
@@ -34,21 +33,21 @@ namespace Shaykhullin.Network.Core
 			ExecuteMethod = executeMethod;
 		}
 
-		static Func<T, object, Task> MagicMethod<T>(MethodInfo method)
+		static Action<T, object> MagicMethod<T>(MethodInfo method)
 		{
 			var constructedHelper = typeof(HandlerDto)
 				.GetMethod("MagicMethodHelper", BindingFlags.Static | BindingFlags.NonPublic)
 				.MakeGenericMethod(typeof(T), method.GetParameters()[0].ParameterType);
 
-			return (Func<T, object, Task>)constructedHelper.Invoke(null, new object[] {method});
+			return (Action<T, object>)constructedHelper.Invoke(null, new object[] {method});
 		}
 
-		static Func<object, object, Task> MagicMethodHelper<TTarget, TParam>(MethodInfo method)
+		static Action<object, object> MagicMethodHelper<TTarget, TParam>(MethodInfo method)
 		{
-			var func = (Func<TTarget, TParam, Task>)Delegate.CreateDelegate
-				(typeof(Func<TTarget, TParam, Task>), method);
+			var action = (Action<TTarget, TParam>)Delegate.CreateDelegate
+				(typeof(Action<TTarget, TParam>), method);
 
-			return (target, param) => func((TTarget)target, (TParam)param);
+			return (target, param) => action((TTarget)target, (TParam)param);
 		}
 	}
 }

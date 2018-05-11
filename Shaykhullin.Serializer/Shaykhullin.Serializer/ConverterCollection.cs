@@ -4,17 +4,29 @@ using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Serializer.Core
 {
+	public class AliasDto
+	{
+		public int AliasHash { get; }
+		public Type AliasType { get; }
+
+		public AliasDto(int aliasHash, Type aliasType)
+		{
+			AliasHash = aliasHash;
+			AliasType = aliasType;
+		}
+	}
+	
 	internal class ConverterContainer
 	{
 		private readonly IContainerConfig config;
 		private readonly ConverterContainer parent;
-		private readonly Dictionary<int, Type> aliases;
+		private readonly List<AliasDto> aliases;
 		private readonly Dictionary<Type, ConverterDto> converters;
 
 		public ConverterContainer(IContainerConfig config)
 		{
 			this.config = config;
-			aliases = new Dictionary<int, Type>();
+			aliases = new List<AliasDto>();
 			converters = new Dictionary<Type, ConverterDto>();
 		}
 
@@ -29,7 +41,8 @@ namespace Shaykhullin.Serializer.Core
 			if (TryGetDto(type) == null)
 			{
 				var dto = new ConverterDto(type);
-				aliases.Add(dto.EntityAlias, dto.EntityType);
+				
+				aliases.Add(new AliasDto(dto.EntityAlias, dto.EntityType));
 				converters.Add(type, dto);
 			}
 		}
@@ -46,15 +59,21 @@ namespace Shaykhullin.Serializer.Core
 				{
 					ConverterType = converterType
 				});
-				aliases.Add(dto.EntityAlias, dto.EntityType);
+				aliases.Add(new AliasDto(dto.EntityAlias, dto.EntityType));
 			}
 		}
 
 		public Type GetTypeFromAlias(int alias)
 		{
-			return aliases.TryGetValue(alias, out var type) 
-				? type 
-				: parent?.GetTypeFromAlias(alias);
+			for (var i = 0; i < aliases.Count; i++)
+			{
+				if (aliases[i].AliasHash == alias)
+				{
+					return aliases[i].AliasType;
+				}
+			}
+
+			return parent?.GetTypeFromAlias(alias);
 		}
 
 		public ConverterDto TryGetDto(Type type)

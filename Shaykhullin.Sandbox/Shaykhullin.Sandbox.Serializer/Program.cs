@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Shaykhullin.Serializer;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Sandbox.Serializer
 {
@@ -16,10 +17,10 @@ namespace Shaykhullin.Sandbox.Serializer
 
 			var serializer = config.Create();
 
-			using (var stream = new MemoryStream())
+			using (var stream = new ValueStream())
 			{
 				serializer.Serialize(stream, test);
-				stream.Position = 0;
+				stream.Seek(0);
 				var instance = serializer.Deserialize<Test[]>(stream);
 			}
 		}

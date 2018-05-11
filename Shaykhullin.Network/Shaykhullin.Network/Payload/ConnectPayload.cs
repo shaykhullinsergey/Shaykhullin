@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.Network.Core
 {
-	internal class ConnectPayload : Payload
+	internal class ConnectPayload : Payload<ConnectInfo>
 	{
 		private static readonly Type ConnectCommandType = typeof(Connect);
 		

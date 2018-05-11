@@ -4,6 +4,6 @@ namespace Shaykhullin.Network.Core
 {
 	public interface ICommandRaiser
 	{
-		Task RaiseCommand(IPayload payload);
+		Task RaiseCommand<TData>(IPayload<TData> payload);
 	}
 }

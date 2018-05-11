@@ -1,40 +1,42 @@
 ﻿using System;
-using System.IO;
 using Shaykhullin.ArrayPool;
 
 namespace Shaykhullin.Stream
 {
-	public class MemoryStream : System.IO.Stream
+	public struct ValueStream : IDisposable
 	{
-		public byte[] Buffer { get; private set; }
 		private IArrayPool arrayPool;
-		
-		public MemoryStream()
-		{
-			Buffer = Array.Empty<byte>();
-			arrayPool = new ArrayPoolConfig().Create();
-		}
 
-		public MemoryStream(IArrayPool arrayPool)
+		public byte[] Buffer { get; private set; }
+		
+		public ValueStream(IArrayPool arrayPool)
 		{
 			Buffer = Array.Empty<byte>();
 			this.arrayPool = arrayPool;
+			Position = 0;
 		}
 
-		public MemoryStream(byte[] buffer)
+		public ValueStream(byte[] buffer)
 		{
 			Buffer = buffer;
+			arrayPool = null;
+			Position = 0;
 		}
 
-		public override long Position { get; set; }
+		public long Position { get; set; }
 
-		public override int Read(byte[] destination, int offset, int count)
+		public void Seek(long position)
+		{
+			Position = position;
+		}
+
+		public int Read(byte[] destination, int offset, int count)
 		{
 			CopyTo(Buffer, Position, destination, offset, count);
 			return count;
 		}
 		
-		public override int ReadByte()
+		public int ReadByte()
 		{
 			return Buffer[Position++];
 		}
@@ -48,13 +50,13 @@ namespace Shaykhullin.Stream
 				Buffer[Position++]).Int32;
 		}
 		
-		public override void Write(byte[] source, int offset, int count)
+		public void Write(byte[] source, int offset, int count)
 		{
 			EnsureCapacity(count);
 			CopyTo(source, offset, Buffer, Position, count);
 		}
 		
-		public override void WriteByte(byte value)
+		public void WriteByte(byte value)
 		{
 			EnsureCapacity(1);
 			Buffer[Position++] = value;
@@ -114,21 +116,16 @@ namespace Shaykhullin.Stream
 			Position += count;
 		}
 		
-		protected override void Dispose(bool disposing)
+		public void Dispose()
 		{
 			arrayPool?.ReleaseArray(Buffer);
 			Buffer = null;
 			arrayPool = null;
-			
-			base.Dispose(disposing);
 		}
 
-		public override bool CanRead { get; } = true;
-		public override bool CanSeek { get; } = false;
-		public override bool CanWrite { get; } = true;
-		public override long Length => Buffer.Length;
-		public override void Flush() => throw new NotImplementedException();
-		public override void SetLength(long value) => throw new NotImplementedException();
-		public override long Seek(long offset, SeekOrigin origin) => throw new NotImplementedException();
+		public bool CanRead => true;
+		public bool CanSeek => false;
+		public bool CanWrite => true;
+		public long Length => Buffer.Length;
 	}
 }

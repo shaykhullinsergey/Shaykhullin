@@ -2,9 +2,9 @@
 
 namespace Shaykhullin.Network.Core
 {
-	public interface IPayload
+	public interface IPayload<TData>
 	{
-		object Data { get; }
+		TData Data { get; }
 		Type CommandType { get; }
 	}
 }

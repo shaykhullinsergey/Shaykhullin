@@ -13,7 +13,7 @@ namespace Shaykhullin.Serializer.Tests
 			{
 				var input = "String data type message";
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<string>(stream);
 
 				Assert.Equal(input, result);
@@ -38,7 +38,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Person>(stream);
 
 				Assert.Equal("WORKS", result.Name);
@@ -65,7 +65,7 @@ namespace Shaykhullin.Serializer.Tests
 				using (var stream = CreateStream())
 				{
 					serializer.Serialize(stream, input);
-					stream.Position = 0;
+					stream.Seek(0);
 					var result = serializer.Deserialize<Person>(stream);
 
 					Assert.Equal("WORKS", result.Name);

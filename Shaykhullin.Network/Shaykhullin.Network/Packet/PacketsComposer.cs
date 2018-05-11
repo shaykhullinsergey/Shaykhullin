@@ -18,12 +18,9 @@ namespace Shaykhullin.Network.Core
 			this.arrayPool = arrayPool;
 		}
 
-		public IPacket GetPacket(byte[] buffer)
+		public Packet GetPacket(byte[] buffer)
 		{
-			return new Packet
-			{
-				Buffer = buffer
-			};
+			return new Packet(buffer);
 		}
 
 		public byte[] GetBuffer()
@@ -36,20 +33,20 @@ namespace Shaykhullin.Network.Core
 			arrayPool.ReleaseArray(buffer);
 		}
 
-		public IPacket[] GetPackets(IMessage message)
+		public Packet[] GetPackets(Message message)
 		{
 			var id = (byte)(uniqueMessageId++ % byte.MaxValue);
 
-			var data = message.DataStreamBuffer;
-			var count = GetPacketCount(message.DataStreamLength);
-			
-			var packets = new IPacket[count];
+			var data = message.Data;
+			var count = GetPacketCount(message.Length);
+
+			var packets = arrayPool.GetArrayExact<Packet>(count);
 			
 			for (var order = 0; order < count; order++)
 			{
-				var end = (order + 1) * PayloadSize >= message.DataStreamLength;
+				var end = (order + 1) * PayloadSize >= message.Length;
 				
-				var length = (byte)(!end ? PayloadSize : message.DataStreamLength - order * PayloadSize);
+				var length = (byte)(!end ? PayloadSize : message.Length - order * PayloadSize);
 				
 				var buffer = GetBuffer();
 
@@ -65,7 +62,7 @@ namespace Shaykhullin.Network.Core
 			return packets;
 		}
 
-		public IMessage GetMessage(IList<IPacket> packets)
+		public Message GetMessage(IList<Packet> packets)
 		{
 			var dataLength = 0;
 			for (var i = 0; i < packets.Count; i++)
@@ -81,8 +78,8 @@ namespace Shaykhullin.Network.Core
 				Array.Copy(packets[i].Buffer, HeaderSize, data, position, packets[i].Length);
 				position += packets[i].Length;
 			}
-			
-			return new Message { DataStreamBuffer = data, DataStreamLength = data.Length };
+
+			return new Message(data, data.Length);
 		}
 
 		private static int GetPacketCount(int length) => length / PayloadSize + (length % PayloadSize == 0 ? 0 : 1);

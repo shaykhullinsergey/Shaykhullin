@@ -1,8 +1,14 @@
 ﻿namespace Shaykhullin.Network.Core
 {
-	public interface IMessage
+	public readonly struct Message
 	{
-		byte[] DataStreamBuffer { get; }
-		int DataStreamLength { get; }
+		public byte[] Data { get; }
+		public int Length { get; }
+
+		public Message(byte[] data, int length)
+		{
+			Data = data;
+			Length = length;
+		}
 	}
 }

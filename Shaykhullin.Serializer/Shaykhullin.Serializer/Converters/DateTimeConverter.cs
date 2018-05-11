@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
 	internal class DateTimeConverter : Converter<DateTime>
 	{
-		public override void Serialize(Stream stream, DateTime data)
+		public override void Serialize(ValueStream stream, DateTime data)
 		{
 			var binary = data.ToBinary();
 			
@@ -20,7 +21,7 @@ namespace Shaykhullin.Serializer.Core
 			stream.WriteByte(union.Byte8);
 		}
 		
-		public override DateTime Deserialize(Stream stream)
+		public override DateTime Deserialize(ValueStream stream)
 		{
 			var binary = new UnifiedUnion(
 				(byte)stream.ReadByte(),

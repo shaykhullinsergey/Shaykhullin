@@ -1,5 +1,5 @@
-﻿using Shaykhullin.DependencyInjection;
-using Shaykhullin.Serializer;
+﻿using Shaykhullin.Serializer;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
@@ -13,8 +13,8 @@ namespace Shaykhullin.Network.Core
 			this.config = config;
 		}
 
-		public IHandlerBuilder<TData, TCommand> Call<THandler>() where THandler 
-			: IHandler<TData, TCommand>
+		public IHandlerBuilder<TData, TCommand> Call<THandler>() 
+			where THandler : IHandler<TData, TCommand>
 		{
 			using (var container = config.Create())
 			{
@@ -26,6 +26,24 @@ namespace Shaykhullin.Network.Core
 	
 				container.Resolve<HandlerCollection>()
 					.Add<TData, TCommand, THandler>();
+
+				return this;
+			}
+		}
+
+		public IHandlerBuilder<TData, TCommand> CallAsync<THandler>() 
+			where THandler : IAsyncHandler<TData, TCommand>
+		{
+			using (var container = config.Create())
+			{
+				container.Resolve<ISerializerConfig>()
+					.Match<TData>();
+	
+				container.Resolve<CommandCollection>()
+					.Add<TData, TCommand>();
+	
+				container.Resolve<HandlerCollection>()
+					.AddAsync<TData, TCommand, THandler>();
 
 				return this;
 			}

@@ -16,7 +16,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Collection<int>>(stream);
 
 				Assert.Equal(3, result.Count);
@@ -33,7 +33,7 @@ namespace Shaykhullin.Serializer.Tests
 			{
 				var input = new Collection<string> { "ABC", "DEG", "HIJ" };
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Collection<string>>(stream);
 
 				Assert.Equal(3, result.Count);
@@ -73,7 +73,7 @@ namespace Shaykhullin.Serializer.Tests
 				};
 
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Collection<SimplePerson>>(stream);
 
 				Assert.Equal(2, result.Count);
@@ -143,7 +143,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Collection<ComplexPerson>>(stream);
 
 				Assert.Equal(3, result.Count);
@@ -223,7 +223,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Collection<BasePerson>>(stream);
 
 				Assert.Equal(3, result.Count);

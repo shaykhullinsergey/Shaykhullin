@@ -1,15 +1,15 @@
-﻿using Shaykhullin.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
-	public class CommandCollection
+	internal class CommandCollection
 	{
 		private static readonly Dictionary<Type, Type> GenericArgumentsCache = new Dictionary<Type, Type>();
 		
 		private readonly IContainerConfig config;
-		private readonly Dictionary<int, Type> commands = new Dictionary<int, Type>();
+		private readonly List<CommandDto> commands = new List<CommandDto>();
 
 		public CommandCollection(IContainerConfig config)
 		{
@@ -20,32 +20,45 @@ namespace Shaykhullin.Network.Core
 			where TCommand : ICommand<TData>
 		{
 			var command = typeof(TCommand);
-			
-			if (!commands.ContainsValue(command))
+
+			for (var i = 0; i < commands.Count; i++)
 			{
-				config.Register<TCommand>();
-				commands.Add(GetHash(command.Name), command);
+				if (commands[i].CommandType == command)
+				{
+					return;
+				}
 			}
+			
+			config.Register<TCommand>();
+			commands.Add(new CommandDto(GetHash(command.Name), command));
 		}
 		
-		public Type GetCommand(int id)
+		public Type GetCommand(int commandId)
 		{
-			return commands[id];
+			for (var i = 0; i < commands.Count; i++)
+			{
+				if (commands[i].CommandId == commandId)
+				{
+					return commands[i].CommandType;
+				}
+			}
+			
+			throw new InvalidOperationException(nameof(GetCommand));
 		}
 
-		public int GetCommand(Type command)
+		public int GetCommand(Type commandType)
 		{
-			foreach (var item in commands)
+			foreach (var command in commands)
 			{
-				if (item.Value == command)
+				if (command.CommandType == commandType)
 				{
-					return item.Key;
+					return command.CommandId;
 				}
 			}
 
-			var hash = GetHash(command.Name);
-			commands.Add(hash, command);
-			config.Register<object>(command);
+			var hash = GetHash(commandType.Name);
+			commands.Add(new CommandDto(hash, commandType));
+			config.Register<object>(commandType);
 			return hash;
 		}
 		

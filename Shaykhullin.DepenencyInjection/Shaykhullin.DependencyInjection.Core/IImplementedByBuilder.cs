@@ -6,7 +6,10 @@ namespace Shaykhullin.DependencyInjection.Core
 	{
 		ILifecycleBuilder ImplementedBy<TImplementation>(Func<IContainer, TImplementation> factory = null)
 			where TImplementation : TRegistry;
-
 		ILifecycleBuilder ImplementedBy(Type implemented, Func<IContainer, object> factory = null);
+
+		ILifecycleBuilder ImplementedBy<TImplementation>(TImplementation implementation)
+			where TImplementation : TRegistry;
+		ILifecycleBuilder ImplementedBy(Type type, object implementation);
 	}
 }

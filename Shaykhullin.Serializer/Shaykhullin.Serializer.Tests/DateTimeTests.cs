@@ -17,7 +17,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<DateTime>(stream);
 
 				Assert.Equal(2018, result.Year);
@@ -40,7 +40,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<DateTime>(stream);
 
 				Assert.Equal(2018, result.Year);
@@ -63,7 +63,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<DateTime>(stream);
 
 				Assert.Equal(2018, result.Year);

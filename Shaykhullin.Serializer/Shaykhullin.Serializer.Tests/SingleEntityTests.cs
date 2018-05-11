@@ -23,7 +23,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<Entity>(stream);
 
 				Assert.NotNull(result);
@@ -49,7 +49,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<StringEntity>(stream);
 
 				Assert.NotNull(result);
@@ -84,7 +84,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<EntityHolder>(stream);
 
 				Assert.NotNull(result);

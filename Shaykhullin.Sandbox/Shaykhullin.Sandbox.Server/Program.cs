@@ -13,7 +13,7 @@ namespace Shaykhullin.Sandbox.Server
 
 			config.On<int>().In<Command>().Call<Handler>();
 
-			using (var app = config.Create("127.0.0.1", 4002))
+			using (var app = config.Create("127.0.0.1", 4000))
 			{
 				await app.Run();
 			}
@@ -34,10 +34,9 @@ namespace Shaykhullin.Sandbox.Server
 
 	class Handler : IHandler<int, Command>
 	{
-		public async Task Execute(Command command)
+		public void Execute(Command command)
 		{
-			Console.WriteLine(command.Message);
-			await command.Connection.Send(command.Message + 1).To<Command>();
+			command.Connection.Send(command.Message + 1).To<Command>();
 		}
 	}
 }

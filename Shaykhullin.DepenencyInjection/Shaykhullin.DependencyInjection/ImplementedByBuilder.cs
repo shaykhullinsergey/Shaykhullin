@@ -12,12 +12,12 @@ namespace Shaykhullin.DependencyInjection.Core
 			this.dependency = dependency;
 		}
 
-		public ILifecycleBuilder ImplementedBy<TImplemented>(Func<IContainer, TImplemented> factory = null) 
-			where TImplemented : TRegistry
+		public ILifecycleBuilder ImplementedBy<TImplementation>(Func<IContainer, TImplementation> factory = null) 
+			where TImplementation : TRegistry
 		{
 			return factory == null 
-				? ImplementedBy(typeof(TImplemented)) 
-				: ImplementedBy(typeof(TImplemented), c => factory(c));
+				? ImplementedBy(typeof(TImplementation), null) 
+				: ImplementedBy(typeof(TImplementation), c => factory(c));
 		}
 
 		public ILifecycleBuilder ImplementedBy(Type implemented, Func<IContainer, object> factory = null)
@@ -28,6 +28,23 @@ namespace Shaykhullin.DependencyInjection.Core
 			}
 
 			dependency.Implementation = implemented;
+			
+			return new LifecycleBuilder(dependency);
+		}
+
+		public ILifecycleBuilder ImplementedBy<TImplementation>(TImplementation implementation)
+			where TImplementation : TRegistry
+		{
+			dependency.Implementation = typeof(TImplementation);
+			dependency.Instance = implementation;
+			
+			return new LifecycleBuilder(dependency);
+		}
+
+		public ILifecycleBuilder ImplementedBy(Type type, object implementation)
+		{
+			dependency.Implementation = type;
+			dependency.Instance = implementation;
 			
 			return new LifecycleBuilder(dependency);
 		}

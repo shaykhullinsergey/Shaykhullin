@@ -43,7 +43,41 @@ namespace Shaykhullin.Network.Core
 			return Task.CompletedTask;
 		}
 
-		public async Task WritePacket(IPacket packet)
+		public Packet ReadPacket()
+		{
+			var buffer = packetsComposer.GetBuffer();
+
+			while (!isAlive && !IsAlive)
+			{
+				Connect().GetAwaiter().GetResult();
+			}
+
+			var read = tcpClient.GetStream().Read(buffer, 0, buffer.Length);
+
+			if (read == 0 && !IsAlive)
+			{
+				commandRaiser.RaiseCommand(new DisconnectPayload("Connection closed")).GetAwaiter().GetResult();
+				throw new OperationCanceledException();
+			}
+
+			return packetsComposer.GetPacket(buffer);
+		}
+
+		public void WritePacket(Packet packet)
+		{
+			var data = packet.Buffer;
+
+			try
+			{
+				tcpClient.GetStream().Write(data, 0, data.Length);
+			}
+			catch (Exception exception)
+			{
+				commandRaiser.RaiseCommand(new DisconnectPayload("Connection closed", exception)).GetAwaiter().GetResult();
+			}
+		}
+
+		public async Task WritePacketAsync(Packet packet)
 		{
 			var data = packet.Buffer;
 
@@ -57,7 +91,7 @@ namespace Shaykhullin.Network.Core
 			}
 		}
 
-		public async Task<IPacket> ReadPacket()
+		public async Task<Packet> ReadPacketAsync()
 		{
 			var buffer = packetsComposer.GetBuffer();
 

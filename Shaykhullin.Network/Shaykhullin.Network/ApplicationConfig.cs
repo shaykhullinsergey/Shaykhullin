@@ -6,7 +6,7 @@ using Shaykhullin.Serializer;
 using Shaykhullin.DependencyInjection;
 using Shaykhullin.DependencyInjection.Core;
 
-namespace Shaykhullin.Network
+namespace Shaykhullin.Network.Core
 {
 	public abstract class ApplicationConfig<TNode> : IConfig<TNode>
 		where TNode : IApplication

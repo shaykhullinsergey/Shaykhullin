@@ -13,11 +13,15 @@ namespace Shaykhullin.Sandbox.Client
 
 			config.On<int>().In<Command>().Call<Handler>();
 			
-			using (var app = config.Create("127.0.0.1", 4002))
+			using (var app = config.Create("127.0.0.1", 4000))
 			{
 				using (var connection = await app.Connect())
 				{
-					await connection.Send(1).To<Command>();
+					GC.CollectionCount(0);
+					GC.CollectionCount(1);
+					GC.CollectionCount(2);
+					
+					await connection.Send(1).ToAsync<Command>();
 					
 					Thread.Sleep(-1);
 				}
@@ -39,7 +43,22 @@ namespace Shaykhullin.Sandbox.Client
 	
 	class Handler : IHandler<int, Command>
 	{
-		public async Task Execute(Command command)
+		public void Execute(Command command)
+		{
+			if (command.Message > 30000)
+			{
+				GC.CollectionCount(0);
+				GC.CollectionCount(1);
+				GC.CollectionCount(2);
+			}
+			
+			command.Connection.Send(command.Message + 1).To<Command>();
+		}
+	}
+
+	class AsyncHandler : IAsyncHandler<int, Command>
+	{
+		public Task Execute(Command command)
 		{
 			Console.WriteLine(command.Message);
 
@@ -50,7 +69,9 @@ namespace Shaykhullin.Sandbox.Client
 				GC.CollectionCount(2);
 			}
 			
-			await command.Connection.Send(command.Message + 1).To<Command>();
+			command.Connection.Send(command.Message + 1).To<Command>();
+			
+			return Task.CompletedTask;
 		}
 	}
 }

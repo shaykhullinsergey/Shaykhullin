@@ -1,10 +1,15 @@
 ﻿namespace Shaykhullin.Network.Core
 {
-	public interface IPacket
+	public readonly struct Packet
 	{
-		byte Id { get; }
-		byte Length { get; }
-		bool IsLast { get; }
-		byte[] Buffer { get; }
+		public byte MessageId => Buffer[0];
+		public byte Length => Buffer[1];
+		public bool IsLast => Buffer[2] == 1;
+		public byte[] Buffer { get; }
+
+		public Packet(byte[] buffer)
+		{
+			Buffer = buffer;
+		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, 12.2);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<double>(stream);
 				Assert.Equal(12.2, result);
 			}
@@ -26,7 +26,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, double.MaxValue);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<double>(stream);
 				Assert.Equal(double.MaxValue, result);
 			}

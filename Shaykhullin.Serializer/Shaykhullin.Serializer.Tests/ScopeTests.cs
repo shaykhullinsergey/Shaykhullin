@@ -31,7 +31,7 @@ namespace Shaykhullin.Serializer.Tests
 					using (var serializer = config.Create())
 					{
 						serializer.Serialize(stream, b);
-						stream.Position = 0;
+						stream.Seek(0);
 						var result = serializer.Deserialize<Base>(stream);
 						
 						Assert.IsType<Base>(result);
@@ -49,7 +49,7 @@ namespace Shaykhullin.Serializer.Tests
 						using (var serializer = scope.Create())
 						{
 							serializer.Serialize(stream, b);
-							stream.Position = 0;
+							stream.Seek(0);
 							var result = serializer.Deserialize<Base>(stream);
 						
 							Assert.IsType<Derived>(result);
@@ -62,7 +62,7 @@ namespace Shaykhullin.Serializer.Tests
 					using (var serializer = config.Create())
 					{
 						serializer.Serialize(stream, b);
-						stream.Position = 0;
+						stream.Seek(0);
 						var result = serializer.Deserialize<Base>(stream);
 						
 						Assert.IsType<Base>(result);

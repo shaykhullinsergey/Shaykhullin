@@ -25,7 +25,12 @@ namespace Shaykhullin.Network.Core
 			return commandCollention.GetCommand(command);
 		}
 
-		public IList<IHandlerDto> GetHandlers(IPayload payload)
+		public IList<IHandlerDto> GetAsyncHandlers<TData>(IPayload<TData> payload)
+		{
+			return handlerCollection.GetAsyncHandlers(payload.CommandType);
+		}
+		
+		public IList<IHandlerDto> GetHandlers<TData>(IPayload<TData> payload)
 		{
 			return handlerCollection.GetHandlers(payload.CommandType);
 		}

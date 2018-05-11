@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -19,12 +20,12 @@ namespace Shaykhullin.Serializer.Core
 			this.serializer = serializer;
 		}
 
-		public override IList Deserialize(Stream stream)
+		public override IList Deserialize(ValueStream stream)
 		{
 			throw new InvalidOperationException();
 		}
 
-		public override void Serialize(Stream stream, IList elements)
+		public override void Serialize(ValueStream stream, IList elements)
 		{
 			var elementType = elements.GetType().GetGenericArguments()[0];
 
@@ -40,7 +41,7 @@ namespace Shaykhullin.Serializer.Core
 			}
 		}
 
-		public override object DeserializeObject(Stream stream, Type type)
+		public override object DeserializeObject(ValueStream stream, Type type)
 		{
 			var elementType = type.GetGenericArguments()[0];
 

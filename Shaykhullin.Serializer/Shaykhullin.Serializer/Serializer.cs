@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
 using Shaykhullin.Activator;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -24,46 +24,31 @@ namespace Shaykhullin.Serializer.Core
 			properties = new Dictionary<Type, PropertyInfo[]>();
 		}
 
-		public void Serialize<TData>(Stream stream, TData data)
+		public void Serialize<TData>(ValueStream stream, TData data)
 		{
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Serializer));
-			}
-			
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
 			}
 
 			Serialize(stream, data, typeof(TData));
 		}
 
-		public TData Deserialize<TData>(Stream stream)
+		public TData Deserialize<TData>(ValueStream stream)
 		{
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Serializer));
-			}
-			
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
 			}
 			
 			return (TData)Deserialize(stream, typeof(TData));
 		}
 
-		public void Serialize(Stream stream, object data, Type dataTypeOverride)
+		public void Serialize(ValueStream stream, object data, Type dataTypeOverride)
 		{
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Serializer));
-			}
-			
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
 			}
 
 			if (dataTypeOverride == null)
@@ -121,18 +106,13 @@ namespace Shaykhullin.Serializer.Core
 			}
 		}
 
-		public object Deserialize(Stream stream, Type dataType)
+		public object Deserialize(ValueStream stream, Type dataType)
 		{
 			if (disposed)
 			{
 				throw new ObjectDisposedException(nameof(Serializer));
 			}
 			
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
-			}
-
 			if (dataType == null)
 			{
 				throw new ArgumentNullException(nameof(dataType));

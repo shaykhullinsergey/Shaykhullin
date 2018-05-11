@@ -14,7 +14,7 @@ namespace Shaykhullin.Serializer.Tests
 			{
 				var input = new[] { 3, 2, 1, 2, 3 };
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<int[]>(stream);
 
 				Assert.Equal(5, result.Length);
@@ -31,7 +31,7 @@ namespace Shaykhullin.Serializer.Tests
 			{
 				var input = new[] { "ABC", "DEG", "HIJ" };
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<string[]>(stream);
 
 				Assert.Equal(3, result.Length);
@@ -69,7 +69,7 @@ namespace Shaykhullin.Serializer.Tests
 				};
 
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<SimplePerson[]>(stream);
 
 				Assert.Equal(2, result.Length);
@@ -137,7 +137,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<ComplexPerson[]>(stream);
 
 				Assert.Equal(3, result.Length);
@@ -215,7 +215,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<A[]>(stream);
 
 				var a1 = Assert.IsType<A>(result[0]);
@@ -259,7 +259,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<BasePerson[]>(stream);
 
 				Assert.Equal(3, result.Length);
@@ -329,7 +329,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<ClassHolder>(stream);
 
 				Assert.NotNull(result.BaseClasses);
@@ -360,7 +360,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<DateTime[]>(stream);
 
 				Assert.Equal(5, result.Length);

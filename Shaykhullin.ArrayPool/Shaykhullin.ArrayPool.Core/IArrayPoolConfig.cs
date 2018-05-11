@@ -1,4 +1,4 @@
-﻿namespace Shaykhullin.ArrayPool
+﻿namespace Shaykhullin.ArrayPool.Core
 {
 	public interface IArrayPoolConfig
 	{

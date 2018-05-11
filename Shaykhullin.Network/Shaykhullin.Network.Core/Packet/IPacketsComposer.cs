@@ -6,8 +6,8 @@ namespace Shaykhullin.Network.Core
 	{
 		byte[] GetBuffer();
 		void ReleaseBuffer(byte[] buffer);
-		IMessage GetMessage(IList<IPacket> packets);
-		IPacket GetPacket(byte[] buffer);
-		IPacket[] GetPackets(IMessage message);
+		Message GetMessage(IList<Packet> packets);
+		Packet GetPacket(byte[] buffer);
+		Packet[] GetPackets(Message message);
 	}
 }

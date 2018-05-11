@@ -11,11 +11,11 @@ namespace Shaykhullin.Stream.Tests
 		{
 			var input = new byte[] { 1, 2, 3, 4, 5 };
 			
-			using (var stream = new MemoryStream())
+			using (var stream = new ValueStream())
 			{
 				stream.Write(input, 0, input.Length);
 
-				stream.Position = 0;
+				stream.Seek(0);
 				
 				var result = new byte[5];
 				var read = stream.Read(result, 0, result.Length);
@@ -28,7 +28,7 @@ namespace Shaykhullin.Stream.Tests
 		[Fact]
 		public void ReadByteWriteByteWorks()
 		{
-			using (var stream = new MemoryStream())
+			using (var stream = new ValueStream())
 			{
 				stream.WriteByte(1);
 				stream.WriteByte(2);
@@ -36,7 +36,7 @@ namespace Shaykhullin.Stream.Tests
 				stream.WriteByte(4);
 				stream.WriteByte(5);
 
-				stream.Position = 0;
+				stream.Seek(0);
 				
 				Assert.Equal(1, stream.ReadByte());
 				Assert.Equal(2, stream.ReadByte());
@@ -50,14 +50,14 @@ namespace Shaykhullin.Stream.Tests
 		public void DoubleResizing()
 		{
 			var input = new byte[] { 1, 2, 3, 4, 5 };
-			using (var stream = new MemoryStream())
+			using (var stream = new ValueStream())
 			{
 				stream.Write(input, 0, input.Length);
 				stream.Write(input, 0, input.Length);
 				
 				Assert.Equal(10, stream.Position);
 
-				stream.Position = 0;
+				stream.Seek(0);
 
 				var result = new byte[5];
 				stream.Read(result, 0, result.Length);
@@ -71,7 +71,7 @@ namespace Shaykhullin.Stream.Tests
 		[Fact]
 		public void DoubleResizingOnDifferentSize()
 		{
-			using (var stream = new MemoryStream())
+			using (var stream = new ValueStream())
 			{
 				stream.Write(new byte[10], 0, 10);
 				stream.Write(new byte[20], 0, 20);
@@ -99,7 +99,7 @@ namespace Shaykhullin.Stream.Tests
 			{
 				for (var i = 0; i < 100_000_0; i++)
 				{
-					using (var stream = new MemoryStream(pool))
+					using (var stream = new ValueStream(pool))
 					{
 						stream.Write(input1, 0, input1.Length);
 						stream.Write(input2, 0, input2.Length);

@@ -12,7 +12,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, 100_000);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<int>(stream);
 
 				Assert.Equal(100_000, result);

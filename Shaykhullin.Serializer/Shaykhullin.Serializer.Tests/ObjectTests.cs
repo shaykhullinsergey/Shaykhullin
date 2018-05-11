@@ -14,7 +14,7 @@ namespace Shaykhullin.Serializer.Tests
 				var input = new object();
 
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<object>(stream);
 
 				Assert.NotNull(result);

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
 	internal class Int64Converter : Converter<long>
 	{
-		public override void Serialize(Stream stream, long data)
+		public override void Serialize(ValueStream stream, long data)
 		{
 			var union = new UnifiedUnion(data);
 			stream.WriteByte(union.Byte1);
@@ -18,7 +19,7 @@ namespace Shaykhullin.Serializer.Core
 			stream.WriteByte(union.Byte8);
 		}
 
-		public override long Deserialize(Stream stream)
+		public override long Deserialize(ValueStream stream)
 		{
 			return new UnifiedUnion(
 				(byte)stream.ReadByte(),

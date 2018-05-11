@@ -5,5 +5,8 @@
 	{
 		IHandlerBuilder<TData, TCommand> Call<THandler>()
 			where THandler : IHandler<TData, TCommand>;
+		
+		IHandlerBuilder<TData, TCommand> CallAsync<THandler>()
+			where THandler : IAsyncHandler<TData, TCommand>;
 	}
 }

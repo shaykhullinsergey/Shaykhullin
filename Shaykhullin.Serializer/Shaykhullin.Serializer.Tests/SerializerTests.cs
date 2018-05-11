@@ -4,9 +4,9 @@ namespace Shaykhullin.Serializer.Tests
 {
 	public class SerializerTests
 	{
-		public System.IO.Stream CreateStream()
+		protected ValueStream CreateStream()
 		{
-			return new MemoryStream();
+			return new ValueStream();
 		}
 	}
 }

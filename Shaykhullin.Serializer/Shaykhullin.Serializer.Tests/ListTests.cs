@@ -15,7 +15,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<List<int>>(stream);
 
 				Assert.Equal(3, result.Count);
@@ -32,7 +32,7 @@ namespace Shaykhullin.Serializer.Tests
 			{
 				IList<string> input = new List<string> { "ABC", "DEG", "HIJ" };
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<IList<string>>(stream);
 
 				Assert.Equal(3, result.Count);
@@ -72,7 +72,7 @@ namespace Shaykhullin.Serializer.Tests
 				};
 
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<IList<SimplePerson>>(stream);
 
 				Assert.Equal(2, result.Count);
@@ -143,7 +143,7 @@ namespace Shaykhullin.Serializer.Tests
 					using (var stream = CreateStream())
 					{
 						serializer.Serialize(stream, input);
-						stream.Position = 0;
+						stream.Seek(0);
 						var result = serializer.Deserialize<IList<ComplexPerson>>(stream);
 
 						Assert.Equal(3, result.Count);
@@ -226,7 +226,7 @@ namespace Shaykhullin.Serializer.Tests
 			using (var stream = CreateStream())
 			{
 				serializer.Serialize(stream, input);
-				stream.Position = 0;
+				stream.Seek(0);
 				var result = serializer.Deserialize<IList<BasePerson>>(stream);
 
 				Assert.Equal(3, result.Count);

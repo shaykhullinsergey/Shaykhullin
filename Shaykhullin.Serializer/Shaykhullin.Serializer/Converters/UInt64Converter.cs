@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
 	internal class UInt64Converter : Converter<ulong>
 	{
-		public override void Serialize(Stream stream, ulong data)
+		public override void Serialize(ValueStream stream, ulong data)
 		{
 			var union = new UnifiedUnion(data);
 			stream.WriteByte(union.Byte1);
@@ -18,7 +19,7 @@ namespace Shaykhullin.Serializer.Core
 			stream.WriteByte(union.Byte8);
 		}
 
-		public override ulong Deserialize(Stream stream)
+		public override ulong Deserialize(ValueStream stream)
 		{
 			return new UnifiedUnion(
 				(byte)stream.ReadByte(),

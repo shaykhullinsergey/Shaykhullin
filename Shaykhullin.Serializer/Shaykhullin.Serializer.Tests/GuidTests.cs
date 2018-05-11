@@ -17,7 +17,7 @@ namespace Shaykhullin.Serializer.Tests
 					using (var stream = CreateStream())
 					{
 						serializer.Serialize(stream, input);
-						stream.Position = 0;
+						stream.Seek(0);
 						var result = serializer.Deserialize<Guid>(stream);
 						
 						Assert.Equal(input, result);

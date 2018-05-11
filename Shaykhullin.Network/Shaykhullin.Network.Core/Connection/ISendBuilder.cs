@@ -4,7 +4,10 @@ namespace Shaykhullin.Network.Core
 {
 	public interface ISendBuilder<TData>
 	{
-		Task To<TCommand>()
+		void To<TCommand>()
+			where TCommand : ICommand<TData>;
+		
+		Task ToAsync<TCommand>()
 			where TCommand : ICommand<TData>;
 	}
 }

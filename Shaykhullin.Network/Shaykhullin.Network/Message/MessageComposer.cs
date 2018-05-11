@@ -23,9 +23,9 @@ namespace Shaykhullin.Network.Core
 			arrayPool = container.Resolve<IArrayPool>();
 		}
 
-		public IMessage GetMessage(IPayload payload)
+		public Message GetMessage<TData>(IPayload<TData> payload)
 		{
-			using (var stream = new MemoryStream(arrayPool))
+			using (var stream = new ValueStream(arrayPool))
 			{
 				var commandId = commandHolder.GetCommand(payload.CommandType);
 
@@ -35,17 +35,13 @@ namespace Shaykhullin.Network.Core
 				compression.Compress(stream);
 				encryption.Encrypt(stream);
 
-				return new Message
-				{
-					DataStreamBuffer = stream.Buffer,
-					DataStreamLength = (int)stream.Length
-				};
+				return new Message(stream.Buffer, (int)stream.Length);
 			}
 		}
 
-		public IPayload GetPayload(IMessage message)
+		public IPayload<TData> GetPayload<TData>(Message message)
 		{
-			using (var stream = new MemoryStream(message.DataStreamBuffer))
+			using (var stream = new ValueStream(message.Data))
 			{
 				var commandId = stream.ReadInt32();
 
@@ -56,10 +52,10 @@ namespace Shaykhullin.Network.Core
 				compression.Decompress(stream);
 
 				var data = serializer.Deserialize(stream, genericArgument);
-				return new Payload
+				return new Payload<TData>
 				{
 					CommandType = commandType,
-					Data = data
+					Data = (TData)data
 				};
 			}
 		}

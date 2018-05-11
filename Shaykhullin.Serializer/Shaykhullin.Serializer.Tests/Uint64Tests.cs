@@ -15,7 +15,7 @@ namespace Shaykhullin.Serializer.Tests
 					using (var stream = CreateStream())
 					{
 						serializer.Serialize(stream, ulong.MaxValue);
-						stream.Position = 0;
+						stream.Seek(0);
 						var result = serializer.Deserialize<ulong>(stream);
 						Assert.Equal(ulong.MaxValue, result);
 					}

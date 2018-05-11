@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />
     <ProjectReference Include="..\..\Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\Shaykhullin.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin.Stream\Shaykhullin.Stream\Shaykhullin.Stream.csproj" />
     <ProjectReference Include="..\Shaykhullin.Serializer.Core\Shaykhullin.Serializer.Core.csproj" />
   </ItemGroup>
 </Project>

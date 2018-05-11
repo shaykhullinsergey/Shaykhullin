@@ -13,7 +13,7 @@ namespace Shaykhullin.DependencyInjection
 		public DependencyContainer(DependencyContainer parent = null)
 		{
 			this.parent = parent;
-			dependencies = new List<Dependency>();
+			dependencies = new List<Dependency>(1);
 		}
 
 		public Dependency Register(Type register)

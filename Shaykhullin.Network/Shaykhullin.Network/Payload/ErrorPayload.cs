@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.Network.Core
 {
-	internal class ErrorPayload : Payload
+	internal class ErrorPayload : Payload<ErrorInfo>
 	{
 		private static readonly Type ErrorCommandType = typeof(Error);
 		

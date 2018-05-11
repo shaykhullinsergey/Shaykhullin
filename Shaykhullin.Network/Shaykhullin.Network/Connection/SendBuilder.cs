@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
@@ -14,10 +15,9 @@ namespace Shaykhullin.Network.Core
 			this.data = data;
 		}
 
-		public async Task To<TCommand>() 
-			where TCommand : ICommand<TData>
+		public void To<TCommand>() where TCommand : ICommand<TData>
 		{
-			var payload = new Payload { CommandType = typeof(TCommand), Data = data };
+			var payload = new Payload<TData> { CommandType = typeof(TCommand), Data = data };
 
 			var message = container.Resolve<IMessageComposer>().GetMessage(payload);
 
@@ -29,9 +29,33 @@ namespace Shaykhullin.Network.Core
 
 			for (var i = 0; i < packets.Length; i++)
 			{
-				await transport.WritePacket(packets[i]);
+				transport.WritePacket(packets[i]);
 				packetsComposer.ReleaseBuffer(packets[i].Buffer);
 			}
+			
+			container.Resolve<IArrayPool>().ReleaseArray(packets);
+		}
+
+		public async Task ToAsync<TCommand>() 
+			where TCommand : ICommand<TData>
+		{
+			var payload = new Payload<TData> { CommandType = typeof(TCommand), Data = data };
+
+			var message = container.Resolve<IMessageComposer>().GetMessage(payload);
+
+			var packetsComposer = container.Resolve<IPacketsComposer>();
+
+			var packets = packetsComposer.GetPackets(message);
+
+			var transport = container.Resolve<ITransport>();
+
+			for (var i = 0; i < packets.Length; i++)
+			{
+				await transport.WritePacketAsync(packets[i]).ConfigureAwait(false);
+				packetsComposer.ReleaseBuffer(packets[i].Buffer);
+			}
+			
+			container.Resolve<IArrayPool>().ReleaseArray(packets);
 		}
 	}
 }

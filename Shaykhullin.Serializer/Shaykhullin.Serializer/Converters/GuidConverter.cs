@@ -1,18 +1,19 @@
 ﻿using System;
 using System.IO;
+using Shaykhullin.Stream;
 
-namespace Shaykhullin.Serializer
+namespace Shaykhullin.Serializer.Core
 {
-	public class GuidConverter : Converter<Guid>
+	internal class GuidConverter : Converter<Guid>
 	{
-		public override Guid Deserialize(Stream stream)
+		public override Guid Deserialize(ValueStream stream)
 		{
 			var guidBytes = new byte[16];
 			stream.Read(guidBytes, 0, guidBytes.Length);
 			return new Guid(guidBytes);
 		}
 
-		public override void Serialize(Stream stream, Guid data)
+		public override void Serialize(ValueStream stream, Guid data)
 		{
 			var guidBytes = data.ToByteArray();
 			stream.Write(guidBytes, 0, guidBytes.Length);

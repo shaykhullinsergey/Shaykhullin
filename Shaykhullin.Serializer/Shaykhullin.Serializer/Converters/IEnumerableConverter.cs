@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Shaykhullin.Activator;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
@@ -21,12 +22,12 @@ namespace Shaykhullin.Serializer.Core
 			this.activator = activator;
 		}
 
-		public override IEnumerable Deserialize(Stream stream)
+		public override IEnumerable Deserialize(ValueStream stream)
 		{
 			throw new InvalidOperationException();
 		}
 
-		public override void Serialize(Stream stream, IEnumerable data)
+		public override void Serialize(ValueStream stream, IEnumerable data)
 		{
 			var elements = data.Cast<object>().ToList();
 			var elementType = data.GetType().GetGenericArguments()[0];
@@ -43,7 +44,7 @@ namespace Shaykhullin.Serializer.Core
 			}
 		}
 
-		public override object DeserializeObject(Stream stream, Type type)
+		public override object DeserializeObject(ValueStream stream, Type type)
 		{
 			var elementType = type.GetGenericArguments()[0];
 

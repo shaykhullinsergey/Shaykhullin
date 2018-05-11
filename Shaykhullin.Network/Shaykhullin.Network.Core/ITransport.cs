@@ -6,7 +6,11 @@ namespace Shaykhullin.Network.Core
 	public interface ITransport : IDisposable
 	{
 		Task Connect();
-		Task<IPacket> ReadPacket();
-		Task WritePacket(IPacket packet);
+		
+		Packet ReadPacket();
+		void WritePacket(Packet packet);
+		
+		Task<Packet> ReadPacketAsync();
+		Task WritePacketAsync(Packet packet);
 	}
 }

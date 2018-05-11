@@ -54,8 +54,13 @@ namespace Shaykhullin.DependencyInjection.Core
 			var dependency = dependencyContainer.TryGetDependency(registry, @for)
 				?? throw new InvalidOperationException($"{registry} not found");
 
+			if (dependency.Instance != null)
+			{
+				return dependency.Instance;
+			}
+			
 			dependency.EnsureLifecycle(activator);
-
+			
 			if (dependency.Factory != null)
 			{
 				var factory = dependency.Factory;

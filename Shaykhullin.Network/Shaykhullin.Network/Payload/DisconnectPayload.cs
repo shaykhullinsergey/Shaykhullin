@@ -2,7 +2,7 @@
 
 namespace Shaykhullin.Network.Core
 {
-	internal class DisconnectPayload : Payload
+	internal class DisconnectPayload : Payload<DisconnectInfo>
 	{
 		private static readonly Type DisonnectCommandType = typeof(Disconnect);
 		

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.IO;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
 	public interface IConverter<TData> : IConverter
 	{
-		void Serialize(Stream stream, TData data);
-		TData Deserialize(Stream stream);
+		void Serialize(ValueStream stream, TData data);
+		TData Deserialize(ValueStream stream);
 	}
 
 	public interface IConverter
 	{
-		void SerializeObject(Stream stream, object obj);
-		object DeserializeObject(Stream stream, Type type);
+		void SerializeObject(ValueStream stream, object obj);
+		object DeserializeObject(ValueStream stream, Type type);
 	}
 }

@@ -4,7 +4,7 @@ namespace Shaykhullin.Network.Core
 {
 	public interface IMessageComposer
 	{
-		IMessage GetMessage(IPayload payload);
-		IPayload GetPayload(IMessage message);
+		Message GetMessage<TData>(IPayload<TData> payload);
+		IPayload<TData> GetPayload<TData>(Message message);
 	}
 }

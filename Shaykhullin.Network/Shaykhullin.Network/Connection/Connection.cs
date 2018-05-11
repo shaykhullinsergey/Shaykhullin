@@ -45,40 +45,28 @@ namespace Shaykhullin.Network.Core
 			return new SendBuilder<TData>(container, data);
 		}
 
-		private async Task ReceiveLoop()
+		private readonly List<MessageDto> messages = new List<MessageDto>();
+		private readonly Queue<IList<Packet>> queue = new Queue<IList<Packet>>();
+		
+		private Task ReceiveLoop()
 		{
-			var messages = new Dictionary<byte, IList<IPacket>>();
 			var transport = container.Resolve<ITransport>();
 			var packetsComposer = container.Resolve<IPacketsComposer>();
 			var messageComposer = container.Resolve<IMessageComposer>();
 			var commandRaiser = container.Resolve<ICommandRaiser>();
 
-			var listQueue = new Queue<IList<IPacket>>();
-
 			while (true)
 			{
-				var packet = await transport.ReadPacket().ConfigureAwait(false);
+				var packet = transport.ReadPacket();
 
-				if (messages.TryGetValue(packet.Id, out var packets))
-				{
-					packets.Add(packet);
-				}
-				else
-				{
-					packets = listQueue.Count > 0
-						? listQueue.Dequeue()
-						: new List<IPacket>();
-
-					packets.Add(packet);
-
-					messages.Add(packet.Id, packets);
-				}
-
+				var messageDto = EnsurePacket(packet);
+				
 				if (packet.IsLast)
 				{
-					messages.Remove(packet.Id);
+					var packets = messageDto.Packets;
+					messages.Remove(messageDto);
 					var message = packetsComposer.GetMessage(packets);
-					var payload = messageComposer.GetPayload(message);
+					var payload = messageComposer.GetPayload<object>(message);
 
 					for (var i = 0; i < packets.Count; i++)
 					{
@@ -86,13 +74,34 @@ namespace Shaykhullin.Network.Core
 					}
 
 					packets.Clear();
-					listQueue.Enqueue(packets);
+					queue.Enqueue(packets);
 
-					packetsComposer.ReleaseBuffer(message.DataStreamBuffer);
+					packetsComposer.ReleaseBuffer(message.Data);
 
-					await commandRaiser.RaiseCommand(payload).ConfigureAwait(false);
+					commandRaiser.RaiseCommand(payload).GetAwaiter().GetResult();
 				}
 			}
+		}
+
+		private MessageDto EnsurePacket(Packet packet)
+		{
+			for (var i = 0; i < messages.Count; i++)
+			{
+				if (messages[i].MessageId == packet.MessageId)
+				{
+					messages[i].Packets.Add(packet);
+					return messages[i];
+				}
+			}
+
+			var packets = queue.Count > 0
+				? queue.Dequeue()
+				: new List<Packet>();
+			
+			packets.Add(packet);
+			var messageDto = new MessageDto(packet.MessageId, packets);
+			messages.Add(messageDto);
+			return messageDto;
 		}
 
 		public void Dispose()

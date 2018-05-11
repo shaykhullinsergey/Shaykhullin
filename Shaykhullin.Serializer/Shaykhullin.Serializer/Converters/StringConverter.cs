@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Shaykhullin.Stream;
 
 namespace Shaykhullin.Serializer.Core
 {
 	internal class StringConverter : Converter<string>
 	{
-		public override string Deserialize(Stream stream)
+		public override string Deserialize(ValueStream stream)
 		{
 			var union = new UnifiedUnion(
 				(byte)stream.ReadByte(),
@@ -22,7 +23,7 @@ namespace Shaykhullin.Serializer.Core
 			return Encoding.UTF8.GetString(stringBuffer);
 		}
 
-		public override void Serialize(Stream stream, string data)
+		public override void Serialize(ValueStream stream, string data)
 		{
 			var union = new UnifiedUnion(data.Length);
 			stream.WriteByte(union.Byte1);

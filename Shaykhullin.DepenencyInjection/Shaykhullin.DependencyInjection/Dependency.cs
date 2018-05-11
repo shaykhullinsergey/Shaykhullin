@@ -21,6 +21,8 @@ namespace Shaykhullin.DependencyInjection.Core
 
 		public Type[] ConstructorParameters { get; set; }
 
+		public object Instance { get; set; }
+		
 		public Dependency(Type registry)
 		{
 			Registry = registry;

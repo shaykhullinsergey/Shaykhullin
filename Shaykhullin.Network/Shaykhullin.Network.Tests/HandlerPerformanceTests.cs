@@ -18,7 +18,7 @@ namespace Shaykhullin.Network.Tests
 			public int Message { get; set; }
 		}
 
-		class Handler : IHandler<int, Command>
+		class AsyncHandler : IAsyncHandler<int, Command>
 		{
 			public Task Execute(Command command)
 			{
@@ -28,25 +28,10 @@ namespace Shaykhullin.Network.Tests
 		}
 
 		[Fact]
-		public async void Test1()
-		{
-			var handlerDto = new HandlerDto(typeof(Handler));
-			var command = new Command();
-			var handler = new Handler() as object;
-
-			var sw = Stopwatch.StartNew();
-			for (int i = 0; i < 1_000_000; i++)
-			{
-				await handlerDto.ExecuteMethod(handler, command);
-			}
-			sw.Stop();
-		}
-
-		[Fact]
 		public async void Test2()
 		{
-			var type = typeof(Handler);
-			var handler = new Handler();
+			var type = typeof(AsyncHandler);
+			var handler = new AsyncHandler();
 			var command = new object[]
 			{
 				new Command()
