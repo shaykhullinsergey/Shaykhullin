@@ -2,11 +2,11 @@
 
 namespace Shaykhullin.DependencyInjection.Core
 {
-	internal class ForBuilder : IForBuilder
+	public struct ForBuilder
 	{
 		private readonly Dependency dependency;
 
-		public ForBuilder(Dependency dependency)
+		internal ForBuilder(Dependency dependency)
 		{
 			this.dependency = dependency;
 		}

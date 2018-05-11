@@ -4,10 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaykhullin.Network", "Shaykhullin.Network", "{661CB50B-60A4-4836-9468-E506031E67EA}"
+ProjectSection(SolutionItems) = preProject
+	Configuration\Compression\ICompression.cs = Configuration\Compression\ICompression.cs
+	Configuration\Compression\ICompressionBuilder.cs = Configuration\Compression\ICompressionBuilder.cs
+	Configuration\Encryption\IEncryption.cs = Configuration\Encryption\IEncryption.cs
+	Configuration\Encryption\IEncryptionBuilder.cs = Configuration\Encryption\IEncryptionBuilder.cs
+	Configuration\Serializer\ISerializerBuilder.cs = Configuration\Serializer\ISerializerBuilder.cs
+	Configuration\IConfiguration.cs = Configuration\IConfiguration.cs
+	Configuration\IConfigurationBuilder.cs = Configuration\IConfigurationBuilder.cs
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaykhullin.DependencyInjection", "Shaykhullin.DependencyInjection", "{3D689346-716D-4ABB-8208-6E157DEC2149}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.DependencyInjection.Core", "Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection.Core\Shaykhullin.DependencyInjection.Core.csproj", "{828CF886-F807-4FBD-AA05-5832BBB8717F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shaykhullin.DependencyInjection", "Shaykhullin.DepenencyInjection\Shaykhullin.DependencyInjection\Shaykhullin.DependencyInjection.csproj", "{4922EA8B-C4F2-428D-98E5-28E1B91BE51A}"
 EndProject
@@ -71,10 +78,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{828CF886-F807-4FBD-AA05-5832BBB8717F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{828CF886-F807-4FBD-AA05-5832BBB8717F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{828CF886-F807-4FBD-AA05-5832BBB8717F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{828CF886-F807-4FBD-AA05-5832BBB8717F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4922EA8B-C4F2-428D-98E5-28E1B91BE51A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4922EA8B-C4F2-428D-98E5-28E1B91BE51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4922EA8B-C4F2-428D-98E5-28E1B91BE51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -168,7 +171,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{828CF886-F807-4FBD-AA05-5832BBB8717F} = {3D689346-716D-4ABB-8208-6E157DEC2149}
 		{4922EA8B-C4F2-428D-98E5-28E1B91BE51A} = {3D689346-716D-4ABB-8208-6E157DEC2149}
 		{05C2CC47-0E5F-4FA4-A4E4-363CB88DEF5C} = {661CB50B-60A4-4836-9468-E506031E67EA}
 		{E9503DA3-6103-4A8F-BAA1-08A157462D76} = {661CB50B-60A4-4836-9468-E506031E67EA}

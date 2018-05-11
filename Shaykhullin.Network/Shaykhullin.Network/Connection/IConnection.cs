@@ -5,6 +5,6 @@ namespace Shaykhullin.Network
 {
 	public interface IConnection : IDisposable
 	{
-		ISendBuilder<TData> Send<TData>(TData data);
+		SendBuilder<TData> Send<TData>(TData data);
 	}
 }

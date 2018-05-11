@@ -82,22 +82,22 @@ namespace Shaykhullin.Network.Core
 			new SerializerBuilder(config).UseEncryption<TEncryption>();
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>() 
+		public ImplementedByBuilder<TRegistry> Register<TRegistry>() 
 		{
 			return config.Register<TRegistry>();
 		}
 
-		public IImplementedByBuilder<object> Register(Type registry)
+		public ImplementedByBuilder<object> Register(Type registry)
 		{
 			return config.Register(registry);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
+		public ImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
 		{
 			return config.Register<TRegistry>(registry);
 		}
 
-		public ICommandBuilder<TData> On<TData>()
+		public CommandBuilder<TData> On<TData>()
 		{
 			return new CommandBuilder<TData>(config);
 		}

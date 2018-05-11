@@ -4,7 +4,6 @@ using Shaykhullin.Activator;
 using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection.Core;
 
-
 namespace Shaykhullin.DependencyInjection
 {
 	public class ContainerConfig : IContainerConfig
@@ -28,7 +27,7 @@ namespace Shaykhullin.DependencyInjection
 			dependencyContainer = new DependencyContainer(parent.dependencyContainer);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>()
+		public ImplementedByBuilder<TRegistry> Register<TRegistry>()
 		{
 			if (disposed)
 			{
@@ -38,7 +37,7 @@ namespace Shaykhullin.DependencyInjection
 			return Register<TRegistry>(typeof(TRegistry));
 		}
 
-		public IImplementedByBuilder<object> Register(Type registry)
+		public ImplementedByBuilder<object> Register(Type registry)
 		{
 			if (disposed)
 			{
@@ -53,7 +52,7 @@ namespace Shaykhullin.DependencyInjection
 			return Register<object>(registry);
 		}
 
-		public IImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
+		public ImplementedByBuilder<TRegistry> Register<TRegistry>(Type registry)
 		{
 			if (disposed)
 			{
@@ -65,7 +64,7 @@ namespace Shaykhullin.DependencyInjection
 				throw new ArgumentNullException(nameof(registry));
 			}
 			
-			return new RegisterBuilder(dependencyContainer)
+			return new _RegisterBuilder(dependencyContainer)
 				.Register<TRegistry>(registry);
 		}
 

@@ -2,16 +2,16 @@
 
 namespace Shaykhullin.Network.Core
 {
-	internal class CommandBuilder<TData> : ICommandBuilder<TData>
+	public struct CommandBuilder<TData>
 	{
 		private readonly IContainerConfig config;
 
-		public CommandBuilder(IContainerConfig config)
+		internal CommandBuilder(IContainerConfig config)
 		{
 			this.config = config;
 		}
 		
-		public IHandlerBuilder<TData, TCommand> In<TCommand>()
+		public HandlerBuilder<TData, TCommand> In<TCommand>()
 			where TCommand : ICommand<TData>
 		{
 			return new HandlerBuilder<TData, TCommand>(config);

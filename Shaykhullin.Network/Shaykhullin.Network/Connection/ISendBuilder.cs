@@ -1,15 +1,22 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
-	internal class SendBuilder<TData> : ISendBuilder<TData>
+	public class Payload<TData> : IPayload<TData>
+	{
+		public Type CommandType { get; set; }
+		public TData Data { get; set; }
+	}
+	
+	public struct SendBuilder<TData>
 	{
 		private readonly IContainer container;
 		private readonly TData data;
 
-		public SendBuilder(IContainer container, TData data)
+		internal SendBuilder(IContainer container, TData data)
 		{
 			this.container = container;
 			this.data = data;

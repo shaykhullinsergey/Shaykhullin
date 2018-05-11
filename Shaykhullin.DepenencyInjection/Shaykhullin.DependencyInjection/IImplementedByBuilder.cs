@@ -2,17 +2,16 @@
 
 namespace Shaykhullin.DependencyInjection.Core
 {
-	internal class ImplementedByBuilder<TRegistry> 
-		: IImplementedByBuilder<TRegistry>
+	public struct ImplementedByBuilder<TRegistry>
 	{
 		private readonly Dependency dependency;
 		
-		public ImplementedByBuilder(Dependency dependency)
+		internal ImplementedByBuilder(Dependency dependency)
 		{
 			this.dependency = dependency;
 		}
 
-		public ILifecycleBuilder ImplementedBy<TImplementation>(Func<IContainer, TImplementation> factory = null) 
+		public LifecycleBuilder ImplementedBy<TImplementation>(Func<IContainer, TImplementation> factory = null) 
 			where TImplementation : TRegistry
 		{
 			return factory == null 
@@ -20,7 +19,7 @@ namespace Shaykhullin.DependencyInjection.Core
 				: ImplementedBy(typeof(TImplementation), c => factory(c));
 		}
 
-		public ILifecycleBuilder ImplementedBy(Type implemented, Func<IContainer, object> factory = null)
+		public LifecycleBuilder ImplementedBy(Type implemented, Func<IContainer, object> factory = null)
 		{
 			if (factory != null)
 			{
@@ -32,7 +31,7 @@ namespace Shaykhullin.DependencyInjection.Core
 			return new LifecycleBuilder(dependency);
 		}
 
-		public ILifecycleBuilder ImplementedBy<TImplementation>(TImplementation implementation)
+		public LifecycleBuilder ImplementedBy<TImplementation>(TImplementation implementation)
 			where TImplementation : TRegistry
 		{
 			dependency.Implementation = typeof(TImplementation);
@@ -41,7 +40,7 @@ namespace Shaykhullin.DependencyInjection.Core
 			return new LifecycleBuilder(dependency);
 		}
 
-		public ILifecycleBuilder ImplementedBy(Type type, object implementation)
+		public LifecycleBuilder ImplementedBy(Type type, object implementation)
 		{
 			dependency.Implementation = type;
 			dependency.Instance = implementation;
@@ -59,12 +58,12 @@ namespace Shaykhullin.DependencyInjection.Core
 			new LifecycleBuilder(dependency).For(type);
 		}
 
-		public IForBuilder As<TLifecycle>() where TLifecycle : ILifecycle
+		public ForBuilder As<TLifecycle>() where TLifecycle : ILifecycle
 		{
 			return As(typeof(TLifecycle));
 		}
 
-		public IForBuilder As(Type lifecycle)
+		public ForBuilder As(Type lifecycle)
 		{
 			return new LifecycleBuilder(dependency).As(lifecycle);
 		}

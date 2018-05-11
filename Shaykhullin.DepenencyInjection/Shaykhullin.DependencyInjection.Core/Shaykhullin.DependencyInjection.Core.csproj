@@ -2,6 +2,11 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <LangVersion>7.2</LangVersion>
-    <Version>1.0.11</Version>    
+    <Version>1.0.11</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator.Core\Shaykhullin.Activator.Core.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />
+    <ProjectReference Include="..\..\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool\Shaykhullin.ArrayPool.csproj" />
+  </ItemGroup>
 </Project>

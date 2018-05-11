@@ -6,6 +6,5 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shaykhullin.Activator\Shaykhullin.Activator\Shaykhullin.Activator.csproj" />
-    <ProjectReference Include="..\Shaykhullin.DependencyInjection.Core\Shaykhullin.DependencyInjection.Core.csproj" />
   </ItemGroup>
 </Project>

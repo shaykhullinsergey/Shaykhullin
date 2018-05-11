@@ -3,17 +3,17 @@ using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
 {
-	internal class HandlerBuilder<TData, TCommand> : IHandlerBuilder<TData, TCommand>
+	public struct HandlerBuilder<TData, TCommand>
 		where TCommand : ICommand<TData>
 	{
 		private readonly IContainerConfig config;
 
-		public HandlerBuilder(IContainerConfig config)
+		internal HandlerBuilder(IContainerConfig config)
 		{
 			this.config = config;
 		}
 
-		public IHandlerBuilder<TData, TCommand> Call<THandler>() 
+		public HandlerBuilder<TData, TCommand> Call<THandler>() 
 			where THandler : IHandler<TData, TCommand>
 		{
 			using (var container = config.Create())
@@ -31,7 +31,7 @@ namespace Shaykhullin.Network.Core
 			}
 		}
 
-		public IHandlerBuilder<TData, TCommand> CallAsync<THandler>() 
+		public HandlerBuilder<TData, TCommand> CallAsync<THandler>() 
 			where THandler : IAsyncHandler<TData, TCommand>
 		{
 			using (var container = config.Create())

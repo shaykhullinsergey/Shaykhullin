@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Shaykhullin.ArrayPool;
 using Shaykhullin.DependencyInjection;
 
 namespace Shaykhullin.Network.Core
@@ -35,7 +34,7 @@ namespace Shaykhullin.Network.Core
 			receiveLoopTask = Task.Run(ReceiveLoop);
 		}
 
-		public ISendBuilder<TData> Send<TData>(TData data)
+		public SendBuilder<TData> Send<TData>(TData data)
 		{
 			if (disposed)
 			{
