@@ -1,0 +1,8 @@
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/bin/Debug/netstandard2.0/Network.Core.deps.json
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/bin/Debug/netstandard2.0/Network.Core.dll
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/bin/Debug/netstandard2.0/Network.Core.pdb
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/obj/Debug/netstandard2.0/Network.Core.csproj.CoreCompileInputs.cache
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/obj/Debug/netstandard2.0/Network.Core.AssemblyInfoInputs.cache
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/obj/Debug/netstandard2.0/Network.Core.AssemblyInfo.cs
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/obj/Debug/netstandard2.0/Network.Core.dll
+/home/shaykhullinsergey/Git/Shaykhullin/Network/Network.Core/obj/Debug/netstandard2.0/Network.Core.pdb
